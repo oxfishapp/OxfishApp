@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <title>Oxfish</title>
+      
+      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" rel="javascript" type="text/javascript"></script>
+      <script src="//code.jquery.com/jquery-1.11.0.min.js" rel="javascript" type="text/javascript"></script>  
+      
+      <!-- Latest compiled and minified JavaScript -->
+      <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" rel="javascript" type="text/javascript"></script>
+
+      <script>
+          $('.dropdown-toggle').dropdown();
+          </script>
+
+      <!-- Latest compiled and minified CSS -->
+      <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel=stylesheet type=text/css >
+      <style>
+          .resize-img{
+              width:40px;
+              height:40px;
+                    }
+          .navbar-img{
+              margin-top: -9px
+                      }
+          </style>
+      </head>
+  <body> 
+      <!-- Button trigger modal -->
+      <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+          Launch demo modal
+          </button>
+      
+      
+        <div class="modal fade" id="myModal" >
+            <div class="modal-dialog">
+                <form method="post" action="/send">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Looking for people who know about...</h4>
+                            
+                                <div class="from-inline">
+                                    <div class="row">
+                                        <div class="form-group col-sm-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">♦</span>
+                                                <input type="text" class="form-control" id="skillone" placeholder="Skill">
+                                                </div>
+                                            </div>
+                                        <div class="form-group col-sm-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">♦</span>
+                                                <input type="text" class="form-control" id="skilltwo" placeholder="Skill">
+                                                </div>
+                                            </div>
+                                        <div class="form-group col-sm-4">
+                                            <div class="input-group">
+                                                <span class="input-group-addon">♦</span>
+                                                <input type="text" class="form-control" id="skillthree" placeholder="Skill">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                        
+                            </div>
+                        <div class="modal-body">
+                            
+                            <div class="form-group">
+                                <textarea class="form-control" rows="5" id="textarea" name="textarea" placeholder="Question!"></textarea>
+                                </div>
+                            
+                            <div class="input-group">
+                                <span class="input-group-addon">url</span>
+                                <input type="text" class="form-control" placeholder="Link">
+                                </div>
+
+                            </div>
+                        <div class="modal-footer">
+                            <a class="pull-left">
+                                <img class="resize-img" src="https://pbs.twimg.com/profile_images/378800000520560847/85619cc22258499b15ce50be7b9631c5.jpeg">  
+                                </a>
+
+                            <button type="summit" class="btn btn-primary">
+                                <span class="glyphicon glyphicon-send"> Send</span> 
+                                </button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </form><!-- /.form-send-post -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+        </body>
+  </html>
