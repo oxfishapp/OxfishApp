@@ -29,12 +29,12 @@
       </head>
   <body> 
       <!-- Button trigger modal -->
-      <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+      <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#send">
           Launch demo modal
           </button>
       
       
-        <div class="modal fade" id="myModal" >
+        <div class="modal fade" id="send" >
             <div class="modal-dialog">
                 <form method="post" action="/send">
                     <div class="modal-content">
@@ -47,24 +47,23 @@
                                         <div class="form-group col-sm-4">
                                             <div class="input-group">
                                                 <span class="input-group-addon">♦</span>
-                                                <input type="text" class="form-control" id="skillone" placeholder="Skill">
+                                                <input type="text" class="form-control" id="skillone" placeholder="Ex: java">
                                                 </div>
                                             </div>
                                         <div class="form-group col-sm-4">
                                             <div class="input-group">
                                                 <span class="input-group-addon">♦</span>
-                                                <input type="text" class="form-control" id="skilltwo" placeholder="Skill">
+                                                <input type="text" class="form-control" id="skilltwo" placeholder="Ex: dynamodb">
                                                 </div>
                                             </div>
                                         <div class="form-group col-sm-4">
                                             <div class="input-group">
                                                 <span class="input-group-addon">♦</span>
-                                                <input type="text" class="form-control" id="skillthree" placeholder="Skill">
+                                                <input type="text" class="form-control" id="skillthree" placeholder="Ex: python">
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                        
                             </div>
                         <div class="modal-body">
                             
@@ -74,7 +73,7 @@
                             
                             <div class="input-group">
                                 <span class="input-group-addon">url</span>
-                                <input type="text" class="form-control" placeholder="Link">
+                                <input type="text" class="form-control" placeholder="link">
                                 </div>
 
                             </div>
@@ -92,5 +91,10 @@
                     </form><!-- /.form-send-post -->
                 </div><!-- /.modal-dialog -->
             </div><!-- /.modal -->
+      
+      
+      
+      
+      
         </body>
   </html>

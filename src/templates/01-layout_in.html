@@ -11,10 +11,6 @@
       <!-- Latest compiled and minified JavaScript -->
       <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" rel="javascript" type="text/javascript"></script>
 
-      <script>
-          $('.dropdown-toggle').dropdown();
-          </script>
-
       <!-- Latest compiled and minified CSS -->
       <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel=stylesheet type=text/css >
       <style>
@@ -67,11 +63,11 @@
                         </form>
                     </div>
                 <div class="navbar-form navbar-right" role="query_logoff">
-                    <form class="btn-group">
-                        <button type="summit" class="btn btn-primary">
+                    <div class="btn-group">
+                        <button type="summit" class="btn btn-primary" data-toggle="modal" data-target="#send">
                             <span class="glyphicon glyphicon-send"> Send</span> 
                             </button>
-                        </form>
+                        </div>
                     <form class="btn-group">
                         <button type="submit" class="btn btn-default">
                             <span class="glyphicon glyphicon glyphicon-cog"></span>
@@ -91,6 +87,7 @@
                     </form>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
-          </nav>  
+          </nav> 
+      
         </body>
   </html>
