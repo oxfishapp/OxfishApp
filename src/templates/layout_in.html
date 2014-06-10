@@ -42,11 +42,17 @@
             <div class="collapse navbar-collapse">
               <form class="navbar-form navbar-left" role="img_profile">
                 <a href="/home">
-                    <img class="imgresize" src="https://pbs.twimg.com/profile_images/378800000520560847/85619cc22258499b15ce50be7b9631c5.jpeg">                           </a>
+                    <img class="imgresize" src={{session.user.link_image}}>                           
+                </a>
                 <div class="btn-group">
-                  <button type="button" class="btn btn-default">skill one</button>
-                  <button type="button" class="btn btn-default">skill two</button>
-                  <button type="button" class="btn btn-default">skill three</button>
+                	{% for skill in session.user.skills %}
+                		<button type="button" class="btn btn-default">{{ skill }}</button>
+                	{% endfor %}
+                <!--
+                  <button type="button" class="btn btn-default">session.user[0]</button>
+                  <button type="button" class="btn btn-default">session.user[1]</button>
+                  <button type="button" class="btn btn-default">session.user[2]</button>
+                -->
                 </div>
                 <button type="submit" class="btn btn-default">
                     <span class="glyphicon glyphicon-home"></span>
