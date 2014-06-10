@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <title>Oxfish</title>
+      
+      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" rel="javascript" type="text/javascript"></script>
+      <script src="//code.jquery.com/jquery-1.11.0.min.js" rel="javascript" type="text/javascript"></script>  
+      
+      <!-- Latest compiled and minified JavaScript -->
+      <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" rel="javascript" type="text/javascript"></script>
+      
+<!--
+        <script src="http://ajax.aspnetcdn.com/ajax/jquery/jquery-1.9.0.js"></script>
+        <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+-->
+        <script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-2.2.1.js"></script>
+      
+<!--
+      <script type="text/javascript" rel="javascript">
+      
+//            jQuery(function ($) {
+//                var $btn = $('.action').hide()
+//                $(".list-group-item").mouseenter(function () {
+//                    $(this).find('.action').show();
+////                    $btn.show();
+//                });
+//
+//                $(".list-group-item").mouseleave(function () {
+//                    $(this).find('.action').hide();
+////                    $btn.hide();
+//                });
+//            })
+      </script>
+-->
+
+        <script type="text/javascript">
+            function TasksViewModel() {
+                var self = this;
+                self.tasksURI = 'http://localhost:5000/todo/api/v1.0/tasks';
+                self.username = "";
+                self.password = "";
+                self.tasks = ko.observableArray();
+
+                self.ajax = function(uri, method, data) {
+                    var request = {
+                        url: uri,
+                        type: method,
+                        contentType: "application/json",
+                        accepts: "application/json",
+                        cache: false,
+                        dataType: 'json',
+                        data: JSON.stringify(data),
+                        beforeSend: function (xhr) {
+                            xhr.setRequestHeader("Authorization", 
+                                "Basic " + btoa(self.username + ":" + self.password));
+                        },
+                        error: function(jqXHR) {
+                            console.log("ajax error " + jqXHR.status);
+                        }
+                    };
+                    return $.ajax(request);
+                }
+                self.updateTask = function(task, newTask) {
+                    var i = self.tasks.indexOf(task);
+                    self.tasks()[i].uri(newTask.uri);
+                    self.tasks()[i].title(newTask.title);
+                    self.tasks()[i].description(newTask.description);
+                    self.tasks()[i].done(newTask.done);
+                }
+                
+                self.beginEdit = function(task) {
+                    editTaskViewModel.setTask(task);
+                    $('#edit').modal('show');
+                }
+                self.remove = function(task) {
+                    self.ajax(task.uri(), 'DELETE').done(function() {
+                        self.tasks.remove(task);
+                    });
+                }
+                self.markInProgress = function(task) {
+                    self.ajax(task.uri(), 'PUT', { done: false }).done(function(res) {
+                        self.updateTask(task, res.task);
+                    });
+                }
+                self.markDone = function(task) {
+                    self.ajax(task.uri(), 'PUT', { done: true }).done(function(res) {
+                        self.updateTask(task, res.task);
+                    });
+                }
+            }
+
+            function EditTaskViewModel() {
+                var self = this;
+                self.title = ko.observable();
+                self.description = ko.observable();
+                self.done = ko.observable();
+
+                self.setTask = function(task) {
+                    self.task = task;
+                    self.title(task.title());
+                    self.description(task.description());
+                    self.done(task.done());
+                    $('edit').modal('show');
+                }
+
+                self.editTask = function() {
+                    $('#edit').modal('hide');
+                    tasksViewModel.edit(self.task, {
+                        title: self.title(),
+                        description: self.description() ,
+                        done: self.done()
+                    });
+                }
+            }
+
+
+            var tasksViewModel = new TasksViewModel();
+            var editTaskViewModel = new EditTaskViewModel();
+            ko.applyBindings(tasksViewModel, $('#main')[0]);
+            ko.applyBindings(editTaskViewModel, $('#edit')[0]);
+        </script>
+
+      <!-- Latest compiled and minified CSS -->
+      <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel=stylesheet type=text/css >
+      <style>
+          .resize-img{
+              width:40px;
+              height:40px;
+                    }
+          .navbar-img{
+              margin-top: -9px
+                      }
+          </style>
+      </head>
+  <body>
+      
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="list-group">
+                        <li class="list-group-item">
+                            <div>                   
+                                <div class="media">
+                                    <a class="pull-left" href="#">
+                                        <img class="media-object resize-img"  src="https://pbs.twimg.com/profile_images/378800000520560847/85619cc22258499b15ce50be7b9631c5.jpeg" alt="...">
+                                        </a>
+                                    <form class="pull-right">
+                                        <button type="button" class="btn btn-danger btn-xs" title="Delete">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                            </button>
+                                        </form>
+                                    <div class="media-body">
+                                        <div class="media-heading">
+                                            Emerson <a href="#">@viejoemer</a>
+                                            <div>
+                                            2014-06-09
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <div>
+                                <div class="comment-text">
+                                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
+                                    <a href="http://www.youtube.com/watch?v=7-7knsP2n5w">http://www.youtube.com/watch?v=7-7knsP2n5w</a>
+                                    </div>
+                                <div class="btn-toolbar">
+                                    <div class="pull-left">
+                                        <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
+                                        <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
+                                        <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
+                                        </div>
+                                    <div class="pull-right">
+                                        <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#send">answers <span class="badge">3</span></a>
+                                        <a class="btn btn-default btn-xs " href="#">... </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </div>         
+                    </div>
+                </div>
+            </div>  
+      
+        <div class="modal fade" id="send" >
+            <div class="modal-dialog">
+                <form method="post" action="/send">
+                    <div class="modal-content">
+                        <div class="modal-header">                  
+                            <li class="list-group-item">
+                                <div>                   
+                                    <div class="media">
+                                        <a class="pull-left" href="#">
+                                            <img class="media-object resize-img"  src="https://pbs.twimg.com/profile_images/378800000520560847/85619cc22258499b15ce50be7b9631c5.jpeg" alt="...">
+                                            </a>
+    <!--                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>  -->
+                                        <div class="media-body">
+                                            <div class="media-heading">
+                                                Emerson <a href="#">@viejoemer</a>
+                                                <div>
+                                                2014-06-09
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <div>
+                                    <div class="comment-text">
+                                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
+                                        <a href="http://www.youtube.com/watch?v=7-7knsP2n5w">http://www.youtube.com/watch?v=7-7knsP2n5w</a>
+                                        </div>
+                                    <div class="btn-toolbar">
+                                        <div class="pull-left">
+                                            <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
+                                            <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
+                                            <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
+                                            </div>
+                                        <div class="pull-right">
+                                            <a class="btn btn-default btn-xs " href="#">answers <span class="badge">3</span></a>
+                                            <a class="btn btn-default btn-xs " href="#">... </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </div>
+                        <div class="modal-body">
+                            
+                            <div class="form-group">
+                                <textarea class="form-control" rows="5" id="textarea" name="textarea" placeholder="Answer!"></textarea>
+                                </div>
+                            
+                            <div class="input-group">
+                                <span class="input-group-addon">url</span>
+                                <input type="text" class="form-control" placeholder="link">
+                                </div>
+
+                            </div>
+                        <div class="modal-footer">
+                            <a class="pull-left">
+                                <img class="resize-img" src="https://pbs.twimg.com/profile_images/378800000520560847/85619cc22258499b15ce50be7b9631c5.jpeg">  
+                                </a>
+
+                            <button type="summit" class="btn btn-primary">
+                                <span class="glyphicon glyphicon-send"> Answer</span> 
+                                </button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </form><!-- /.form-send-post -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+      
+        </body>
+  </html>
