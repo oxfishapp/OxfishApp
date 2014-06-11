@@ -1,0 +1,48 @@
+<html>
+	<head>
+		<title>Profile user</title>
+		<style>
+			.imgresize {
+				width: 40px; /* you can use % */
+				height: 40px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="content">
+			<div class="input">
+				<img class="imgresize" src={{data.link_image}}>
+			</div>
+			<div class="input">name: {{data.name}}</div>
+			<div class="input">nickname: {{data.nickname}}</div>
+			<div class="input">registered: {{data.registered}}</div>
+			<div class="input">total_post: {{data.total_post}}</div>
+			<div class="input">score_answers: {{data.score_answers}}</div>
+		
+			{% if 'user' in session and data.nickname == session.user.nickname %}
+				<form action="{{ url_for('endpoints.register', nickname=data.nickname) }}" method="post" >
+			  		<div class="actions">
+			  			email: <input name="email" value={{data.email}}>
+			  			skills:
+			  			{% if data.skills %}
+			  				{% for skill in data.skills %}
+				  				<input name="skill_{{skill}}" value={{skill}}>
+		                	{% endfor %}
+			  			{% else %}
+				  			{% for i in range(3) %}
+				  				<input name="skill_{{i}}">
+		                	{% endfor %}
+		                {% endif %}
+			  			<input type="submit" class="btn primary" value="Save">
+			  		</div>
+				</form>
+			{% else %}
+				skills:
+				{% for skill in data.skills %}
+			  		<div class="input">{{skill}}</div>
+	            {% endfor %}
+			{% endif %}
+			
+		</div>
+	</body>
+</html>

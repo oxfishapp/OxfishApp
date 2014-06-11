@@ -4,10 +4,13 @@ Created on Jun 6, 2014
 @author: anroco
 '''
 import requests
+import json
 from flask import (current_app, url_for, request, render_template, session,
                     redirect)
+from flask.ext.restful import marshal
 from api_auth import tw_oauth, login_required, guest_user
 from restful_resource import OxRESTful_resource
+from views_formats import profile_user
 from commons import add_timeUTCnow
 
 
@@ -63,34 +66,64 @@ def auth_twitter(tw_resp):
     #validar si el usuario culmino el proceso de registro.
     if result.status_code == 428:
         session['full_register'] = False
-        return "terminar registro usuario"
+        return redirect(url_for('endpoints.profile',
+                                nickname=user['nickname']))
 
-    return redirect(url_for(next_url))
+    return redirect(url_for(next_url, nickname=user['nickname']))
 
 
-@login_required
-def profile():
-    user = session['user']
-    data = {'token_user': user['token_user'],
-            'hash_key': user['hash_key']}
+@guest_user
+def profile(nickname):
+    if not 'user' in session or session['user']['nickname'] != nickname:
+        data = {'token_user': session['token_guest']}
+        result = requests.get(OxRESTful_resource.USER_BY_NICKNAME + nickname,
+                              data=data)
+        if result.status_code != 200:
+            return 'error consultando por nickname'
+        data['hash_key'] = result.json()['hash_key']
+    else:
+        user = session['user']
+        data = {'token_user': session['token_guest'],
+                'hash_key': user['hash_key']}
     result = requests.get(OxRESTful_resource.USER_PROFILE, data=data)
-    return render_template('profile.html')
+    if result.status_code != 200:
+        return 'error consultando perfil'
+    result_data = marshal(result.json(), profile_user)
+    return render_template('profile.html', data=result_data)
 
 
 @login_required
-def register_email_skills():
+def register_email_skills(nickname):
     user = session['user']
-    data = {'token_user': user['token_user'],
-            'hash_key': user['hash_key']}
-    result = requests.put(OxRESTful_resource.REGISTER_SKILLS, data=data)
-    data = {'token_user': user['token_user'],
-            }
-    return "register email skills"
 
+    #crear una lista con los skills definidos por el usuario
+    skills = [v for k, v in request.form.iteritems() if k.startswith('skill_')]
 
+    #definir los datos para enviar la solicitud de registro de skills
+    data = {'token_user': user['token_user'], 'key_user': user['key'],
+            'jsonskills': json.dumps(skills)}
+    result = requests.post(OxRESTful_resource.REGISTER_SKILLS, data=data)
 
+    #validar si el registro fue exitoso o no
+    if result.status_code != 200:
+        return 'error registrando los skills'
+
+    #definir los datos para enviar la solicitud de registro de email
+    data = {'token_user': user['token_user'], 'email': request.form['email']}
+    result = requests.put(OxRESTful_resource.REGISTER_EMAIL, data=data)
+
+    #validar si el registro fue exitoso o no
+    if result.status_code != 200:
+        return 'error registrando email'
+
+    #actualizar los datos de sesion del usuario con los actualizados
+    session['user'].update(result.json())
+    if 'full_register' in session:
+        session.pop('full_register')
+        return redirect(url_for('endpoints.home', nickname=user['nickname']))
+    return redirect(url_for('endpoints.profile', nickname=user['nickname']))
 
 
 @login_required
-def home():
+def home(nickname):
     return render_template('layout_in.html')

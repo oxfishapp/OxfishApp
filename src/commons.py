@@ -4,6 +4,16 @@ Created on Jun 6, 2014
 @author: anroco
 '''
 
+from flask.ext.restful.fields import Raw
+
+
+class to_List(Raw):
+    def format(self, value):
+        """ (set) -> list
+        retorna value como una lista (list).
+        """
+        return value if isinstance(value, list) else list(value)
+
 
 def generate_token(secret_key=None, expiration=600, **kwargs):
     '''

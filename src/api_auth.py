@@ -15,7 +15,6 @@ TW_CONSUMER_KEY = 'QbINcoPerlOi4Y4QD3wSjHJKp'
 TW_CONSUMER_SECRET = 'ZBR4eNAo6KUK0gnZO2vm2JKLZdU4gh3DVbcnSibC42diBz1fiJ'
 TW_NAME = 'restanroco'
 TW_ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth/access_token'
-#TW_AUTHORIZE_URL = 'https://api.twitter.com/oauth/authorize'
 TW_REQUEST_TOKEN_URL = 'https://api.twitter.com/oauth/request_token'
 TW_BASE_URL = 'https://api.twitter.com/1.1/'
 TW_AUTHORIZE_URL = 'https://api.twitter.com/oauth/authenticate'
@@ -52,7 +51,8 @@ def login_required(func):
                             next_url=request.endpoint))
 
         #verifica si el usuario ya termino de realizar el proceso de registro
-        elif 'full_register' in session and not session['full_register']:
+        elif request.endpoint != 'endpoints.register' and \
+                'full_register' in session and not session['full_register']:
             return 'terminar de registrarse'
 
         return func(*args, **kwargs)
@@ -114,7 +114,8 @@ def life_token_user():
             data = {'token_user': user['token_user']}
             resp = requests.put(OxRESTful_resource.RENEW_TOKEN_USER, data=data)
             if resp.status_code == 200:
-                user['token_user'] = resp.text.strip('"')
+                import json
+                user['token_user'] = json.loads(resp.text)
                 user['timelife_token'] = add_timeUTCnow(timelife_token)
                 session['user'] = user
                 return True
