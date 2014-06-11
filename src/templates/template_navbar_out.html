@@ -28,6 +28,10 @@
           .navbar-img{
               margin-top: -9px
                       }
+          .resize-img-profile{
+              width:170px; /* you can use % */
+              height:170px;
+                    }
           </style>
       </head>
   <body role="document">
@@ -52,14 +56,11 @@
                         <a class="btn btn-default" href="#">Sign in</a>
                         <a class="btn btn-primary" href="#"><span class="glyphicon glyphicon-star"></span> Join</a>
                     </div>
-                    <div class="navbar-form navbar-right" role="search">
+                    <form class="navbar-form navbar-right" role="search" method="get" action="/send">
                         <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Search">
+                            <input type="text" class="form-control" placeholder="Finder Ex: flask">
                         </div>
-                        <button type="submit" class="btn btn-default">
-                            <span class="glyphicon glyphicon-search"></span>
-                        </button>
-                    </div>
+                    </form>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
         </nav>      

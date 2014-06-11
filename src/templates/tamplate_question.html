@@ -3,36 +3,35 @@
   <head>
       <meta charset="utf-8">
       <title>Oxfish</title>
+      
       <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
       <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" rel="javascript" type="text/javascript"></script>
-      <script src="//code.jquery.com/jquery-1.11.0.min.js" rel="javascript" type="text/javascript"></script>
+      <script src="//code.jquery.com/jquery-1.11.0.min.js" rel="javascript" type="text/javascript"></script>  
+      
       <!-- Latest compiled and minified JavaScript -->
       <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" rel="javascript" type="text/javascript"></script>
-      <script type="text/javascript" rel="javascript">
-//            jQuery(function ($) {
-//                var $btn = $('.action').hide()
-//                $(".list-group-item").mouseenter(function () {
-//                    $(this).find('.action').show();
-////                    $btn.show();
-//                });
-//
-//                $(".list-group-item").mouseleave(function () {
-//                    $(this).find('.action').hide();
-////                    $btn.hide();
-//                });
-//            })
-      
+
+      <script>
+            $('.dropdown-toggle').dropdown();
+            $(window).on('resize load', function() {
+                $('body').css({"padding-top": $(".navbar").height() + "px"});
+            });
       </script>
+
       <!-- Latest compiled and minified CSS -->
       <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel=stylesheet type=text/css >
       <style>
           .resize-img{
-              width:40px;
+              width:40px; /* you can use % */
               height:40px;
                     }
           .navbar-img{
               margin-top: -9px
                       }
+          .resize-img-profile{
+              width:170px; /* you can use % */
+              height:170px;
+                    }
           </style>
       </head>
   <body>
@@ -55,7 +54,6 @@
                                   <div class="form-group">
                                       <h4 class="modal-title">Looking for people who know about...</h4>
                                   </div>
-                                  <div class="form-inline">
                                       <div class="row">
                                           <div class="form-group col-sm-4">
                                               <div class="input-group">
@@ -76,7 +74,6 @@
                                               </div>
                                           </div>
                                       </div>
-                                  </div>
                               </div>
                               <div class="modal-body">
                                   <div class="form-group">

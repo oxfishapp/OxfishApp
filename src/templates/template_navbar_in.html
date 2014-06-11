@@ -10,7 +10,7 @@
       
       <!-- Latest compiled and minified JavaScript -->
       <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" rel="javascript" type="text/javascript"></script>
-      
+
       <script>
             $('.dropdown-toggle').dropdown();
             $(window).on('resize load', function() {
@@ -28,6 +28,10 @@
           .navbar-img{
               margin-top: -9px
                       }
+          .resize-img-profile{
+              width:170px; /* you can use % */
+              height:170px;
+                    }
           </style>
       </head>
   <body>
@@ -66,7 +70,7 @@
                             <a class="btn btn-default" href="#"><span class="glyphicon glyphicon glyphicon-cog"></span></a>
                             <a class="btn btn-default" href="#">Log off </a>
                     </div>
-                    <form class="navbar-form navbar-right" role="search">
+                    <form class="navbar-form navbar-right" role="search" method="get" action="/send">
                         <div class="form-group">
                             <input type="text" class="form-control" placeholder="Finder Ex: flask">
                         </div>

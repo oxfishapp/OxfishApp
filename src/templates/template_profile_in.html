@@ -3,66 +3,106 @@
   <head>
       <meta charset="utf-8">
       <title>Oxfish</title>
+      
       <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
       <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" rel="javascript" type="text/javascript"></script>
-      <script src="//code.jquery.com/jquery-1.11.0.min.js" rel="javascript" type="text/javascript"></script>
+      <script src="//code.jquery.com/jquery-1.11.0.min.js" rel="javascript" type="text/javascript"></script>  
+      
       <!-- Latest compiled and minified JavaScript -->
       <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" rel="javascript" type="text/javascript"></script>
-      <script type="text/javascript" rel="javascript">
-//            jQuery(function ($) {
-//                var $btn = $('.action').hide()
-//                $(".list-group-item").mouseenter(function () {
-//                    $(this).find('.action').show();
-////                    $btn.show();
-//                });
-//
-//                $(".list-group-item").mouseleave(function () {
-//                    $(this).find('.action').hide();
-////                    $btn.hide();
-//                });
-//            })
-      
+
+      <script>
+            $('.dropdown-toggle').dropdown();
+            $(window).on('resize load', function() {
+                $('body').css({"padding-top": $(".navbar").height() + "px"});
+            });
       </script>
+
       <!-- Latest compiled and minified CSS -->
       <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel=stylesheet type=text/css >
       <style>
           .resize-img{
-              width:40px;
+              width:40px; /* you can use % */
               height:40px;
                     }
           .navbar-img{
               margin-top: -9px
                       }
+          .resize-img-profile{
+              width:170px; /* you can use % */
+              height:170px;
+                    }
           </style>
       </head>
   <body>
-      <div class="row">
-          <div class="col-md-offset-2 col-md-8 col-lg-offset-3 col-lg-6 text-center">
+      <div class="container">
+          <div class="col-md-6 col-md-offset-3 text-center">
               <div class="col-sm-12">
                   <center>
-                      <img src="http://www.localcrimenews.com/wp-content/uploads/2013/07/default-user-icon-profile.png" alt="" class="img-circle img-responsive">
+                      <img src="https://pbs.twimg.com/profile_images/378800000520560847/85619cc22258499b15ce50be7b9631c5.jpeg" alt="" class="resize-img-profile img-circle">
                   </center>
               </div>
               <div class="col-sm-12">
                   <h2>Emerson Perdomo</h2>
                   <p><strong>Nickname: </strong> viejoemer </p>
+                  <div class="row">
+                      <div class="col-md-offset-3">
+                          <div class="col-xs-4">
+                              <h2><strong> 20,7K </strong></h2>  
+                              <p><small class="label label-default">Questions</small></p>
+                          </div>
+                          <div class="col-xs-4">
+                              <h2><strong>245</strong></h2>
+                              <p><small class="label label-default">Score</small></p>
+                          </div>
+                      </div>
+                  </div>
+                  <strong>email: </strong>
+                    <div class="row">
+                        <div class="col-md-offset-3">
+                            <div class="col-md-8">
+                                  <div class="form-group">
+                                      <div class="input-group input-group-sm ">
+                                          <span class="input-group-addon">@</span>
+                                          <input type="text" class="form-control" id="skillone" placeholder="example@example.com">
+                                      </div>
+                                  </div>
+                            </div>
+                        </div>                                                    
+                    </div>
                   <div id="tags" itemprop="description">
-                      <strong><span>Skills:</span></strong>
-                      <a href="#"><span class="label label-primary ">user interface</span></a>
-                      <a href="#"><span class="label label-primary">user interface</span></a>
-                      <a href="#"><span class="label label-primary">windowsserver2</span></a>
-                  </div>            
-              </div>            
-              <div class="col-xs-12">
-                  <h2><strong> 20,7K </strong></h2>                    
-                  <p><small class="label label-default">Questions</small></p>
-<!--                    <button class="btn btn-success btn-block"><span class="fa fa-plus-circle"></span> Follow </button>-->
-              </div>
-              <div class="col-xs-12">
-                  <h2><strong>245</strong></h2>                    
-                  <p><small class="label label-default">Score</small></p>
-              </div>
+                    <strong><span>Skills:</span></strong>
+                    <div class="row">
+                        <div class="col-md-offset-3">
+                            <div class="col-md-8">
+                                  <div class="form-group">
+                                      <div class="input-group input-group-sm">
+                                          <span class="input-group-addon">♦</span>
+                                          <input type="text" class="form-control" id="skillone" placeholder="Ex: java">
+                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                      <div class="input-group input-group-sm">
+                                          <span class="input-group-addon">♦</span>
+                                          <input type="text" class="form-control" id="skilltwo" placeholder="Ex: dynamodb">
+                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                      <div class="input-group input-group-sm">
+                                          <span class="input-group-addon">♦</span>
+                                          <input type="text" class="form-control" id="skillthree" placeholder="Ex: python">
+                                      </div>
+                                  </div>
+                            </div>
+                        </div>                                                    
+                    </div>
+                  </div>   
+                  <button class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
+              </div>          
+
           </div>               
       </div>
     </body>
 </html>
+
+               
