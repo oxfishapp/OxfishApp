@@ -77,7 +77,10 @@ def profile(nickname):
 
     Permite construir el perfil de un usuario para ser mostrado al usuario.
     Tambien permite la actualizacion del perfil del usuario. Retorna la
-    renderizacion del perfil.
+    renderizacion del perfil. Cuando la solicitud del recurso es por el metodo
+    GET, se realiza la consulta del perfil del usuario tomando como criterio de
+    busqueda el nickname ingresado. Si el metodo es POST se realiza la
+    actualizacion del perfil del usuario que este en sesion activa.
     '''
     if request.method == 'GET':
         user_profile = user_by_nickname(nickname)
@@ -132,6 +135,13 @@ def register_email_skills():
 
 @guest_user
 def home(nickname):
+    '''
+    (str) -> flask.render_template
+
+    Permite cargar el historial de questions y answers que ha realizado el
+    usuario, desde el momento en que se registro en la aplicacion organizadas
+    cronologicamente.
+    '''
     user = user_by_nickname(nickname)
     data = {'token_user': session['token_guest']}
     result = requests.get(OxRESTful_resource.QUESTION_ANSWER_BY_USER + \
@@ -143,6 +153,14 @@ def home(nickname):
 
 @login_required
 def create_question(nickname):
+    '''
+    (str) -> flask.redirect
+
+    Gestiona el proceso de creacion de una nueva pregunta por parte del usuario
+    Si el metodo de consumo del recurso es GET realiza el renderizado de la
+    vista questions Si el metodo de consumo es POST realiza el registro de la
+    nueva pregunta en el sistema.
+    '''
     if request.method == 'GET':
         return render_template('question.html')
 
@@ -163,7 +181,11 @@ def create_question(nickname):
 
 @guest_user
 def view_alone(question):
-    pass
+    '''
+    (str) -> flask.redirect
+
+    '''
+    
 
 
 def user_by_nickname(nickname):
