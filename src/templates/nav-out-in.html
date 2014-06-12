@@ -32,7 +32,7 @@
             <div class="navbar-form navbar-right" role="query_logoff_settings">
                     <a class="btn btn-primary" href="{{ url_for('endpoints.ask') }}"><span class="glyphicon glyphicon-send"> Send</span></a>
                     <a class="btn btn-default" href="{{ url_for('endpoints.profile') }}"><span class="glyphicon glyphicon glyphicon-cog"></span></a>
-                    <a class="btn btn-default" href="{{ url_for('logout') }}">Log out </a>
+                    <a class="btn btn-default" href="{{ url_for('endpoints.logout') }}">Log out </a>
             </div>
         {% endif %}
     {% endblock %}
