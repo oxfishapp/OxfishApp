@@ -14,7 +14,7 @@
       <script>
             $('.dropdown-toggle').dropdown();
             $(window).on('resize load', function() {
-                $('body').css({"padding-top": ($(".navbar").height()+ 15 )+ "px"});
+                $('body').css({"padding-top": $(".navbar").height() + "px"});
             });
       </script>
 
@@ -50,7 +50,7 @@
                   <div class="modal-dialog">
                       <form method="post" action="/send">
                           <div class="modal-content">
-                              <div class="modal-header">
+                              <div class="modal-body">
                                   <li class="list-group-item">
                                       <div>
                                           <div class="media">
@@ -73,34 +73,16 @@
                                               <a href="http://www.youtube.com/watch?v=7-7knsP2n5w">http://www.youtube.com/watch?v=7-7knsP2n5w</a>
                                           </div>
                                           <div class="btn-toolbar">
-                                              <div class="pull-left">
-                                                  <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
-                                                  <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
-                                                  <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
-                                              </div>
                                               <div class="pull-right">
-                                                  <a class="btn btn-default btn-xs " href="#">answers <span class="badge">3</span></a>
                                                   <a class="btn btn-default btn-xs " href="#">... </a>
                                               </div>
                                           </div>
                                       </div>
                                   </li>
                               </div>
-                              <div class="modal-body">
-                                  <div class="form-group">
-                                      <textarea class="form-control" rows="5" id="textarea" name="textarea" placeholder="Answer!"></textarea>
-                                  </div>
-                                  <div class="input-group">
-                                      <span class="input-group-addon">url</span>
-                                      <input type="text" class="form-control" placeholder="link">
-                                  </div>
-                              </div>
                               <div class="modal-footer">
-                                  <a class="pull-left">
-                                      <img class="img-circle resize-img" src="https://pbs.twimg.com/profile_images/378800000520560847/85619cc22258499b15ce50be7b9631c5.jpeg">
-                                  </a>
-                                  <button type="summit" class="btn btn-primary">
-                                      <span class="glyphicon glyphicon-send"> Answer</span>
+                                  <button type="summit" class="btn btn-danger">
+                                      <span class="glyphicon glyphicon-trash"> Delete</span>
                                   </button>
                                   <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                               </div>
