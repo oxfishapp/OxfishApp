@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <title>Oxfish</title>
+      
+      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js" rel="javascript" type="text/javascript"></script>
+      <script src="//code.jquery.com/jquery-1.11.0.min.js" rel="javascript" type="text/javascript"></script>  
+      
+      <!-- Latest compiled and minified JavaScript -->
+      <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" rel="javascript" type="text/javascript"></script>
+
+      <script>
+            $('.dropdown-toggle').dropdown();
+            $(window).on('resize load', function() {
+                $('body').css({"padding-top": ($(".navbar").height()+ 15 )+ "px"});
+            });
+      </script>
+
+      <!-- Latest compiled and minified CSS -->
+      <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel=stylesheet type=text/css >
+      <style>
+          .resize-img{
+              width:40px; /* you can use % */
+              height:40px;
+                    }
+          .navbar-img{
+              margin-top: -9px
+                      }
+          .resize-img-profile{
+              width:150px; /* you can use % */
+              height:150px;
+                    }
+          </style>
+      </head>
+  <body>
+      <div class="container">
+          <div class="row">
+          <div class="col-md-6 col-md-offset-3 text-center">
+              <div class="col-sm-12">
+                  <center>
+                      <img src="https://pbs.twimg.com/profile_images/378800000520560847/85619cc22258499b15ce50be7b9631c5.jpeg" alt="" class="resize-img-profile img-circle">
+                  </center>
+              </div>
+              <div class="col-sm-12">
+                  <h3>Emerson Perdomo</h3>
+                  <p><strong>Nickname: </strong> viejoemer </p>
+                  
+                  <h3><strong> 20,7K </strong></h3>  
+                  <p><small class="label label-default">Questions</small></p>
+
+                  <h3><strong>245</strong></h3>
+                  <p><small class="label label-default">Score</small></p>
+                  
+                  <div id="tags" itemprop="description">
+                      <strong><span>Skills:</span></strong>
+                      <a href="#"><span class="label label-primary ">user interface</span></a>
+                      <a href="#"><span class="label label-primary">user interface</span></a>
+                      <a href="#"><span class="label label-primary">windowsserver2</span></a>
+                  </div>           
+              </div> 
+            </div>
+        </div>      
+      </div>
+    </body>
+</html>
