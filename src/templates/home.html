@@ -1,0 +1,41 @@
+<html>
+	<head>
+		<title>Profile user</title>
+		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+		<style>
+			.imgresize {
+				width: 40px; /* you can use % */
+				height: 40px;
+			}
+		</style>
+	</head>
+	<body>
+		{% for post in data_posts %}
+			<div>
+				<tr>
+				    <td><img class="imgresize" src={{ post.link_image }}></td>
+				    <td>{{ post.name }}</td>
+				    <td>{{ post.nickname }}</td>
+				</tr>
+			</div>
+			<div>
+				<td>{{ post.message140 }}</td>
+			</div>
+			<div>link video: {{ post.link }}</div>
+			<div>
+				{% if post.flag_answer %}
+				<tr>
+				    {% for skill in post.skills %}
+		  				<input type="submit" value="{{ skill }}">
+                	{% endfor %}
+					<td>answers: {{ post.total_answers }}</td>				    
+				</tr>
+				{% endif %}
+				<form method="get" action="{{ url_for('endpoints.view_alone', question=post['keys']['hash_key'] if post.flag_answer else post['keys']['hash_key_original']) }}">
+					<input type="submit" value="view_alone">
+			    </form>
+
+			</div>
+		{% endfor %}	
+	</body>
+</html>

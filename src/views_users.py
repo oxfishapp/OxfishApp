@@ -7,10 +7,8 @@ import requests
 import json
 from flask import (current_app, url_for, request, render_template, session,
                     redirect)
-from flask.ext.restful import marshal
 from api_auth import tw_oauth, login_required, guest_user
 from restful_resource import OxRESTful_resource
-from views_formats import profile_user
 from commons import add_timeUTCnow
 
 
@@ -74,26 +72,31 @@ def auth_twitter(tw_resp):
 
 @guest_user
 def profile(nickname):
-    if not 'user' in session or session['user']['nickname'] != nickname:
-        data = {'token_user': session['token_guest']}
-        result = requests.get(OxRESTful_resource.USER_BY_NICKNAME + nickname,
-                              data=data)
-        if result.status_code != 200:
-            return 'error consultando por nickname'
-        data['hash_key'] = result.json()['hash_key']
-    else:
-        user = session['user']
-        data = {'token_user': session['token_guest'],
-                'hash_key': user['hash_key']}
+    '''
+    (str) -> flask.render_template
+
+    Permite construir el perfil de un usuario para ser mostrado al usuario.
+    '''
+    user = user_by_nickname(nickname)
+    data = {'token_user': session['token_guest'], 'hash_key': user['hash_key']}
     result = requests.get(OxRESTful_resource.USER_PROFILE, data=data)
     if result.status_code != 200:
         return 'error consultando perfil'
-    result_data = marshal(result.json(), profile_user)
-    return render_template('profile.html', data=result_data)
+    return render_template('profile.html', data=result.json())
 
 
 @login_required
 def register_email_skills(nickname):
+    '''
+    (str) -> flask.redirect
+
+    permite registrar el email y los skills del usuario, si el registro fue
+    exitodso puede ser rederigido a uno de dos endpoints:
+        * endpoints.home, si es la primera vez que se registra el email y los
+        skills.
+        * endpoints.profile, si el usuario ya ha registrado previamente esta
+        informacion y esta realizano un proceso de actualizacion.
+    '''
     user = session['user']
 
     #crear una lista con los skills definidos por el usuario
@@ -124,6 +127,37 @@ def register_email_skills(nickname):
     return redirect(url_for('endpoints.profile', nickname=user['nickname']))
 
 
-@login_required
+@guest_user
 def home(nickname):
-    return render_template('layout_in.html')
+    user = user_by_nickname(nickname)
+    data = {'token_user': session['token_guest']}
+    result = requests.get(OxRESTful_resource.QUESTIONS_BY_USER + \
+                          user['key'], data=data)
+    if result.status_code != 200:
+        return 'error cargar historial usuario'
+    return render_template('home.html', data_posts=result.json())
+
+
+@guest_user
+def view_alone(question):
+    
+
+
+def user_by_nickname(nickname):
+    '''
+    (str) -> dict
+
+    permite consultar un usuario teniendo como criterio de busqueda el nickname
+    del usuario. Si el usuario no es mismo de la sesion, se consulta el recurso
+    disponible en el Ox_RESTful, de lo contrario se retorna el mismo usuario de
+    sesion.
+    '''
+    if not 'user' in session or session['user']['nickname'] != nickname:
+        data = {'token_user': session['token_guest']}
+        result = requests.get(OxRESTful_resource.USER_BY_NICKNAME + nickname,
+                              data=data)
+        if result.status_code != 200:
+            return 'error consultando por nickname'
+        return result.json()
+    else:
+        return session['user']

@@ -7,10 +7,12 @@ Created on Jun 6, 2014
 
 class OxRESTful_resource():
 
-    SERVER_NAME = 'http://localhost:5000'
-    LOGIN_USER = SERVER_NAME + '/api/1.0/login'
-    REGISTER_SKILLS = SERVER_NAME + '/api/1.0/auth/skills'
-    REGISTER_EMAIL = SERVER_NAME + '/api/1.0/auth/register'
-    USER_PROFILE = SERVER_NAME + '/api/1.0/user'
-    USER_BY_NICKNAME = SERVER_NAME + '/api/1.0/user/'
-    RENEW_TOKEN_USER = SERVER_NAME + '/api/1.0/auth/get_token'
+    SERVER_NAME = 'http://localhost:5000/api/1.0'
+    LOGIN_USER = SERVER_NAME + '/login'
+    REGISTER_SKILLS = SERVER_NAME + '/auth/skills'
+    REGISTER_EMAIL = SERVER_NAME + '/auth/register'
+    USER_PROFILE = SERVER_NAME + '/user'
+    USER_BY_NICKNAME = SERVER_NAME + '/user/'
+    RENEW_TOKEN_USER = SERVER_NAME + '/auth/get_token'
+    QUESTIONS_BY_USER = SERVER_NAME + '/home/'
+    VIEW_ALONE_ASK = SERVER_NAME + '/home/'
