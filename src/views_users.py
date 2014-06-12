@@ -76,17 +76,18 @@ def profile(nickname):
     (str) -> flask.render_template
 
     Permite construir el perfil de un usuario para ser mostrado al usuario.
+    Tambien permite la actualizacion del perfil del usuario. Retorna la
+    renderizacion del perfil.
     '''
-    user = user_by_nickname(nickname)
-    data = {'token_user': session['token_guest'], 'hash_key': user['hash_key']}
-    result = requests.get(OxRESTful_resource.USER_PROFILE, data=data)
-    if result.status_code != 200:
-        return 'error consultando perfil'
-    return render_template('profile.html', data=result.json())
+    if request.method == 'GET':
+        user_profile = user_by_nickname(nickname)
+    else:
+        user_profile = register_email_skills()
+    return render_template('profile.html', profile=user_profile)
 
 
 @login_required
-def register_email_skills(nickname):
+def register_email_skills():
     '''
     (str) -> flask.redirect
 
@@ -100,7 +101,7 @@ def register_email_skills(nickname):
     user = session['user']
 
     #crear una lista con los skills definidos por el usuario
-    skills = [v for k, v in request.form.iteritems() if k.startswith('skill_')]
+    skills = request.form.getlist('skill')
 
     #definir los datos para enviar la solicitud de registro de skills
     data = {'token_user': user['token_user'], 'key_user': user['key'],
@@ -112,7 +113,8 @@ def register_email_skills(nickname):
         return 'error registrando los skills'
 
     #definir los datos para enviar la solicitud de registro de email
-    data = {'token_user': user['token_user'], 'email': request.form['email']}
+    data = {'token_user': user['token_user'],
+            'email': request.form['email']}
     result = requests.put(OxRESTful_resource.REGISTER_EMAIL, data=data)
 
     #validar si el registro fue exitoso o no
@@ -123,24 +125,45 @@ def register_email_skills(nickname):
     session['user'].update(result.json())
     if 'full_register' in session:
         session.pop('full_register')
-        return redirect(url_for('endpoints.home', nickname=user['nickname']))
-    return redirect(url_for('endpoints.profile', nickname=user['nickname']))
+        return redirect(url_for('endpoints.home',
+                                nickname=user['nickname']))
+    return result.json()
 
 
 @guest_user
 def home(nickname):
     user = user_by_nickname(nickname)
     data = {'token_user': session['token_guest']}
-    result = requests.get(OxRESTful_resource.QUESTIONS_BY_USER + \
+    result = requests.get(OxRESTful_resource.QUESTION_ANSWER_BY_USER + \
                           user['key'], data=data)
     if result.status_code != 200:
         return 'error cargar historial usuario'
-    return render_template('home.html', data_posts=result.json())
+    return render_template('home.html', home=result.json())
+
+
+@login_required
+def create_question(nickname):
+    if request.method == 'GET':
+        return render_template('question.html')
+
+    user = session['user']
+
+    #crear una lista con los skills definidos para la pregunta
+    data_question = request.form.to_dict()
+    add_data = {'skills': request.form.getlist('skills'), 'source': 'web',
+                'key_user': user['key']}
+    data_question.update(add_data)
+    data = {'token_user': user['token_user'],
+            'jsontimeline': json.dumps(data_question)}
+    result = requests.post(OxRESTful_resource.CREATE_QUESTION, data=data)
+    if result.status_code != 200:
+        return 'error crear question'
+    return redirect(url_for('endpoints.home', nickname=user['nickname']))
 
 
 @guest_user
 def view_alone(question):
-    
+    pass
 
 
 def user_by_nickname(nickname):
@@ -148,16 +171,11 @@ def user_by_nickname(nickname):
     (str) -> dict
 
     permite consultar un usuario teniendo como criterio de busqueda el nickname
-    del usuario. Si el usuario no es mismo de la sesion, se consulta el recurso
-    disponible en el Ox_RESTful, de lo contrario se retorna el mismo usuario de
-    sesion.
+    del usuario.
     '''
-    if not 'user' in session or session['user']['nickname'] != nickname:
-        data = {'token_user': session['token_guest']}
-        result = requests.get(OxRESTful_resource.USER_BY_NICKNAME + nickname,
-                              data=data)
-        if result.status_code != 200:
-            return 'error consultando por nickname'
-        return result.json()
-    else:
-        return session['user']
+    data = {'token_user': session['token_guest']}
+    result = requests.get(OxRESTful_resource.USER_BY_NICKNAME + nickname,
+                          data=data)
+    if result.status_code != 200:
+        return 'error consultando por nickname'
+    return result.json()

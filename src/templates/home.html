@@ -10,12 +10,12 @@
 		</style>
 	</head>
 	<body>
-		{% for post in data_posts %}
+		{% for post in home %}
 			<div>
 				<tr>
 				    <td><img class="imgresize" src={{ post.link_image }}></td>
-				    <td>{{ post.name }}</td>
-				    <td>{{ post.nickname }}</td>
+				    <td>{{ home.name }}</td>
+				    <td>{{ home.nickname }}</td>
 				</tr>
 			</div>
 			<div>
@@ -31,7 +31,7 @@
 					<td>answers: {{ post.total_answers }}</td>				    
 				</tr>
 				{% endif %}
-				<form method="get" action="{{ url_for('endpoints.view_alone', question=post['keys']['hash_key'] if post.flag_answer else post['keys']['hash_key_original']) }}">
+				<form method="get" action="{{ url_for('endpoints.show', question=post['keys']['hash_key'] if post.flag_answer else post['keys']['hash_key_original']) }}">
 					<input type="submit" value="view_alone">
 			    </form>
 
