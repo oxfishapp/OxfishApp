@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Ask</title>
+		<title>Answer</title>
 		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 		<style>
 			.imgresize {
@@ -21,15 +21,9 @@
 		</script>
 	</head>
 	<body>
-		<form method="post" action="{{ url_for('endpoints.ask', nickname=session.user.nickname) }}">
+		<form method="post" action="{{ url_for('endpoints.answer', question=question) }}">
 			<input id="latLong" type="hidden" name="geolocation">
-			<div>
-				<tr>
-					<td><input name="skills" value=""></td>
-					<td><input name="skills" value=""></td>
-					<td><input name="skills" value=""></td>
-				</tr>
-			</div>
+			
 			<div>
 				<textarea name="message140" rows="4" cols="50"></textarea>
 			</div>

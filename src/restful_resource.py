@@ -17,3 +17,4 @@ class OxRESTful_resource():
     QUESTION_ANSWER_BY_USER = SERVER_NAME + '/home/'
     VIEW_ALONE_ASK = SERVER_NAME + '/home/'
     CREATE_QUESTION = SERVER_NAME + '/auth/post_q'
+    CREATE_ANSWER = SERVER_NAME + '/auth/post_a'

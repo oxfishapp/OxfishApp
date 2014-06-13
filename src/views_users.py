@@ -23,7 +23,8 @@ def login():
 
     next_url = request.args.get('next_url') or 'endpoints.home'
     return tw_oauth.authorize(callback=url_for('endpoints.auth_twitter',
-                                               next_url=next_url))
+                                               next_url=next_url,
+                                               data=request.args.get('data')))
 
 
 @tw_oauth.authorized_handler
@@ -44,6 +45,7 @@ def auth_twitter(tw_resp):
     #definir el endpoint al cual ser redirigido
     next_url = request.args.get('next_url') or \
                                 url_for('endpoints.timelinepublic')
+
     data = {'token_user': session['token_guest'],
             'access_token': tw_resp['oauth_token'],
             'token_secret': tw_resp['oauth_token_secret']}
@@ -66,8 +68,11 @@ def auth_twitter(tw_resp):
         session['full_register'] = False
         return redirect(url_for('endpoints.profile',
                                 nickname=user['nickname']))
+    import ast
 
-    return redirect(url_for(next_url, nickname=user['nickname']))
+    data = {'nickname': user['nickname']} if next_url == 'endpoints.home' \
+            else ast.literal_eval(request.args.get('data'))
+    return redirect(url_for(next_url, **data))
 
 
 @guest_user
@@ -152,7 +157,7 @@ def home(nickname):
 
 
 @login_required
-def create_question(nickname):
+def create_question():
     '''
     (str) -> flask.redirect
 
@@ -166,7 +171,6 @@ def create_question(nickname):
 
     user = session['user']
 
-    #crear una lista con los skills definidos para la pregunta
     data_question = request.form.to_dict()
     add_data = {'skills': request.form.getlist('skills'), 'source': 'web',
                 'key_user': user['key']}
@@ -179,13 +183,40 @@ def create_question(nickname):
     return redirect(url_for('endpoints.home', nickname=user['nickname']))
 
 
+@login_required
+def create_answer(question):
+    '''
+    (str) -> flask.redirect
+
+    Gestiona el proceso de creacion de una respuesta por parte del usuario
+    Si el metodo de consumo del recurso es GET realiza el renderizado de la
+    vista answer. Si el metodo de consumo es POST realiza el registro de la
+    nueva respuesta en el sistema.
+    '''
+
+    if request.method == 'GET':
+        return render_template('answer.html', question=question)
+
+    user = session['user']
+    data_question = request.form.to_dict()
+    add_data = {'source': 'web', 'key_user': user['key'],
+                'key_post_original': question}
+    data_question.update(add_data)
+    data = {'token_user': user['token_user'],
+            'jsontimeline': json.dumps(data_question)}
+    result = requests.post(OxRESTful_resource.CREATE_ANSWER, data=data)
+    if result.status_code != 200:
+        return 'error crear answer'
+    return redirect(url_for('endpoints.home', nickname=user['nickname']))
+
+
 @guest_user
 def view_alone(question):
     '''
     (str) -> flask.redirect
 
     '''
-    
+    pass
 
 
 def user_by_nickname(nickname):

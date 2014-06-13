@@ -48,7 +48,7 @@ def login_required(func):
         #valida si el usuario tiene una sesion activa
         if not ('user' in session and session['user'] and life_token_user()):
             return redirect(url_for('endpoints.login',
-                            next_url=request.endpoint))
+                            next_url=request.endpoint, data=kwargs))
 
         #verifica si el usuario ya termino de realizar el proceso de registro
         elif request.endpoint != 'endpoints.register' and \

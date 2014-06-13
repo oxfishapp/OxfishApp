@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>Profile user</title>
+		<title>Home</title>
 		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 		<style>
 			.imgresize {
@@ -10,6 +10,8 @@
 		</style>
 	</head>
 	<body>
+		<a class="btn btn-default" href="{{ url_for('endpoints.ask') }}">Help me!</a>
+			    		
 		{% for post in home %}
 			<div>
 				<tr>
@@ -28,12 +30,13 @@
 				    {% for skill in post.skills %}
 		  				<input type="submit" value="{{ skill }}">
                 	{% endfor %}
-					<td>answers: {{ post.total_answers }}</td>				    
+					<td>answers: {{ post.total_answers }}</td>
+					
+					<a class="btn btn-default" href="{{ url_for('endpoints.answer', question=post['keys']['hash_key']) }}">Answer!</a>
+					
 				</tr>
 				{% endif %}
-				<form method="get" action="{{ url_for('endpoints.show', question=post['keys']['hash_key'] if post.flag_answer else post['keys']['hash_key_original']) }}">
-					<input type="submit" value="view_alone">
-			    </form>
+				<a class="btn btn-default" href="{{ url_for('endpoints.show', question=post['keys']['hash_key'] if post.flag_answer else post['keys']['hash_key_original']) }}">Show!</a>
 
 			</div>
 		{% endfor %}	
