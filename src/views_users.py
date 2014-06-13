@@ -91,7 +91,7 @@ def profile(nickname):
         user_profile = user_by_nickname(nickname)
     else:
         user_profile = register_email_skills()
-    return render_template('profile.html', profile=user_profile,
+    return render_template('_profile.html', profile=user_profile,
                            title='Profile')
 
 
@@ -154,7 +154,7 @@ def home(nickname):
                           user['key'], data=data)
     if result.status_code != 200:
         return 'error cargar historial usuario'
-    return render_template('home.html', home=result.json(), title='Home')
+    return render_template('_home.html', home=result.json(), title='Home')
 
 
 @login_required
@@ -168,7 +168,7 @@ def create_question():
     nueva pregunta en el sistema.
     '''
     if request.method == 'GET':
-        return render_template('question.html')
+        return render_template('_question.html')
 
     user = session['user']
 
@@ -196,7 +196,7 @@ def create_answer(question):
     '''
 
     if request.method == 'GET':
-        return render_template('answer.html', question=question)
+        return render_template('_answer.html', question=question)
 
     user = session['user']
     data_question = request.form.to_dict()
