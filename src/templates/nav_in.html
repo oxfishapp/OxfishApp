@@ -1,0 +1,30 @@
+{% extends "nav_out.html" %}
+{% block nav_img %}
+    {% if session.user %}
+        <a class="navbar-brand">
+          <img class="img-circle resize-img navbar-img" src="{{ session.user.link_image }}">  
+        </a>
+    {% endif %}
+{% endblock %}
+{% block nav_in_out %}
+    {% if not session.user %}
+        {{ super() }}
+    {% else %}
+        <div class="navbar-form navbar-left" role="skills">
+            <div class="btn-group">
+                {% for skill in session.skills %}
+                    <a class="btn btn-default" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
+                {% endfor %}
+            </div> 
+        </div>
+        <div class="navbar-form navbar-left" role="login">  
+                <a class="btn btn-default" href="{{ url_for('endpoints.home') }}"><span class="glyphicon glyphicon-home"></span></a>
+                <a class="btn btn-default" href="{{ url_for('endpoints.timeline') }}"><span class="glyphicon glyphicon-tasks"></span></a>
+        </div>
+        <div class="navbar-form navbar-right" role="query_logoff_profile">
+                <a class="btn btn-primary" href="{{ url_for('endpoints.ask') }}"><span class="glyphicon glyphicon-send"> Send</span></a>
+                <a class="btn btn-default" href="{{ url_for('endpoints.profile') }}"><span class="glyphicon glyphicon glyphicon-cog"></span></a>
+                <a class="btn btn-default" href="{{ url_for('endpoints.logout') }}">Log out </a>
+        </div>
+    {% endif %}
+{% endblock %}
