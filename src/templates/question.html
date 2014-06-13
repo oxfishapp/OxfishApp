@@ -21,7 +21,7 @@
 		</script>
 	</head>
 	<body>
-		<form method="post" action="{{ url_for('endpoints.ask', nickname=session.user.nickname) }}">
+		<form method="post" action="{{ url_for('endpoints.ask') }}">
 			<input id="latLong" type="hidden" name="geolocation">
 			<div>
 				<tr>

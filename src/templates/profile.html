@@ -1,15 +1,6 @@
-<html>
-	<head>
-		<title>Profile</title>
-		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-		<style>
-			.imgresize {
-				width: 40px; /* you can use % */
-				height: 40px;
-			}
-		</style>
-	</head>
-	<body>
+{% extends "layout.html" %}
+{% block body_base %}
+
 		<div id="content">
 			<div class="input">
 				<img class="imgresize" src={{profile.link_image}}>
@@ -45,5 +36,4 @@
 			{% endif %}
 			
 		</div>
-	</body>
-</html>
+{% endblock %}

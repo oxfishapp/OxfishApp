@@ -67,7 +67,7 @@ def auth_twitter(tw_resp):
     if result.status_code == 428:
         session['full_register'] = False
         return redirect(url_for('endpoints.profile',
-                                nickname=user['nickname']))
+                                nickname=user['nickname'], title='Profile'))
     import ast
 
     data = {'nickname': user['nickname']} if next_url == 'endpoints.home' \
@@ -91,7 +91,8 @@ def profile(nickname):
         user_profile = user_by_nickname(nickname)
     else:
         user_profile = register_email_skills()
-    return render_template('profile.html', profile=user_profile)
+    return render_template('profile.html', profile=user_profile,
+                           title='Profile')
 
 
 @login_required
@@ -153,7 +154,7 @@ def home(nickname):
                           user['key'], data=data)
     if result.status_code != 200:
         return 'error cargar historial usuario'
-    return render_template('home.html', home=result.json())
+    return render_template('home.html', home=result.json(), title='Home')
 
 
 @login_required
@@ -217,6 +218,15 @@ def view_alone(question):
 
     '''
     pass
+
+
+@guest_user
+def finderdown():
+    '''
+    (str) -> flask.redirect
+
+    '''
+    return redirect(url_for('endpoints.finder', find=request.args.get('find')))
 
 
 def user_by_nickname(nickname):

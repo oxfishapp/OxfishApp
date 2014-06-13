@@ -1,44 +1,32 @@
-<html>
-	<head>
-		<title>Home</title>
-		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-		<style>
-			.imgresize {
-				width: 40px; /* you can use % */
-				height: 40px;
-			}
-		</style>
-	</head>
-	<body>
-		<a class="btn btn-default" href="{{ url_for('endpoints.ask') }}">Help me!</a>
-			    		
-		{% for post in home %}
-			<div>
-				<tr>
-				    <td><img class="imgresize" src={{ post.link_image }}></td>
-				    <td>{{ home.name }}</td>
-				    <td>{{ home.nickname }}</td>
-				</tr>
-			</div>
-			<div>
-				<td>{{ post.message140 }}</td>
-			</div>
-			<div>link video: {{ post.link }}</div>
-			<div>
-				{% if post.flag_answer %}
-				<tr>
-				    {% for skill in post.skills %}
-		  				<input type="submit" value="{{ skill }}">
-                	{% endfor %}
-					<td>answers: {{ post.total_answers }}</td>
-					
-					<a class="btn btn-default" href="{{ url_for('endpoints.answer', question=post['keys']['hash_key']) }}">Answer!</a>
-					
-				</tr>
-				{% endif %}
-				<a class="btn btn-default" href="{{ url_for('endpoints.show', question=post['keys']['hash_key'] if post.flag_answer else post['keys']['hash_key_original']) }}">Show!</a>
+{% extends "layout.html" %}
+{% block body_base %}
+	    		
+	{% for post in home %}
+		<div>
+			<tr>
+			    <td><img class="imgresize" src={{ post.link_image }}></td>
+			    <td>{{ home.name }}</td>
+			    <td>{{ home.nickname }}</td>
+			</tr>
+		</div>
+		<div>
+			<td>{{ post.message140 }}</td>
+		</div>
+		<div>link video: {{ post.link }}</div>
+		<div>
+			{% if post.flag_answer %}
+			<tr>
+			    {% for skill in post.skills %}
+	  				<input type="submit" value="{{ skill }}">
+            	{% endfor %}
+				<td>answers: {{ post.total_answers }}</td>
+				
+				<a class="btn btn-default" href="{{ url_for('endpoints.answer', question=post['keys']['hash_key']) }}">Answer!</a>
+				
+			</tr>
+			{% endif %}
+			<a class="btn btn-default" href="{{ url_for('endpoints.show', question=post['keys']['hash_key'] if post.flag_answer else post['keys']['hash_key_original']) }}">Show!</a>
 
-			</div>
-		{% endfor %}	
-	</body>
-</html>
+		</div>
+	{% endfor %}	
+{% endblock %}

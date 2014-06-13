@@ -21,6 +21,24 @@ endpoints.add_url_rule('/ask/a/<string:question>', 'answer',
                        views_users.create_answer, methods=['GET', 'POST'])
 endpoints.add_url_rule('/ask/q/<string:question>', 'show',
                        views_users.view_alone)
+
+endpoints.add_url_rule('/about', 'about',
+                       views_users.view_alone)
+endpoints.add_url_rule('/finder/<string:find>', 'finder',
+                       views_users.view_alone)
+
+endpoints.add_url_rule('/finder/finderdown', 'finderdown',
+                       views_users.finderdown)
+
+endpoints.add_url_rule('/timeline/public', 'timeline',
+                       views_users.view_alone)
+
+endpoints.add_url_rule('/logout', 'logout',
+                       views_users.view_alone)
+
+
+
+
 #timeline
 #delete
 #finder
