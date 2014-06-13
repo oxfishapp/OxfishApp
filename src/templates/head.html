@@ -12,7 +12,17 @@
             $(window).on('resize load', function() {
                 $('body').css({"padding-top": ($(".navbar").height()+ 15 )+ "px"});
             });
-      </script>
+          
+			window.onload = getLocation;
+			
+			function getLocation() {
+			   navigator.geolocation.getCurrentPosition(callback);
+			}
+			 
+			function callback(position) {
+			   	document.getElementById('latLong').value = position.coords.latitude + ',' + position.coords.longitude;
+			}
+		</script>
 
       <!-- Latest compiled and minified CSS -->
       <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel=stylesheet type=text/css >
