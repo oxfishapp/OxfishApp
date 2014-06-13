@@ -1,47 +1,25 @@
-<html>
-	<head>
-		<title>Ask</title>
-		<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-		<style>
-			.imgresize {
-				width: 40px; /* you can use % */
-				height: 40px;
-			}
-		</style>
-		<script>
-			window.onload = getLocation;
-			
-			function getLocation() {
-			   navigator.geolocation.getCurrentPosition(callback);
-			}
-			 
-			function callback(position) {
-			   	document.getElementById('latLong').value = position.coords.latitude + ',' + position.coords.longitude;
-			}
-		</script>
-	</head>
-	<body>
-		<form method="post" action="{{ url_for('endpoints.ask') }}">
-			<input id="latLong" type="hidden" name="geolocation">
-			<div>
-				<tr>
-					<td><input name="skills" value=""></td>
-					<td><input name="skills" value=""></td>
-					<td><input name="skills" value=""></td>
-				</tr>
-			</div>
-			<div>
-				<textarea name="message140" rows="4" cols="50"></textarea>
-			</div>
-			<div>
-				url: <input name="link" value="">
-			</div>
-			<div>
-				<tr>
-					<td><img class="imgresize" src={{session.user.link_image}}></td>
-					<td><input type="submit" value="Help me!"></td>
-				</tr>
-			</div>
-		</form>
-	</body>
-</html>
+{% extends "layout.html" %}
+{% block body_base %}
+	<form method="post" action="{{ url_for('endpoints.ask') }}">
+		<input id="latLong" type="hidden" name="geolocation">
+		<div>
+			<tr>
+				<td><input name="skills" value=""></td>
+				<td><input name="skills" value=""></td>
+				<td><input name="skills" value=""></td>
+			</tr>
+		</div>
+		<div>
+			<textarea name="message140" rows="4" cols="50"></textarea>
+		</div>
+		<div>
+			url: <input name="link" value="">
+		</div>
+		<div>
+			<tr>
+				<td><img class="imgresize" src={{session.user.link_image}}></td>
+				<td><input type="submit" value="Help me!"></td>
+			</tr>
+		</div>
+	</form>
+{% endblock %}

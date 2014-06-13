@@ -1,39 +1,39 @@
 {% extends "layout.html" %}
 {% block body_base %}
 
-		<div id="content">
-			<div class="input">
-				<img class="imgresize" src={{profile.link_image}}>
-			</div>
-			<div class="input">name: {{profile.name}}</div>
-			<div class="input">nickname: {{profile.nickname}}</div>
-			<div class="input">registered: {{profile.registered}}</div>
-			<div class="input">total_post: {{profile.total_post}}</div>
-			<div class="input">score_answers: {{profile.score_answers}}</div>
-		
-			{% if 'user' in session and profile.nickname == session.user.nickname %}
-				<form action="{{ url_for('endpoints.profile', nickname=profile.nickname) }}" method="post" >
-			  		<div class="actions">
-			  			email: <input name="email" value={{profile.email}}>
-			  			skills:
-			  			{% if profile.skills %}
-			  				{% for skill in profile.skills %}
-				  				<input name="skill" value={{skill}}>
-		                	{% endfor %}
-			  			{% else %}
-				  			{% for i in range(3) %}
-				  				<input name="skill">
-		                	{% endfor %}
-		                {% endif %}
-			  			<input type="submit" class="btn primary" value="Save">
-			  		</div>
-				</form>
-			{% else %}
-				skills:
-				{% for skill in profile.skills %}
-			  		<div class="input">{{skill}}</div>
-	            {% endfor %}
-			{% endif %}
-			
+	<div id="content">
+		<div class="input">
+			<img class="imgresize" src={{profile.link_image}}>
 		</div>
+		<div class="input">name: {{profile.name}}</div>
+		<div class="input">nickname: {{profile.nickname}}</div>
+		<div class="input">registered: {{profile.registered}}</div>
+		<div class="input">total_post: {{profile.total_post}}</div>
+		<div class="input">score_answers: {{profile.score_answers}}</div>
+	
+		{% if 'user' in session and profile.nickname == session.user.nickname %}
+			<form action="{{ url_for('endpoints.profile', nickname=profile.nickname) }}" method="post" >
+		  		<div class="actions">
+		  			email: <input name="email" value={{profile.email}}>
+		  			skills:
+		  			{% if profile.skills %}
+		  				{% for skill in profile.skills %}
+			  				<input name="skill" value={{skill}}>
+	                	{% endfor %}
+		  			{% else %}
+			  			{% for i in range(3) %}
+			  				<input name="skill">
+	                	{% endfor %}
+	                {% endif %}
+		  			<input type="submit" class="btn primary" value="Save">
+		  		</div>
+			</form>
+		{% else %}
+			skills:
+			{% for skill in profile.skills %}
+		  		<div class="input">{{skill}}</div>
+	        {% endfor %}
+		{% endif %}
+		
+	</div>
 {% endblock %}
