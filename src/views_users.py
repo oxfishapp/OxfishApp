@@ -168,7 +168,7 @@ def create_question():
     nueva pregunta en el sistema.
     '''
     if request.method == 'GET':
-        return render_template('_question.html')
+        return render_template('question.html')
 
     user = session['user']
 
@@ -212,21 +212,39 @@ def create_answer(question):
 
 
 @guest_user
+def finderdown():
+    '''
+    () -> flask.redirect
+
+    Gestiona el endpoints.finderdown, obtiene el valor de la variable *find*
+    para ser pasada como parametro al endpoints.finder y ralizar la busqueda
+    por skill.
+    '''
+    return redirect(url_for('endpoints.finder', find=request.args.get('find')))
+
+
+@guest_user
 def view_alone(question):
     '''
     (str) -> flask.redirect
 
+    Permite mostrar un question con sus anwers. La variable *question* continen
+    el hash_key de la pregunta a ser buscada y mostrada.
     '''
-    pass
 
-
-@guest_user
-def finderdown():
-    '''
-    (str) -> flask.redirect
-
-    '''
-    return redirect(url_for('endpoints.finder', find=request.args.get('find')))
+    data = {'token_user': session['token_guest']}
+    result_qwa = requests.get(OxRESTful_resource.QUESTION_WIN_ANSWER + \
+                              question, data=data)
+    data['hash_key'] = question
+    result_a = requests.get(OxRESTful_resource.QUESTION_ALL_ANSWER, data=data)
+    if result_qwa.status_code != 200 and result_a.status_code != 200:
+        return 'error al consultar la question y sus answers'
+    data_result = result_qwa.json()
+    questions = data_result['question']
+    win_answers = data_result['winanswers']
+    answers = result_a.json()
+    return render_template('_show.html', questions=questions, answers=answers,
+                            win_answers=win_answers, title='Show')
 
 
 def user_by_nickname(nickname):
@@ -242,3 +260,12 @@ def user_by_nickname(nickname):
     if result.status_code != 200:
         return 'error consultando por nickname'
     return result.json()
+
+
+@guest_user
+def temp(question):
+    '''
+    (str) -> flask.redirect
+
+    '''
+    pass

@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block body_base %}
+	    		
+	<div>
+		<tr>
+		    <td><img class="resize-img" src={{ questions.link_image }}></td>
+		    <td>{{ questions.name }}</td>
+    		<td>{{ questions.nickname }}</td>
+    		<td>{{ questions.key_timeline_post }}</td>
+    		{% if questions.win_answers %}
+    			<input type="button" value="Done!!!"/>
+    		{% else %}
+    			<input type="button" value="In progress!!!"/>
+    		{% endif %}	
+		</tr>
+	</div>
+	<div>
+		<td>{{ questions.message140 }}</td>
+	</div>
+	<div>link video: {{ questions.link }}</div>
+	<div>
+		<tr>
+		{% for skill in questions.skills %}
+			<input type="submit" value="{{ skill }}">
+		{% endfor %}
+			<td>answers: {{ questions.total_answers }}</td>
+			<a class="btn btn-default" href="{{ url_for('endpoints.show', question=questions['keys']['hash_key']) }}">Show!</a>
+		</tr>
+	</div>
+	
+	{% if win_answers %}
+		<br />
+		<b>win answers!!!</b>
+		{% for answer in win_answers %}
+			<div>
+				<tr>
+				    <td><img class="resize-img" src={{ answer.link_image }}></td>
+				    <td>{{ answer.name }}</td>
+		    		<td>{{ answer.nickname }}</td>
+		    		<td>{{ answer.key_timeline_post }}</td>
+				</tr>
+			</div>
+			<div>
+				<td>{{ answer.message140 }}</td>
+			</div>
+			<div>link video: {{ answer.link }}</div>
+			<div>
+				<input type="button" value="winner!!!"/>
+			</div>
+		{% endfor %}
+	{% endif %}	
+	
+	{% if answers %}
+		<br />
+		<b>answers!!!</b> 
+		{% for answer in answers %}
+			<div>
+				<tr>
+				    <td><img class="resize-img" src={{ answer.link_image }}></td>
+				    <td>{{ answer.name }}</td>
+		    		<td>{{ answer.nickname }}</td>
+		    		<td>{{ answer.key_timeline_post }}</td>
+				</tr>
+			</div>
+			<div>
+				<td>{{ answer.message140 }}</td>
+			</div>
+			<div>link video: {{ answer.link }}</div>
+			<div>
+				<input type="button" value="¿winner?"/>
+			</div>
+		{% endfor %}
+	{% endif %}	
+{% endblock %}

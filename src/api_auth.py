@@ -75,6 +75,9 @@ def guest_user(func):
                 not validate_token(session['token_guest'], secret_key):
             session['token_guest'] = generate_token(secret_key)
 
+        if 'user' in session:
+            life_token_user()
+
         return func(*args, **kwargs)
     return decorated_guest_user
 
