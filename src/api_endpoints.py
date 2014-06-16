@@ -23,7 +23,8 @@ endpoints.add_url_rule('/show/<string:question>', 'show',
                        views_users.view_alone)
 endpoints.add_url_rule('/finder/finderdown', 'finderdown',
                        views_users.finderdown)
-
+endpoints.add_url_rule('/timeline/public', 'timeline',
+                       views_users.timeline_public)
 
 
 
@@ -31,8 +32,7 @@ endpoints.add_url_rule('/about', 'about',
                        views_users.temp)
 endpoints.add_url_rule('/finder/<string:find>', 'finder',
                        views_users.temp)
-endpoints.add_url_rule('/timeline/public', 'timeline',
-                       views_users.temp)
+
 endpoints.add_url_rule('/logout', 'logout',
                        views_users.temp)
 

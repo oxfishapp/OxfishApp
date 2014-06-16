@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 {% block body_base %}
 	    		
-	{% for post in home %}
+	{% for post in timeline %}
 		<div>
 			<tr>
 			    <td><img class="resize-img" src={{ post.link_image }}></td>
 			    <td>{{ post.name }}</td>
-	    		<td><a href="{{ url_for('endpoints.home', nickname=post.nickname) }}">@{{ post.nickname }}</a></td>
+			    <td><a href="{{ url_for('endpoints.home', nickname=post.nickname) }}">@{{ post.nickname }}</a></td>			    
 	    		<td>{{ post.key_timeline_post }}</td>		
 			</tr>
 		</div>
@@ -15,7 +15,6 @@
 		</div>
 		<div>link video: {{ post.link }}</div>
 		<div>
-			{% if post.flag_answer %}
 			<tr>
 			    {% for skill in post.skills %}
 	  				<input type="submit" value="{{ skill }}">
@@ -23,10 +22,8 @@
 				<td>answers: {{ post.total_answers }}</td>
 				
 				<a class="btn btn-default" href="{{ url_for('endpoints.answer', question=post['keys']['hash_key']) }}">Answer!</a>
-				
 			</tr>
-			{% endif %}
-			<a class="btn btn-default" href="{{ url_for('endpoints.show', question=post['keys']['hash_key'] if post.flag_answer else post['keys']['hash_key_original']) }}">Show!</a>
+			<a class="btn btn-default" href="{{ url_for('endpoints.show', question=post['keys']['hash_key']) }}">Show!</a>
 
 		</div>
 	{% endfor %}	

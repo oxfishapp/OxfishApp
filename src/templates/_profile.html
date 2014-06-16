@@ -3,13 +3,14 @@
 
 	<div id="content">
 		<div class="input">
-			<img class="imgresize" src={{profile.link_image}}>
+			<img class="resize-img" src={{profile.link_image}}>
 		</div>
 		<div class="input">name: {{profile.name}}</div>
 		<div class="input">nickname: {{profile.nickname}}</div>
 		<div class="input">registered: {{profile.registered}}</div>
 		<div class="input">total_post: {{profile.total_post}}</div>
 		<div class="input">score_answers: {{profile.score_answers}}</div>
+		<div class="input">score_win_answers: {{profile.score_win_answers}}</div>
 	
 		{% if 'user' in session and profile.nickname == session.user.nickname %}
 			<form action="{{ url_for('endpoints.profile', nickname=profile.nickname) }}" method="post" >

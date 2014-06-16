@@ -181,6 +181,8 @@ def create_question():
     result = requests.post(OxRESTful_resource.CREATE_QUESTION, data=data)
     if result.status_code != 200:
         return 'error crear question'
+    data = {'token_user': user['token_user'], 'post': True}
+    result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
     return redirect(url_for('endpoints.home', nickname=user['nickname']))
 
 
@@ -208,7 +210,9 @@ def create_answer(question):
     result = requests.post(OxRESTful_resource.CREATE_ANSWER, data=data)
     if result.status_code != 200:
         return 'error crear answer'
-    return redirect(url_for('endpoints.home', nickname=user['nickname']))
+    data = {'token_user': user['token_user'], 'answer': True}
+    result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
+    return redirect(url_for('endpoints.show', question=question))
 
 
 @guest_user
@@ -245,6 +249,23 @@ def view_alone(question):
     answers = result_a.json()
     return render_template('_show.html', questions=questions, answers=answers,
                             win_answers=win_answers, title='Show')
+
+
+@guest_user
+def timeline_public():
+    '''
+    () -> flask.render_template
+
+    Renderiza la vista timeline_public, consulta los questions que tienen al
+    menos un answer, luego son mostrados al usuario en orden cronologico.
+    '''
+
+    data = {'token_user': session['token_guest']}
+    result = requests.get(OxRESTful_resource.PUBLIC_TIMELINE, data=data)
+    if result.status_code != 200:
+        return 'error consulta timeline public'
+    return render_template('_timeline.html', timeline=result.json(),
+                           title='Timeline Public')
 
 
 def user_by_nickname(nickname):
