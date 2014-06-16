@@ -77,7 +77,7 @@
             <div id="tags" itemprop="description">
               <strong><span>Skills:</span></strong>
 			{% for skill in profile.skills %}
-                <a class="btn btn-default" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
+                <a class="btn btn-primary" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
 	        {% endfor %}
             </div>  
 		{% endif %}
