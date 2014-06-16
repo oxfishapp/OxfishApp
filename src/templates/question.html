@@ -20,26 +20,26 @@
                                   <div class="form-group">
                                       <h4 class="modal-title">Looking for people who know about...</h4>
                                   </div>
-                                      <div class="row">
-                                          <div class="form-group col-sm-4">
-                                              <div class="input-group">
-                                                  <span class="input-group-addon">♦</span>
-                                                  <input name="skills" type="text" class="form-control" id="skillone" placeholder="Ex: java">
-                                              </div>
-                                          </div>
-                                          <div class="form-group col-sm-4">
-                                              <div class="input-group">
-                                                  <span class="input-group-addon">♦</span>
-                                                  <input name="skills" type="text" class="form-control" id="skilltwo" placeholder="Ex: dynamodb">
-                                              </div>
-                                          </div>
-                                          <div class="form-group col-sm-4">
-                                              <div class="input-group">
-                                                  <span class="input-group-addon">♦</span>
-                                                  <input name="skills" type="text" class="form-control" id="skillthree" placeholder="Ex: python">
-                                              </div>
+                                  <div class="row">
+                                      <div class="form-group col-sm-4">
+                                          <div class="input-group">
+                                              <span class="input-group-addon">♦</span>
+                                              <input name="skills" type="text" class="form-control" id="skillone" placeholder="Ex: java">
                                           </div>
                                       </div>
+                                      <div class="form-group col-sm-4">
+                                          <div class="input-group">
+                                              <span class="input-group-addon">♦</span>
+                                              <input name="skills" type="text" class="form-control" id="skilltwo" placeholder="Ex: dynamodb">
+                                          </div>
+                                      </div>
+                                      <div class="form-group col-sm-4">
+                                          <div class="input-group">
+                                              <span class="input-group-addon">♦</span>
+                                              <input name="skills" type="text" class="form-control" id="skillthree" placeholder="Ex: python">
+                                          </div>
+                                      </div>
+                                  </div>
                               </div>
                               <div class="modal-body">
                                   <div class="form-group">
@@ -50,20 +50,20 @@
                                       <input name="link" type="text" class="form-control" placeholder="link">
                                   </div>
                               </div>
-                                <div class="modal-footer">
-                                    <a class="pull-left">
-                                        <img class="img-circle resize-img" src="{{ session.user.link_image }}">  
-                                        </a>
-                                    <button type="summit" class="btn btn-primary">
-                                        <span class="glyphicon glyphicon-send"> Send</span>
-                                    </button>
-                                    <a type="button" class="btn btn-default" href="{{ url_for('endpoints.home', nickname=session.user.nickname) }}">Close</a>
-<!--
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">
-                                        Close
-                                    </button>
--->
-                                </div>
+                              <div class="modal-footer">
+                                <a class="pull-left">
+                                    <img class="img-circle resize-img" src="{{ session.user.link_image }}">  
+                                    </a>
+                                <button type="summit" class="btn btn-primary">
+                                    <span class="glyphicon glyphicon-send"> Send</span>
+                                </button>
+                                <a type="button" class="btn btn-default" href="{{ url_for('endpoints.home', nickname=session.user.nickname) }}">Close</a>
+                            <!--
+                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                    Close
+                                </button>
+                            -->
+                              </div>
                           </div><!-- /.modal-content -->
                       </form><!-- /.form-send-post -->
                   </div><!-- /.modal-dialog -->

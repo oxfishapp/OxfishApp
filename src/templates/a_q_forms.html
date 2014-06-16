@@ -1,0 +1,55 @@
+{%- macro button(user, value, class_btn, answers='', action='', text='', class_icon='', btn=False) -%}
+	{% if btn %}
+        <form class="pull-right" method="post" action="{{ action }}">
+            <input type="hidden" name="value" value="{{ value }}">
+            <button type="button" class="btn {{ class_btn }} btn-xs" title="Delete">
+                <span class="{{ class_icon }}"></span> {{ text }}
+            </button>
+        </form>
+    {% else %}
+        <div class="pull-right">
+            <a class="btn {{ class_btn }} btn-xs " href="{{ url_for('endpoints.show', key=value) }}">
+                <span class="{{ class_icon }}">{{ answers }}</span> {{ text }}
+            </a>
+        </div>
+	{% endif %}
+{%- endmacro -%}
+
+<!--<a class="btn btn-default btn-xs " href="#">answers <span class="badge">3</span></a>-->
+
+{%- macro q_skills(skills, skill_find='', class_btn='') -%}
+    <div class="pull-left">
+    {% for skill in skills %}
+        {% if skill_find == skill  %}
+            <a class="btn {{ class_btn }}" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
+        {% else %}
+            <a class="btn btn-default" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
+        {% endif %}
+    {% endfor %}
+    </div>
+{%- endmacro -%}
+
+<!--
+<a class="btn btn-success btn-xs " href="#">
+    <span class="glyphicon glyphicon-star"></span> Done!
+</a>
+-->
+
+<!--
+<a class="btn btn-primary btn-xs" href="#">
+    <span class="glyphicon glyphicon-refresh"></span> progress
+</a>
+-->
+
+
+<!--
+<button type="button" class="btn btn-danger btn-xs" title="Delete">
+    <span class="glyphicon glyphicon-trash"></span>
+</button>
+-->
+
+if en escalera
+
+answers
+
+habilidades
