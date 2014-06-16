@@ -22,3 +22,5 @@ class OxRESTful_resource():
     QUESTION_WIN_ANSWER = SERVER_NAME + '/post_qwa/'
     QUESTION_ALL_ANSWER = SERVER_NAME + '/allanswers'
     PUBLIC_TIMELINE = SERVER_NAME + '/publictimeline'
+    FINDER = SERVER_NAME + '/findbyskill/'
+    UPDATE_POST = SERVER_NAME + '/auth/update'

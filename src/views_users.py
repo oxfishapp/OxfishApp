@@ -91,7 +91,7 @@ def profile(nickname):
         user_profile = user_by_nickname(nickname)
     else:
         user_profile = register_email_skills()
-    return render_template('_profile.html', profile=user_profile,
+    return render_template('profile.html', profile=user_profile,
                            title='Profile')
 
 
@@ -173,8 +173,8 @@ def create_question():
     user = session['user']
 
     data_question = request.form.to_dict()
-    add_data = {'skills': request.form.getlist('skills'), 'source': 'web',
-                'key_user': user['key']}
+    add_data = {'source': 'web', 'key_user': user['key'],
+                'skills': filter(None, request.form.getlist('skills'))}
     data_question.update(add_data)
     data = {'token_user': user['token_user'],
             'jsontimeline': json.dumps(data_question)}
@@ -266,6 +266,47 @@ def timeline_public():
         return 'error consulta timeline public'
     return render_template('_timeline.html', timeline=result.json(),
                            title='Timeline Public')
+
+
+@guest_user
+def finder(find):
+    '''
+    (str) -> flask.render_template
+
+    Permite realiza la busqueda de los questions asociados a un skill en
+    particular, el parametro *find* contiene el nombre del skill a ser buscada.
+    La lista de questions del skill buscado se muestran en la renderizacion de
+    vista find_skill.
+    '''
+
+    data = {'token_user': session['token_guest']}
+    result = requests.get(OxRESTful_resource.FINDER + find, data=data)
+    if result.status_code != 200:
+        return 'error finder skill'
+    return render_template('_find_skill.html', find_skill=result.json(),
+                           title='Skill')
+
+
+@login_required
+def update_post():
+    '''
+    (str) -> flask.redirect
+
+    Permite actualizar el estado de un answer asiciado a un question, el asnwer
+    puede alternar entre dos estados win_answer y answer comun. Se recibe el
+    hash_key del question y answer seleccionada asi como el estado actual del
+    answer a ser modificado. Redirige al endpoints.show para refrescar la vista
+    '''
+
+    user = session['user']
+    new_data = request.form
+    data = {'token_user': user['token_user'], 'hash_key': new_data['question'],
+            'jsontimeline': json.dumps({'hash_key_answer': new_data['answer'],
+                                'state': 0 if int(new_data['state']) else 1})}
+    result = requests.put(OxRESTful_resource.UPDATE_POST, data=data)
+    if result.status_code != 200:
+        return 'error update post'
+    return redirect(url_for('endpoints.show', question=new_data['question']))
 
 
 def user_by_nickname(nickname):

@@ -25,13 +25,16 @@ endpoints.add_url_rule('/finder/finderdown', 'finderdown',
                        views_users.finderdown)
 endpoints.add_url_rule('/timeline/public', 'timeline',
                        views_users.timeline_public)
+endpoints.add_url_rule('/finder/<string:find>', 'finder',
+                       views_users.finder)
+endpoints.add_url_rule('/ask/wa', 'update_post', views_users.update_post,
+                       methods=['POST'])
 
 
 
 endpoints.add_url_rule('/about', 'about',
                        views_users.temp)
-endpoints.add_url_rule('/finder/<string:find>', 'finder',
-                       views_users.temp)
+
 
 endpoints.add_url_rule('/logout', 'logout',
                        views_users.temp)

@@ -21,10 +21,11 @@
 	<div>
 		<tr>
 		{% for skill in questions.skills %}
-			<input type="submit" value="{{ skill }}">
+			<a class="btn btn-default" href="{{ url_for('endpoints.finder', find=skill) }}">{{ skill }}</a>
 		{% endfor %}
-			<td>answers: {{ questions.total_answers }}</td>
-			<a class="btn btn-default" href="{{ url_for('endpoints.show', question=questions['keys']['hash_key']) }}">Show!</a>
+		<td>answers: {{ questions.total_answers }}</td>
+		<a class="btn btn-default" href="{{ url_for('endpoints.answer', question=questions['keys']['hash_key']) }}">Answer!</a>
+		<a class="btn btn-default" href="{{ url_for('endpoints.show', question=questions['keys']['hash_key']) }}">Show!</a>
 		</tr>
 	</div>
 	
@@ -45,7 +46,16 @@
 			</div>
 			<div>link video: {{ answer.link }}</div>
 			<div>
-				<input type="button" value="winner!!!"/>
+				{% if questions.key_user == session.user.key %}
+					<form action="{{ url_for('endpoints.update_post') }}" method="post">
+						<input type="hidden" name="question" value={{ questions['keys']['hash_key'] }}>
+						<input type="hidden" name="answer" value={{ answer['keys']['hash_key'] }}>
+						<input type="hidden" name="state" value={{ answer.win }}>
+						<input type="submit" value="winner"/>		
+					</form>
+				{% else %}
+					<input type="button" value="winner" disabled/>
+				{% endif%}
 			</div>
 		{% endfor %}
 	{% endif %}	
@@ -67,7 +77,16 @@
 			</div>
 			<div>link video: {{ answer.link }}</div>
 			<div>
-				<input type="button" value="¿winner?"/>
+				{% if questions.key_user == session.user.key %}
+					<form action="{{ url_for('endpoints.update_post') }}" method="post">
+						<input type="hidden" name="question" value={{ questions['keys']['hash_key'] }}>
+						<input type="hidden" name="answer" value={{ answer['keys']['hash_key'] }}>
+						<input type="hidden" name="state" value={{ answer.win }}>
+						<input type="submit" value="winner"/>		
+					</form>
+				{% else %}
+					<input type="button" value="winner" disabled/>
+				{% endif%}
 			</div>
 		{% endfor %}
 	{% endif %}	
