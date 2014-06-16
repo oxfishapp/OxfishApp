@@ -1,0 +1,51 @@
+{%- macro a_q_format(data) -%}
+<!--
+    {% if True %}
+    {% elif %}
+    {% else %}
+    {% endif %}
+-->
+
+{% from 'a_q_forms.html' import ifvalidation as btn_custom, q_skills %}
+
+<li class="list-group-item">
+    <div>                   
+        <div class="media">
+            <a class="pull-left" href="#">
+                <img class="img-circle resize-img"  src="{{ session.user.link_image }}" alt="...">
+            </a>
+            <div class="pull-right">
+                <a class="btn btn-success btn-xs " href="#">
+                    <span class="glyphicon glyphicon-star"></span> Done!
+                </a>
+            </div>
+            <div class="media-body">
+                <div class="media-heading">
+                    Emerson <a href="#">@viejoemer</a>
+                    <div>
+                        2014-06-09
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="comment-text">
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
+            <a href="http://www.youtube.com/watch?v=7-7knsP2n5w">http://www.youtube.com/watch?v=7-7knsP2n5w</a>
+        </div>
+        <div class="btn-toolbar">
+            <div class="pull-left">
+                <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
+                <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
+                <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
+            </div>
+            <div class="pull-right">
+                <a class="btn btn-default btn-xs " href="#">answers <span class="badge">3</span></a>
+                <a class="btn btn-default btn-xs " href="#">... </a>
+            </div>
+        </div>
+    </div>
+</li>
+
+{%- endmacro -%}

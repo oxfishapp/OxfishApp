@@ -19,14 +19,27 @@
 
 {%- macro q_skills(skills, skill_find='', class_btn='') -%}
     <div class="pull-left">
-    {% for skill in skills %}
-        {% if skill_find == skill  %}
-            <a class="btn {{ class_btn }}" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
+        {% if skill_find %}
+            {% for skill in skills %}
+                {% if skill_find == skill  %}
+                    <a class="btn {{ class_btn }}" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
+                {% else %}
+                    <a class="btn btn-default" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
+                {% endif %}
+            {% endfor %}
         {% else %}
-            <a class="btn btn-default" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
+            {% for skill in skills %}
+                    <a class="btn btn-default" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
+            {% endfor %}
         {% endif %}
-    {% endfor %}
     </div>
+{%- endmacro -%}
+
+{%- macro ifvalidation(winanswers, totalanswers, key_user) -%}
+    {% if True %}
+    {% elif %}
+    {% else %}
+    {% endif %}
 {%- endmacro -%}
 
 <!--
@@ -47,9 +60,3 @@
     <span class="glyphicon glyphicon-trash"></span>
 </button>
 -->
-
-if en escalera
-
-answers
-
-habilidades
