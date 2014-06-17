@@ -48,7 +48,7 @@
     </div>
 {%- endmacro -%}
 
-{%- macro ifvalidation(winanswers, totalanswers, key_user, key_original_post, hash_key, totalanswers, win) -%}
+{%- macro ifvalidation(winanswers, totalanswers, key_user, key_original_post, hash_key, win) -%}
     {% if key_original_post %}
     {% elif winanswers %}
         {{ button(value=hash_key, text='Done!', class_icon='glyphicon glyphicon-star', class_btn='btn-success', btn=2) }}
