@@ -7,10 +7,10 @@
             <a class="pull-left" href="{{ url_for('endpoints.profile', nickname=data.nickname) }}">
                 <img class="img-circle resize-img"  src="{{ data.link_image }}" alt="...">
             </a>
-            {{ ifbtn(winanswers=data.win_answers, totalanswers=data.total_answers, key_user=data.key_user, key_original_post=data['keys']['hash_key_original'], hash_key=data['keys']['hash_key']) }}
+            {{ ifbtn(winanswers=data.win_answers, totalanswers=data.total_answers, key_user=data.key_user, key_original_post=data['keys']['hash_key_original'], hash_key=data['keys']['hash_key'], totalanswers=data.total_answers, win=data.win) }}
             <div class="media-body">
                 <div class="media-heading">
-                    {{ data.name }} <a href="#">@{{ data.nickname }}</a>
+                    {{ data.name }} <a href="{{ url_for('endpoints.home', nickname=data.nickname) }}">@{{ data.nickname }}</a>
                     <div>
                         {{ data.key_timeline_post }}
                     </div>
