@@ -46,7 +46,7 @@
 			</div>
 			<div>link video: {{ answer.link }}</div>
 			<div>
-				{% if questions.key_user == session.user.key %}
+				{% if 'user' in session and questions.key_user == session.user.key %}
 					<form action="{{ url_for('endpoints.update_post') }}" method="post">
 						<input type="hidden" name="question" value={{ questions['keys']['hash_key'] }}>
 						<input type="hidden" name="answer" value={{ answer['keys']['hash_key'] }}>
@@ -77,7 +77,7 @@
 			</div>
 			<div>link video: {{ answer.link }}</div>
 			<div>
-				{% if questions.key_user == session.user.key %}
+				{% if 'user' in session and questions.key_user == session.user.key %}
 					<form action="{{ url_for('endpoints.update_post') }}" method="post">
 						<input type="hidden" name="question" value={{ questions['keys']['hash_key'] }}>
 						<input type="hidden" name="answer" value={{ answer['keys']['hash_key'] }}>

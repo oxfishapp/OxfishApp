@@ -290,7 +290,7 @@ def finder(find):
 @login_required
 def update_post():
     '''
-    (str) -> flask.redirect
+    () -> flask.redirect
 
     Permite actualizar el estado de un answer asiciado a un question, el asnwer
     puede alternar entre dos estados win_answer y answer comun. Se recibe el
@@ -307,6 +307,18 @@ def update_post():
     if result.status_code != 200:
         return 'error update post'
     return redirect(url_for('endpoints.show', question=new_data['question']))
+
+
+def logout():
+    '''
+    (str) -> flask.redirect
+
+    Elimina la sesion activa que tiene un usuario, borra la variable de sesion
+    user y redirige al endpoints.timeline.
+    '''
+
+    session.clear()
+    return redirect(url_for('endpoints.timeline'))
 
 
 def user_by_nickname(nickname):
