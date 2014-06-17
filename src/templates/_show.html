@@ -11,7 +11,13 @@
     			<input type="button" value="Done!!!"/>
     		{% else %}
     			<input type="button" value="In progress!!!"/>
-    		{% endif %}	
+    		{% endif %}
+    		{% if 'user' in session and questions.key_user == session.user.key and not(questions.total_answers or questions.win) %}
+				<form action="{{ url_for('endpoints.delete_post') }}" method="post">
+					<input type="hidden" name="hash_key" value={{ questions['keys']['hash_key'] }}>
+					<input type="submit" value="Del"/>
+				</form>
+			{% endif %}		
 		</tr>
 	</div>
 	<div>
@@ -71,6 +77,12 @@
 				    <td><a href="{{ url_for('endpoints.home', nickname=answer.nickname) }}">@{{ answer.nickname }}</a></td>
 		    		<td>{{ answer.key_timeline_post }}</td>
 				</tr>
+				{% if 'user' in session and answer.key_user == session.user.key and not(answer.total_answers or answer.win) %}
+					<form action="{{ url_for('endpoints.delete_post') }}" method="post">
+						<input type="hidden" name="hash_key" value={{ answer['keys']['hash_key'] }}>
+						<input type="submit" value="Del"/>
+					</form>
+				{% endif %}	
 			</div>
 			<div>
 				<td>{{ answer.message140 }}</td>

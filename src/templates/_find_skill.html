@@ -9,6 +9,12 @@
 			    <td><a href="{{ url_for('endpoints.home', nickname=post.nickname) }}">@{{ post.nickname }}</a></td>			    
 	    		<td>{{ post.key_timeline_post }}</td>		
 			</tr>
+			{% if 'user' in session and post.key_user == session.user.key and not(post.total_answers or post.win) %}
+				<form action="{{ url_for('endpoints.delete_post') }}" method="post">
+					<input type="hidden" name="hash_key" value={{ post['keys']['hash_key'] }}>
+					<input type="submit" value="Del"/>
+				</form>
+			{% endif %}			
 		</div>
 		<div>
 			<td>{{ post.message140 }}</td>

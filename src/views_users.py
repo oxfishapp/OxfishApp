@@ -264,7 +264,7 @@ def timeline_public():
     result = requests.get(OxRESTful_resource.PUBLIC_TIMELINE, data=data)
     if result.status_code != 200:
         return 'error consulta timeline public'
-    return render_template('_timeline.html', timeline=result.json(),
+    return render_template('timeline.html', timeline=result.json(),
                            title='Timeline Public')
 
 
@@ -309,16 +309,29 @@ def update_post():
     return redirect(url_for('endpoints.show', question=new_data['question']))
 
 
-def logout():
+@login_required
+def delete_post():
     '''
-    (str) -> flask.redirect
+    () -> flask.redirect
 
-    Elimina la sesion activa que tiene un usuario, borra la variable de sesion
-    user y redirige al endpoints.timeline.
+    Elimina un question o answer, simpre que cumpla con los siguientes
+    requerimientos:
+
+        * Solo puede ser eliminada por el usuario que lo creo.
+        * Un question solo puede ser eliminada si no tiene answers asociadas.
+        * Un answer solo puede ser eliminada si no se ha marcado como win
+          answer.
+
+    si la eliminaion fue exitosa, se redirige a la vista que realizo el llamado
     '''
 
-    session.clear()
-    return redirect(url_for('endpoints.timeline'))
+    user = session['user']
+    data = {'token_user': user['token_user'], 'key_user': user['key']}
+    data['hash_key'] = request.form['hash_key']
+    result = requests.delete(OxRESTful_resource.DELETE_QA, data=data)
+    if result.status_code != 200:
+        return 'error delete question o answer'
+    return redirect(request.referrer)
 
 
 def user_by_nickname(nickname):
@@ -334,6 +347,18 @@ def user_by_nickname(nickname):
     if result.status_code != 200:
         return 'error consultando por nickname'
     return result.json()
+
+
+def logout():
+    '''
+    (str) -> flask.redirect
+
+    Elimina la sesion activa que tiene un usuario, borra la variable de sesion
+    user y redirige al endpoints.timeline.
+    '''
+
+    session.clear()
+    return redirect(url_for('endpoints.timeline'))
 
 
 @guest_user

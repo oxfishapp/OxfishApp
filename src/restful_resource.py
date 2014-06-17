@@ -24,3 +24,4 @@ class OxRESTful_resource():
     PUBLIC_TIMELINE = SERVER_NAME + '/publictimeline'
     FINDER = SERVER_NAME + '/findbyskill/'
     UPDATE_POST = SERVER_NAME + '/auth/update'
+    DELETE_QA = SERVER_NAME + '/auth/delete'
