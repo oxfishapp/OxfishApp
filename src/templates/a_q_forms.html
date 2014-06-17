@@ -2,7 +2,7 @@
 	{% if btn == 0 %}
         <form class="pull-right" method="post" action="{{ url_for('endpoints.delete_post') }}">
             <input type="hidden" name="hash_key" value="{{ value }}">
-            <button type="button" class="btn {{ class_btn }} btn-xs" title="Delete">
+            <button type="submit" class="btn {{ class_btn }} btn-xs" title="Delete">
                 <span class="{{ class_icon }}"></span> {{ text }}
             </button>
         </form>
@@ -69,6 +69,10 @@
                 <input type="hidden" name="state" value={{ win }}>
                 {{ button(value=hash_key, text='WINNER', class_icon='', class_btn='', btn=4, state_winner=win) }}
             </form>
+        {% elif win %}
+            <div class="pull-right">
+                 {{ button(value=hash_key, text='WINNER', class_icon='', class_btn='', btn=1, state_winner=win) }}
+            </div>
         {% elif not keyuserquestion and 'user' in session and key_user == session.user.key and not(total_answers or win) %}
             {{ button(value=hash_key, text='', class_icon='glyphicon glyphicon-trash', class_btn='btn-danger', btn=0) }}
         {% endif %}
