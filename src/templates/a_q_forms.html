@@ -1,4 +1,4 @@
-{%- macro button(value, text, class_icon, class_btn, answers='', action='{{ url_for('endpoints.show', question=value ) }}', btn=True, name='') -%}
+{%- macro button(value, text, class_icon, class_btn, answers='', action="{{ url_for('endpoints.show', question=value ) }}", btn=True, name='') -%}
 	{% if btn %}
         <form class="pull-right" method="post" action="{{ action }}">
             <input type="hidden" name="{{ name }}" value="{{ value }}">
@@ -14,8 +14,6 @@
         </div>
 	{% endif %}
 {%- endmacro -%}
-
-<!--<a class="btn btn-default btn-xs " href="#">answers <span class="badge">3</span></a>-->
 
 {%- macro q_skills(skills, skill_find='') -%}
     <div class="pull-left">
@@ -42,25 +40,6 @@
     {% elif totalanswers %}
         {{ button(value=hash_key, text='progress', class_icon='glyphicon glyphicon-refresh', class_btn='btn-primary', btn=False) }}
     {% elif key_user == session.user.key %}
-        {{ button(value=hash_key, text='', class_icon='glyphicon glyphicon-trash', class_btn='btn-danger', action='{{ url_for('endpoints.delete_post') }}', name='hash_key') }}
+        {{ button(value=hash_key, text='', class_icon='glyphicon glyphicon-trash', class_btn='btn-danger', action="{{ url_for('endpoints.delete_post') }}", name='hash_key') }}
     {% endif %}
 {%- endmacro -%}
-
-<!--
-<a class="btn btn-success btn-xs " href="#">
-    <span class="glyphicon glyphicon-star"></span> Done!
-</a>
--->
-
-<!--
-<a class="btn btn-primary btn-xs" href="#">
-    <span class="glyphicon glyphicon-refresh"></span> progress
-</a>
--->
-
-
-<!--
-<button type="button" class="btn btn-danger btn-xs" title="Delete">
-    <span class="glyphicon glyphicon-trash"></span>
-</button>
--->
