@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block body_base %}
+
+	{% if win_answers %}
+		<br />
+		<b>win answers!!!</b>
+		{% for answer in win_answers %}
+			<div>
+				{% if 'user' in session and questions.key_user == session.user.key %}
+					<form action="{{ url_for('endpoints.update_post') }}" method="post">
+						<input type="hidden" name="question" value={{ questions['keys']['hash_key'] }}>
+						<input type="hidden" name="answer" value={{ answer['keys']['hash_key'] }}>
+						<input type="hidden" name="state" value={{ answer.win }}>
+						<input type="submit" value="winner"/>		
+					</form>
+				{% else %}
+					<input type="button" value="winner" disabled/>
+				{% endif%}
+			</div>
+		{% endfor %}
+	{% endif %}	
+	
+	{% if answers %}
+		<br />
+		<b>answers!!!</b> 
+		{% for answer in answers %}
+			<div>
+				{% if 'user' in session and questions.key_user == session.user.key %}
+					<form action="{{ url_for('endpoints.update_post') }}" method="post">
+						<input type="hidden" name="question" value={{ questions['keys']['hash_key'] }}>
+						<input type="hidden" name="answer" value={{ answer['keys']['hash_key'] }}>
+						<input type="hidden" name="state" value={{ answer.win }}>
+						<input type="submit" value="winner"/>		
+					</form>
+				{% else %}
+					<input type="button" value="winner" disabled/>
+				{% endif%}
+			</div>
+		{% endfor %}
+	{% endif %}	
+{% endblock %}
