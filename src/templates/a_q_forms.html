@@ -1,4 +1,4 @@
-{%- macro button(value, text, class_icon, class_btn, answers='', btn='') -%}
+{%- macro button(value, text, class_icon, class_btn, answers='', btn='' ,state_winner='') -%}
 	{% if btn == 0 %}
         <form class="pull-right" method="post" action="{{ url_for('endpoints.delete_post') }}">
             <input type="hidden" name="hash_key" value="{{ value }}">
@@ -7,14 +7,15 @@
             </button>
         </form>
     {% elif btn == 1 %}
-<!--
-        <form class="pull-right" method="post" action="{{ action }}">
-            <input type="hidden" name="{{ name }}" value="{{ value }}">
-            <button type="button" class="btn {{ class_btn }} btn-xs" title="Delete">
-                <span class="{{ class_icon }}"></span> {{ text }}
-            </button>
-        </form>
--->
+        {% if state_winner %}
+            <a class="btn btn-primary btn-xs" href="{{ url_for('endpoints.show', question=value ) }}">
+                {{ text }}
+            </a>
+        {% else %}
+            <a class="btn btn-default btn-xs" href="{{ url_for('endpoints.show', question=value ) }}">
+                {{ text }}
+            </a>
+        {% endif %}
     {% elif btn == 2 %}
         <div class="pull-right">
             <a class="btn {{ class_btn }} btn-xs " href="{{ url_for('endpoints.show', question=value ) }}">
@@ -27,6 +28,16 @@
                 <span class="{{ class_icon }}">{{ answers }}</span> {{ text }}
             </a>
         </div>
+    {% elif btn == 4 %}
+        {% if state_winner %}
+            <button type="submit" class="btn btn-primary btn-xs" title="winner">
+                {{ text }}
+            </button>	
+        {% else %}
+            <button type="submit" class="btn btn-default btn-xs" title="winner">
+                {{ text }}
+            </button>	
+        {% endif %}
 	{% endif %}
 {%- endmacro -%}
 
@@ -48,8 +59,24 @@
     </div>
 {%- endmacro -%}
 
-{%- macro ifvalidation(winanswers, totalanswers, key_user, key_original_post, hash_key, win) -%}
+{%- macro ifvalidation(winanswers, totalanswers, key_user, key_original_post, hash_key, win, keyuserquestion='') -%}
     {% if key_original_post %}
+
+        {% if 'user' in session and keyuserquestion == session.user.key %}
+            <form action="{{ url_for('endpoints.update_post') }}" method="post">
+                <input type="hidden" name="question" value={{ key_original_post }}>
+                <input type="hidden" name="answer" value={{ hash_key }}>
+                <input type="hidden" name="state" value={{ win }}>
+                {{ button(value=hash_key, text='WINNER', class_icon='', class_btn='', btn=4, state_winner=win) }}
+            </form>
+        {% elif keyuserquestion %}
+            <div class="pull-right">
+                {{ button(value=hash_key, text='WINNER', class_icon='', class_btn='', btn=1, state_winner=win) }}
+            </div>
+        {% else %}
+            {{ button(value=hash_key, text='', class_icon='glyphicon glyphicon-trash', class_btn='btn-danger', btn=0) }}
+        {% endif %}
+
     {% elif winanswers %}
         {{ button(value=hash_key, text='Done!', class_icon='glyphicon glyphicon-star', class_btn='btn-success', btn=2) }}
     {% elif totalanswers %}

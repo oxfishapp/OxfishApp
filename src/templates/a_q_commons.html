@@ -1,13 +1,12 @@
-{%- macro a_q_format(data, skill='') -%}
+{%- macro a_q_format(data, skill='', key_user_question='') -%}
 {% from 'a_q_forms.html' import ifvalidation as ifbtn, q_skills, button %}
-
 <li class="list-group-item">
     <div>                   
         <div class="media">
             <a class="pull-left" href="{{ url_for('endpoints.profile', nickname=data.nickname) }}">
                 <img class="img-circle resize-img"  src="{{ data.link_image }}" alt="...">
             </a>
-            {{ ifbtn(winanswers=data.win_answers, totalanswers=data.total_answers, key_user=data.key_user, key_original_post=data['keys']['hash_key_original'], hash_key=data['keys']['hash_key'], win=data.win) }}
+            {{ ifbtn(winanswers=data.win_answers, totalanswers=data.total_answers, key_user=data.key_user, key_original_post=data['keys']['hash_key_original'], hash_key=data['keys']['hash_key'], win=data.win, keyuserquestion=key_user_question ) }}
             <div class="media-body">
                 <div class="media-heading">
                     {{ data.name }} <a href="{{ url_for('endpoints.home', nickname=data.nickname) }}">@{{ data.nickname }}</a>
