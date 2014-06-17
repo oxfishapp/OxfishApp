@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block body_base %}
+{% from 'a_q_commons.html' import a_q_format as format%}
+<div class="container" role="main">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <ul class="list-group">  
+                {% for post in find_skill %}
+                    {{ format(data=post,skill=found) }}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
