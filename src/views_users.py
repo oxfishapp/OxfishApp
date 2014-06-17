@@ -325,6 +325,11 @@ def delete_post():
 
     si la eliminaion fue exitosa, se redirige a la vista que realizo el llamado
     '''
+    if 'full_post' in request.form:
+        import ast
+
+        post = ast.literal_eval(request.form['full_post'])
+        return render_template('_delete.html', post=post)
 
     user = session['user']
     data = {'token_user': user['token_user'], 'key_user': user['key']}
@@ -332,7 +337,8 @@ def delete_post():
     result = requests.delete(OxRESTful_resource.DELETE_QA, data=data)
     if result.status_code != 200:
         return 'error delete question o answer'
-    return redirect(request.referrer)
+    return redirect(url_for('endpoints.home',
+                            nickname=session['user']['nickname']))
 
 
 def user_by_nickname(nickname):
@@ -363,7 +369,7 @@ def logout():
 
 
 @guest_user
-def temp(question):
+def temp():
     '''
     (str) -> flask.redirect
 
