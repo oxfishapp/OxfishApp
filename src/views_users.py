@@ -154,7 +154,7 @@ def home(nickname):
                           user['key'], data=data)
     if result.status_code != 200:
         return 'error cargar historial usuario'
-    return render_template('_home.html', home=result.json(), title='Home')
+    return render_template('home.html', home=result.json(), title='Home')
 
 
 @login_required
