@@ -17,7 +17,7 @@
 		<div>
 			<tr>
 			    {% for skill in post.skills %}
-	  				<input type="submit" value="{{ skill }}">
+	  				<a class="btn btn-default" href="{{ url_for('endpoints.finder', find=skill) }}">{{ skill }}</a>
             	{% endfor %}
 				<td>answers: {{ post.total_answers }}</td>
 				
