@@ -1,14 +1,14 @@
-{%- macro button(user, value, class_btn, answers='', action='', text='', class_icon='', btn=False) -%}
+{%- macro button(value, text, class_icon, class_btn, answers='', action='{{ url_for('endpoints.show', question=value ) }}', btn=True, name='') -%}
 	{% if btn %}
         <form class="pull-right" method="post" action="{{ action }}">
-            <input type="hidden" name="value" value="{{ value }}">
+            <input type="hidden" name="{{ name }}" value="{{ value }}">
             <button type="button" class="btn {{ class_btn }} btn-xs" title="Delete">
                 <span class="{{ class_icon }}"></span> {{ text }}
             </button>
         </form>
     {% else %}
         <div class="pull-right">
-            <a class="btn {{ class_btn }} btn-xs " href="{{ url_for('endpoints.show', key=value) }}">
+            <a class="btn {{ class_btn }} btn-xs " href="{{ action }}">
                 <span class="{{ class_icon }}">{{ answers }}</span> {{ text }}
             </a>
         </div>
@@ -17,28 +17,32 @@
 
 <!--<a class="btn btn-default btn-xs " href="#">answers <span class="badge">3</span></a>-->
 
-{%- macro q_skills(skills, skill_find='', class_btn='') -%}
+{%- macro q_skills(skills, skill_find='') -%}
     <div class="pull-left">
         {% if skill_find %}
             {% for skill in skills %}
                 {% if skill_find == skill  %}
-                    <a class="btn {{ class_btn }}" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
+                    <a class="btn btn-primary btn-xs" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
                 {% else %}
-                    <a class="btn btn-default" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
+                    <a class="btn btn-default btn-xs" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
                 {% endif %}
             {% endfor %}
         {% else %}
             {% for skill in skills %}
-                    <a class="btn btn-default" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
+                    <a class="btn btn-default btn-xs" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
             {% endfor %}
         {% endif %}
     </div>
 {%- endmacro -%}
 
-{%- macro ifvalidation(winanswers, totalanswers, key_user) -%}
-    {% if True %}
-    {% elif %}
-    {% else %}
+{%- macro ifvalidation(winanswers, totalanswers, key_user, key_original_post, hash_key) -%}
+    {% if key_original_post %}
+    {% elif winanswers %}
+        {{ button(value=hash_key, text='Done!', class_icon='glyphicon glyphicon-star', class_btn='btn-success', btn=False) }}
+    {% elif totalanswers %}
+        {{ button(value=hash_key, text='progress', class_icon='glyphicon glyphicon-refresh', class_btn='btn-primary', btn=False) }}
+    {% elif key_user == session.user.key %}
+        {{ button(value=hash_key, text='', class_icon='glyphicon glyphicon-trash', class_btn='btn-danger', action='{{ url_for('endpoints.delete_post') }}', name='hash_key') }}
     {% endif %}
 {%- endmacro -%}
 

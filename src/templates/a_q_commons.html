@@ -1,29 +1,25 @@
-{%- macro a_q_format(data) -%}
-<!--
-    {% if True %}
-    {% elif %}
-    {% else %}
-    {% endif %}
--->
-
-{% from 'a_q_forms.html' import ifvalidation as btn_custom, q_skills %}
+{%- macro a_q_format(data, skill='') -%}
+{% from 'a_q_forms.html' import ifvalidation as ifbtn, q_skills, button %}
 
 <li class="list-group-item">
     <div>                   
         <div class="media">
-            <a class="pull-left" href="#">
-                <img class="img-circle resize-img"  src="{{ session.user.link_image }}" alt="...">
+            <a class="pull-left" href="{{ url_for('endpoints.profile', nickname=data.nickname) }}">
+                <img class="img-circle resize-img"  src="{{ data.link_image }}" alt="...">
             </a>
+            {{ ifbtn(winanswers=data.win_answers, totalanswers=data.total_answers, key_user=data.key_user, key_original_post=data['keys']['hash_key_original'], hash_key=data['keys']['hash_key']) }}
+<!--
             <div class="pull-right">
-                <a class="btn btn-success btn-xs " href="#">
+                <a class="btn btn-success btn-xs" href="#">
                     <span class="glyphicon glyphicon-star"></span> Done!
                 </a>
             </div>
+-->
             <div class="media-body">
                 <div class="media-heading">
-                    Emerson <a href="#">@viejoemer</a>
+                    {{ data.name }} <a href="#">@{{ data.nickname }}</a>
                     <div>
-                        2014-06-09
+                        {{ data.key_timeline_post }}
                     </div>
                 </div>
             </div>
@@ -31,19 +27,50 @@
     </div>
     <div>
         <div class="comment-text">
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
-            <a href="http://www.youtube.com/watch?v=7-7knsP2n5w">http://www.youtube.com/watch?v=7-7knsP2n5w</a>
+            {{ data.message140 }}
+            <a href="{{ data.link }}">{{ data.link }}</a>
         </div>
         <div class="btn-toolbar">
+            
+            {% if not data['keys']['hash_key_original']  %}
+                {{ q_skills(skills = data.skills, skill_find=skill) }}
+                {{ button(value=data['keys']['hash_key'], text='...', class_icon='', class_btn='btn-default', btn=False) }}
+                {{ button(value=data['keys']['hash_key'], answers=data.total_answers, action='{{ url_for('endpoints.answer', question=data['keys']['hash_key']) }}' , text='answers', class_icon='badge', class_btn='btn-default', btn=False) }}
+            {% else %}
+                {{ button(value=data['keys']['hash_key_original'], text='...', class_icon='', class_btn='btn-default', btn=False) }}
+            {% endif %}
+   
+<!--
+            {% if not data['keys']['hash_key_original']  %}
+                {{ q_skills(skills = data.skills, skill_find=skill) }}            
+            {% endif %}
+-->
+<!--
             <div class="pull-left">
                 <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
                 <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
                 <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
             </div>
+-->
+<!--
+            {% if not data['keys']['hash_key_original']  %}
+                {{ button(value=data['keys']['hash_key'], text='...', class_icon='', class_btn='btn-default', btn=False) }}
+            {% else %}
+                {{ button(value=data['keys']['hash_key_original'], text='...', class_icon='', class_btn='btn-default', btn=False) }}
+            {% endif %}
+            
+            {% if not data['keys']['hash_key_original']  %}
+                {{ button(value=data['keys']['hash_key'], answers=data.total_answers, action='{{ url_for('endpoints.answer', question=data['keys']['hash_key']) }}' , text='answers', class_icon='badge', class_btn='btn-default', btn=False) }}
+            {% endif %}
+-->
+<!--
             <div class="pull-right">
-                <a class="btn btn-default btn-xs " href="#">answers <span class="badge">3</span></a>
                 <a class="btn btn-default btn-xs " href="#">... </a>
             </div>
+            <div class="pull-right">
+                <a class="btn btn-default btn-xs " href="#">answers <span class="badge">3</span></a>
+            </div>
+-->
         </div>
     </div>
 </li>
