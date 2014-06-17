@@ -284,7 +284,7 @@ def finder(find):
     if result.status_code != 200:
         return 'error finder skill'
     return render_template('_find_skill.html', find_skill=result.json(),
-                           title='Skill')
+                           title='Skill', found=find)
 
 
 @login_required
