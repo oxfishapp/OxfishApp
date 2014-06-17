@@ -1,7 +1,33 @@
 {% extends "layout.html" %}
 {% block body_base %}
-	<form method="post" action="{{ url_for('endpoints.answer', question=question) }}">
+	
+	<div>
+		<tr>
+		    <td><img class="resize-img" src={{ question.link_image }}></td>
+		    <td>{{ question.name }}</td>
+		    <td><a href="{{ url_for('endpoints.home', nickname=question.nickname) }}">@{{ question.nickname }}</a></td>			    
+    		<td>{{ question.key_timeline_post }}</td>		
+		</tr>
+	</div>
+	<div>
+		<td>{{ question.message140 }}</td>
+	</div>
+	<div>link video: {{ question.link }}</div>
+	<div>
+		<tr>
+		    {% for skill in question.skills %}
+  				<a class="btn btn-default" href="{{ url_for('endpoints.finder', find=skill) }}">{{ skill }}</a>
+        	{% endfor %}
+			<td>answers: {{ question.total_answers }}</td>
+		</tr>
+		<a class="btn btn-default" href="{{ url_for('endpoints.show', question=question['keys']['hash_key']) }}">Show!</a>
+	</div>
+	<br />
+	---------------------------------------------------------------
+	
+	<form method="post" action="{{ url_for('endpoints.answer') }}">
 		<input id="latLong" type="hidden" name="geolocation">
+		<input type="hidden" name="key_post_original" value={{ question['keys']['hash_key'] }}>
 		
 		<div>
 			<textarea name="message140" rows="4" cols="50"></textarea>

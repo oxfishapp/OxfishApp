@@ -187,7 +187,7 @@ def create_question():
 
 
 @login_required
-def create_answer(question):
+def create_answer():
     '''
     (str) -> flask.redirect
 
@@ -196,23 +196,24 @@ def create_answer(question):
     vista answer. Si el metodo de consumo es POST realiza el registro de la
     nueva respuesta en el sistema.
     '''
+    if 'full_question' in request.form:
+        import ast
 
-    if request.method == 'GET':
+        question = ast.literal_eval(request.form['full_question'])
         return render_template('_answer.html', question=question)
 
     user = session['user']
-    data_question = request.form.to_dict()
-    add_data = {'source': 'web', 'key_user': user['key'],
-                'key_post_original': question}
-    data_question.update(add_data)
+    json_question = request.form.to_dict()
+    json_question.update({'source': 'web', 'key_user': user['key']})
     data = {'token_user': user['token_user'],
-            'jsontimeline': json.dumps(data_question)}
+            'jsontimeline': json.dumps(json_question)}
     result = requests.post(OxRESTful_resource.CREATE_ANSWER, data=data)
     if result.status_code != 200:
         return 'error crear answer'
     data = {'token_user': user['token_user'], 'answer': True}
     result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
-    return redirect(url_for('endpoints.show', question=question))
+    return redirect(url_for('endpoints.show',
+                            question=request.form['key_post_original']))
 
 
 @guest_user
@@ -247,7 +248,7 @@ def view_alone(question):
     questions = data_result['question']
     win_answers = data_result['winanswers']
     answers = result_a.json()
-    return render_template('_show.html', questions=questions, answers=answers,
+    return render_template('show.html', questions=questions, answers=answers,
                             win_answers=win_answers, title='Show')
 
 

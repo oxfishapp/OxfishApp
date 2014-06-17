@@ -30,8 +30,11 @@
             	{% endfor %}
 				<td>answers: {{ post.total_answers }}</td>
 				
-				<a class="btn btn-default" href="{{ url_for('endpoints.answer', question=post['keys']['hash_key']) }}">Answer!</a>
-	
+				<form action="{{ url_for('endpoints.answer') }}" method="post">
+					<input type="hidden" name="full_question" value="{{ post }}"/>
+					<input type="submit" value="Anwser!!" />
+				</form>
+				
 			</tr>
 			{% endif %}
 			<a class="btn btn-default" href="{{ url_for('endpoints.show', question=post['keys']['hash_key'] if post.flag_answer else post['keys']['hash_key_original']) }}">Show!</a>
