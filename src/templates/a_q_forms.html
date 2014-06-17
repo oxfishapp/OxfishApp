@@ -63,17 +63,13 @@
     {% if key_original_post %}
 
         {% if 'user' in session and keyuserquestion == session.user.key %}
-            <form action="{{ url_for('endpoints.update_post') }}" method="post">
+            <form class="pull-right" action="{{ url_for('endpoints.update_post') }}" method="post">
                 <input type="hidden" name="question" value={{ key_original_post }}>
                 <input type="hidden" name="answer" value={{ hash_key }}>
                 <input type="hidden" name="state" value={{ win }}>
                 {{ button(value=hash_key, text='WINNER', class_icon='', class_btn='', btn=4, state_winner=win) }}
             </form>
-        {% elif keyuserquestion %}
-            <div class="pull-right">
-                {{ button(value=hash_key, text='WINNER', class_icon='', class_btn='', btn=1, state_winner=win) }}
-            </div>
-        {% else %}
+        {% elif not keyuserquestion and 'user' in session and key_user == session.user.key and not(total_answers or win) %}
             {{ button(value=hash_key, text='', class_icon='glyphicon glyphicon-trash', class_btn='btn-danger', btn=0) }}
         {% endif %}
 
