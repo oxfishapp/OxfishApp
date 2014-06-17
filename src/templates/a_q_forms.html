@@ -1,14 +1,29 @@
-{%- macro button(value, text, class_icon, class_btn, answers='', action="{{ url_for('endpoints.show', question=value ) }}", btn=True, name='') -%}
-	{% if btn %}
+{%- macro button(value, text, class_icon, class_btn, answers='', btn='') -%}
+	{% if btn == 0 %}
+        <form class="pull-right" method="post" action="{{ url_for('endpoints.delete_post') }}">
+            <input type="hidden" name="hash_key" value="{{ value }}">
+            <button type="button" class="btn {{ class_btn }} btn-xs" title="Delete">
+                <span class="{{ class_icon }}"></span> {{ text }}
+            </button>
+        </form>
+    {% elif btn == 1 %}
+<!--
         <form class="pull-right" method="post" action="{{ action }}">
             <input type="hidden" name="{{ name }}" value="{{ value }}">
             <button type="button" class="btn {{ class_btn }} btn-xs" title="Delete">
                 <span class="{{ class_icon }}"></span> {{ text }}
             </button>
         </form>
-    {% else %}
+-->
+    {% elif btn == 2 %}
         <div class="pull-right">
-            <a class="btn {{ class_btn }} btn-xs " href="{{ action }}">
+            <a class="btn {{ class_btn }} btn-xs " href="{{ url_for('endpoints.show', question=value ) }}">
+                <span class="{{ class_icon }}">{{ answers }}</span> {{ text }}
+            </a>
+        </div>
+    {% elif btn == 3 %}
+        <div class="pull-right">
+            <a class="btn {{ class_btn }} btn-xs " href="{{ url_for('endpoints.answer', question=value) }}">
                 <span class="{{ class_icon }}">{{ answers }}</span> {{ text }}
             </a>
         </div>
@@ -36,10 +51,10 @@
 {%- macro ifvalidation(winanswers, totalanswers, key_user, key_original_post, hash_key) -%}
     {% if key_original_post %}
     {% elif winanswers %}
-        {{ button(value=hash_key, text='Done!', class_icon='glyphicon glyphicon-star', class_btn='btn-success', btn=False) }}
+        {{ button(value=hash_key, text='Done!', class_icon='glyphicon glyphicon-star', class_btn='btn-success', btn=2) }}
     {% elif totalanswers %}
-        {{ button(value=hash_key, text='progress', class_icon='glyphicon glyphicon-refresh', class_btn='btn-primary', btn=False) }}
+        {{ button(value=hash_key, text='progress', class_icon='glyphicon glyphicon-refresh', class_btn='btn-primary', btn=2) }}
     {% elif key_user == session.user.key %}
-        {{ button(value=hash_key, text='', class_icon='glyphicon glyphicon-trash', class_btn='btn-danger', action="{{ url_for('endpoints.delete_post') }}", name='hash_key') }}
+        {{ button(value=hash_key, text='', class_icon='glyphicon glyphicon-trash', class_btn='btn-danger', btn=0) }}
     {% endif %}
 {%- endmacro -%}

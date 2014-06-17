@@ -27,10 +27,10 @@
             
             {% if not data['keys']['hash_key_original']  %}
                 {{ q_skills(skills = data.skills, skill_find=skill) }}
-                {{ button(value=data['keys']['hash_key'], text='...', class_icon='', class_btn='btn-default', btn=False) }}
-                {{ button(value=data['keys']['hash_key'], answers=data.total_answers, action="{{ url_for('endpoints.answer', question=data['keys']['hash_key']) }}" , text='answers', class_icon='badge', class_btn='btn-default', btn=False) }}
+                {{ button(value=data['keys']['hash_key'], text='...', class_icon='', class_btn='btn-default', btn=2) }}
+                {{ button(value=data['keys']['hash_key'], answers=data.total_answers, text='answers', class_icon='badge', class_btn='btn-default', btn=3) }}
             {% else %}
-                {{ button(value=data['keys']['hash_key_original'], text='...', class_icon='', class_btn='btn-default', btn=False) }}
+                {{ button(value=data['keys']['hash_key_original'], text='...', class_icon='', class_btn='btn-default', btn=2) }}
             {% endif %}
         </div>
     </div>
