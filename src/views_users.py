@@ -283,7 +283,7 @@ def finder(find):
     result = requests.get(OxRESTful_resource.FINDER + find, data=data)
     if result.status_code != 200:
         return 'error finder skill'
-    return render_template('_find_skill.html', find_skill=result.json(),
+    return render_template('find_skill.html', find_skill=result.json(),
                            title='Skill', found=find)
 
 
