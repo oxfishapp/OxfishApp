@@ -25,8 +25,8 @@
 {%- endmacro -%}
 
 {%- macro btnbase(btext, bclass_icon, bclass_btn, banswers='') -%}
-    <button type="submit" class="btn {{ _class_btn }} btn-xs">
-        <span class="{{ _class_icon }}">{{ _answers }}</span> {{ _text }}
+    <button type="submit" class="btn {{ bclass_btn }} btn-xs">
+        <span class="{{ bclass_icon }}">{{ banswers }}</span> {{ btext }}
     </button>
 {%- endmacro -%}
 
