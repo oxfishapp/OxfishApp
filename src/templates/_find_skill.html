@@ -11,7 +11,7 @@
 			</tr>
 			{% if 'user' in session and post.key_user == session.user.key and not(post.total_answers or post.win) %}
 				<form action="{{ url_for('endpoints.delete_post') }}" method="post">
-					<input type="hidden" name="hash_key" value={{ post['keys']['hash_key'] }}>
+					<input type="hidden" name="full_post" value="{{ post }}">
 					<input type="submit" value="Del"/>
 				</form>
 			{% endif %}			

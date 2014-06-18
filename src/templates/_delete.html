@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block body_base %}
+	    		
+	<div>
+		<tr>
+		    <td><img class="resize-img" src={{ post.link_image }}></td>
+		    <td>{{ post.name }}</td>
+    		<td><a href="{{ url_for('endpoints.home', nickname=post.nickname) }}">@{{ post.nickname }}</a></td>
+    		<td>{{ post.key_timeline_post }}</td>
+		</tr>
+	</div>
+	<div>
+		<td>{{ post.message140 }}</td>
+	</div>
+	<div>link video: {{ post.link }}</div>
+	<div>
+		{% if post.flag_answer %}
+		<tr>
+		    {% for skill in post.skills %}
+  				<a class="btn btn-default" href="{{ url_for('endpoints.finder', find=skill) }}">{{ skill }}</a>
+        	{% endfor %}
+			<td>answers: {{ post.total_answers }}</td>
+		</tr>
+		{% endif %}
+		<a class="btn btn-default" href="{{ url_for('endpoints.show', question=post['keys']['hash_key'] if post.flag_answer else post['keys']['hash_key_original']) }}">Show!</a>
+	</div>
+	---------------------------------------
+	<div>
+		<tr>
+			<form action="{{ url_for('endpoints.delete_post') }}" method="post">
+				<input type="hidden" name="hash_key" value={{ post['keys']['hash_key'] }}>
+				<input type="submit" value="Delete!!"/>
+			</form>
+			<a class="btn btn-default" href="{{ request.referrer }}">Close</a>
+		</tr>
+	</div>
+{% endblock %}
