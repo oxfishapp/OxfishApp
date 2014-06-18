@@ -53,6 +53,7 @@
             <input type="hidden" name="question" value={{ _key_original_post }}>
             <input type="hidden" name="answer" value={{ _hash_key }}>
             <input type="hidden" name="state" value={{ _win }}>
+            <input type="hidden" name="key_user" value={{ _key_user }}>
                 {% if _win %}
                     {{ btnbase(btext='WINNER', bclass_icon='', bclass_btn='btn-primary', banswers='') }}
                 {% else %}
