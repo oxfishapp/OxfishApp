@@ -33,9 +33,7 @@
                 {{ q_skills(skills = data.skills, skill_find=skill) }}
                 {{ btnlink(_value=data['keys']['hash_key'], _text='...') }}
                 {% if question %}
-                    {{ btnform(_value=data, _name='full_question', _endpoint='endpoints.answer', _text='answers', _class_icon='badge', _class_btn='btn-default', _answers=data.total_answers) }}
-                {% else %}
-                    
+                    {{ btnform(_value=data, _name='full_question', _endpoint='endpoints.answer', _text='answers', _class_icon='badge', _class_btn='btn-default', _answers=data.total_answers) }}            
                 {% endif %}
             {% else %}
                 {{ btnlink(_value=data['keys']['hash_key_original'], _text='...') }}
