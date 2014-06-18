@@ -347,7 +347,7 @@ def delete_post():
         if result.status_code != 200:
             return 'error delete question o answer'
         data = {'token_user': user['token_user'],
-                'post' if request.form['is_question'] else 'answer': -1}
+                'post' if request.form['is_question'] == 'True' else 'answer': -1}
         result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
     return redirect(url_for('endpoints.home',
                             nickname=session['user']['nickname']))

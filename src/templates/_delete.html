@@ -29,7 +29,7 @@
 		<tr>
 			<form action="{{ url_for('endpoints.delete_post') }}" method="post">
 				<input type="hidden" name="hash_key" value={{ post['keys']['hash_key'] }}>
-				<input type="hidden" name="is_question" value={{ post.flag_answer }}>
+				<input type="hidden" name="is_question" value={{ post['keys']['hash_key_original'] == None }}>
 				<input type="submit" value="Delete!!"/>
 			</form>
 			<a class="btn btn-default" href="{{ request.referrer }}">Close</a>
