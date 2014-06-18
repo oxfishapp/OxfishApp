@@ -33,7 +33,7 @@
 {%- macro btnform(_value, _name, _endpoint, _text, _class_icon, _class_btn, _answers='') -%}
     <form class="pull-right" method="post" action={{ url_for(_endpoint) }}>
         <input type="hidden" name="{{ _name }}" value="{{ _value }}"/>
-        btnbase(btext=_text, bclass_icon=_class_icon, bclass_btn=_class_btn, banswers=_answers)
+        {{ btnbase(btext=_text, bclass_icon=_class_icon, bclass_btn=_class_btn, banswers=_answers) }}
     </form>
 {%- endmacro -%}
 
