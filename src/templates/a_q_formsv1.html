@@ -1,0 +1,97 @@
+{%- macro button(value, text, class_icon, class_btn, answers='', btn='' ,state_winner='') -%}
+	{% if btn == 0 %}
+        <form class="pull-right" method="post" action={{ url_for('endpoints.delete_post') }}>
+            <input type="hidden" name="hash_key" value={{ value }}>
+            <button type="submit" class="btn {{ class_btn }} btn-xs" title="Delete">
+                <span class="{{ class_icon }}"></span> {{ text }}
+            </button>
+        </form>
+    {% elif btn == 1 %}
+        {% if state_winner %}
+            <a class="btn btn-primary btn-xs" href={{ url_for('endpoints.show', question=value ) }}>
+                {{ text }}
+            </a>
+        {% else %}
+            <a class="btn btn-default btn-xs" href={{ url_for('endpoints.show', question=value ) }}>
+                {{ text }}
+            </a>
+        {% endif %}
+    {% elif btn == 2 %}
+        {% set endpoint = 'endpoints.show' %}
+        <div class="pull-right">
+            <a class="btn {{ class_btn }} btn-xs " href={{ url_for(endpoint, question=value ) }}>
+                <span class="{{ class_icon }}">{{ answers }}</span> {{ text }}
+            </a>
+        </div>
+    {% elif btn == 3 %}
+<!--
+        <div class="pull-right">
+            <a class="btn {{ class_btn }} btn-xs " href={{ url_for('endpoints.answer', question=value) }}>
+                <span class="{{ class_icon }}">{{ answers }}</span> {{ text }}
+            </a>
+        </div>
+-->
+            <form class="pull-right" method="post" action={{ url_for('endpoints.answer') }}>
+                <input type="hidden" name="full_question" value="{{ value }}"/>
+<!--                <input type="submit" value="Anwser!!" />-->
+                <button type="submit" class="btn {{ class_btn }} btn-xs" title="Answer">
+                    <span class="{{ class_icon }}">{{ answers }}</span> {{ text }}
+                </button>
+            </form>
+    {% elif btn == 4 %}
+        {% if state_winner %}
+            <button type="submit" class="btn btn-primary btn-xs" title="winner">
+                {{ text }}
+            </button>	
+        {% else %}
+            <button type="submit" class="btn btn-default btn-xs" title="winner">
+                {{ text }}
+            </button>	
+        {% endif %}
+	{% endif %}
+{%- endmacro -%}
+
+{%- macro q_skills(skills, skill_find='') -%}
+    <div class="pull-left">
+        {% if skill_find %}
+            {% for skill in skills %}
+                {% if skill_find == skill  %}
+                    <a class="btn btn-primary btn-xs" href={{ url_for('endpoints.finder', find=skill ) }}>{{ skill }}</a>
+                {% else %}
+                    <a class="btn btn-default btn-xs" href={{ url_for('endpoints.finder', find=skill ) }}>{{ skill }}</a>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% for skill in skills %}
+                    <a class="btn btn-default btn-xs" href={{ url_for('endpoints.finder', find=skill ) }}>{{ skill }}</a>
+            {% endfor %}
+        {% endif %}
+    </div>
+{%- endmacro -%}
+
+{%- macro ifquestion(_winanswers, _totalanswers, _key_user, _hash_key, _win) -%}
+    {% if _winanswers %}
+        {{ button(value=_hash_key, text='Done!', class_icon='glyphicon glyphicon-star', class_btn='btn-success', btn=2) }}
+    {% elif _totalanswers %}
+        {{ button(value=_hash_key, text='progress', class_icon='glyphicon glyphicon-refresh', class_btn='btn-primary', btn=2) }}
+    {% elif 'user' in session and _key_user == session.user.key and not(total_answers or _win) %}
+        {{ button(value=_hash_key, text='', class_icon='glyphicon glyphicon-trash', class_btn='btn-danger', btn=0) }}
+    {% endif %}
+{%- endmacro -%}
+
+{%- macro ifanswer(_key_user, _key_original_post, _hash_key, _win, _keyuserquestion) -%}
+    {% if 'user' in session and _keyuserquestion == session.user.key %}
+        <form class="pull-right" action={{ url_for('endpoints.update_post') }} method="post">
+            <input type="hidden" name="question" value={{ _key_original_post }}>
+            <input type="hidden" name="answer" value={{ _hash_key }}>
+            <input type="hidden" name="state" value={{ _win }}>
+            {{ button(value='', text='WINNER', class_icon='', class_btn='', btn=4, state_winner=_win) }}
+        </form>
+    {% elif _win %}
+        <div class="pull-right">
+             {{ button(value=_key_original_post, text='WINNER', class_icon='', class_btn='', btn=1, state_winner=_win) }}
+        </div>
+    {% elif not _keyuserquestion and 'user' in session and _key_user == session.user.key and not(total_answers or _win) %}
+        {{ button(value=_hash_key, text='', class_icon='glyphicon glyphicon-trash', class_btn='btn-danger', btn=0) }}
+    {% endif %}
+{%- endmacro -%}

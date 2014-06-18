@@ -1,5 +1,5 @@
 {%- macro a_q_format(data, skill='', key_user_question='', question=1) -%}
-{% from 'a_q_forms.html' import ifanswer, ifquestion, q_skills, button %}
+{% from 'a_q_forms.html' import ifanswer, ifquestion, q_skills, button, btnlink, btnform %}
 <li class="list-group-item">
     <div>                   
         <div class="media">
@@ -31,14 +31,14 @@
         <div class="btn-toolbar">
             {% if not data['keys']['hash_key_original']  %}
                 {{ q_skills(skills = data.skills, skill_find=skill) }}
-                {{ button(value=data['keys']['hash_key'], text='...', class_icon='', class_btn='btn-default', btn=2) }}
+                {{ btnlink(_value=data['keys']['hash_key'], _text='...') }}
                 {% if question %}
-                    {{ button(value=data, answers=data.total_answers, text='answers', class_icon='badge', class_btn='btn-default', btn=3) }}
+                    {{ btnform(_value=data, _name='full_question', _endpoint='endpoints.answer', _text='answers', _class_icon='badge', _class_btn='btn-default', _answers=data.total_answers) }}
                 {% else %}
                     
                 {% endif %}
             {% else %}
-                {{ button(value=data['keys']['hash_key_original'], text='...', class_icon='', class_btn='btn-default', btn=2) }}
+                {{ btnlink(_value=data['keys']['hash_key_original'], _text='...') }}
             {% endif %}
         </div>
     </div>
