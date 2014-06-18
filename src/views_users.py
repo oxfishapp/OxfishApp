@@ -196,6 +196,10 @@ def create_answer():
     vista answer. Si el metodo de consumo es POST realiza el registro de la
     nueva respuesta en el sistema.
     '''
+    if request.method == 'GET':
+        return redirect(url_for('endpoints.home',
+                            nickname=session['user']['nickname']))
+
     if 'full_question' in request.form:
         import ast
 
@@ -325,18 +329,19 @@ def delete_post():
 
     si la eliminaion fue exitosa, se redirige a la vista que realizo el llamado
     '''
-    if 'full_post' in request.form:
-        import ast
+    if request.method != 'GET':
+        if 'full_post' in request.form:
+            import ast
 
-        post = ast.literal_eval(request.form['full_post'])
-        return render_template('_delete.html', post=post)
+            post = ast.literal_eval(request.form['full_post'])
+            return render_template('_delete.html', post=post)
 
-    user = session['user']
-    data = {'token_user': user['token_user'], 'key_user': user['key']}
-    data['hash_key'] = request.form['hash_key']
-    result = requests.delete(OxRESTful_resource.DELETE_QA, data=data)
-    if result.status_code != 200:
-        return 'error delete question o answer'
+        user = session['user']
+        data = {'token_user': user['token_user'], 'key_user': user['key']}
+        data['hash_key'] = request.form['hash_key']
+        result = requests.delete(OxRESTful_resource.DELETE_QA, data=data)
+        if result.status_code != 200:
+            return 'error delete question o answer'
     return redirect(url_for('endpoints.home',
                             nickname=session['user']['nickname']))
 
