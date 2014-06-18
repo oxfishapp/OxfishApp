@@ -57,7 +57,7 @@
                                 <button type="summit" class="btn btn-primary">
                                     <span class="glyphicon glyphicon-send"> Send</span>
                                 </button>
-                                <a type="button" class="btn btn-default" href="{{ url_for('endpoints.home', nickname=session.user.nickname) }}">Close</a>
+                                <a type="button" class="btn btn-default" href={{ url_for('endpoints.home', nickname=session.user.nickname) }}>Close</a>
                             <!--
                                 <button type="button" class="btn btn-default" data-dismiss="modal">
                                     Close

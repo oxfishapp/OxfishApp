@@ -48,7 +48,6 @@
 <!--        <div class="modal fade" id="send" >-->
               <div id="answer" >
                   <div class="modal-dialog">
-                      <form method="post" action="/send">
                           <div class="modal-content">
                               <div class="modal-body">
                                   <li class="list-group-item">
@@ -81,13 +80,17 @@
                                   </li>
                               </div>
                               <div class="modal-footer">
-                                  <button type="summit" class="btn btn-danger">
-                                      <span class="glyphicon glyphicon-trash"> Delete</span>
-                                  </button>
-                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <form action="/send" method="post">
+                                        <input type="hidden" name="hash_key" value="">
+                                        <input type="hidden" name="is_question" value="">
+                                        <button type="summit" class="btn btn-danger">
+                                            <span class="glyphicon glyphicon-trash"> Delete</span>
+                                        </button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </form>
+                                  
                               </div>
                           </div><!-- /.modal-content -->
-                      </form><!-- /.form-send-post -->
                   </div><!-- /.modal-dialog -->
               </div><!-- /.modal -->
           </div>
