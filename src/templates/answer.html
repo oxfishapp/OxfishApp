@@ -14,21 +14,22 @@
 <!--        <div class="modal fade" id="send" >-->
           <div id="answer">
               <div class="modal-dialog">
-                  <form method="post" action={{ url_for('endpoints.answer') }}>
-                      <input id="latLong" type="hidden" name="geolocation">
-                      <input type="hidden" name="key_post_original" value={{ question['keys']['hash_key'] }}>
                       <div class="modal-content">
                           <div class="modal-header">
                             {{ format(data=question, question=0) }}
                           </div>
                           <div class="modal-body">
-                              <div class="form-group">
-                                  <textarea class="form-control" rows="5" id="textarea" name="message140" placeholder="Answer!"></textarea>
-                              </div>
-                              <div class="input-group">
-                                  <span class="input-group-addon">url</span>
-                                  <input name="link" type="text" class="form-control" placeholder="link">
-                              </div>
+                              <form method="post" action={{ url_for('endpoints.answer') }}>
+                                  <input id="latLong" type="hidden" name="geolocation">
+                                  <input type="hidden" name="key_post_original" value={{ question['keys']['hash_key'] }}>
+                                  <div class="form-group">
+                                      <textarea class="form-control" rows="5" id="textarea" name="message140" placeholder="Answer!"></textarea>
+                                  </div>
+                                  <div class="input-group">
+                                      <span class="input-group-addon">url</span>
+                                      <input name="link" type="text" class="form-control" placeholder="link">
+                                  </div>
+                              </form><!-- /.form-send-post -->
                           </div>
                           <div class="modal-footer">
                               <a class="pull-left">
@@ -41,8 +42,7 @@
 <!--                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
                           </div>
                       </div><!-- /.modal-content -->
-                  </form><!-- /.form-send-post -->
-              </div><!-- /.modal-dialog -->
+                  </div><!-- /.modal-dialog -->
           </div><!-- /.modal -->
       </div>
   </div>

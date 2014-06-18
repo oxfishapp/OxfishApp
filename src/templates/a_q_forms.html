@@ -42,7 +42,7 @@
         {{ btnlink(_value=_hash_key, _text='Done!', _class_btn='btn-success', _class_icon='glyphicon glyphicon-star') }}
     {% elif _totalanswers %}
         {{ btnlink(_value=_hash_key, _text='progress', _class_btn='btn-primary', _class_icon='glyphicon glyphicon-refresh') }}
-    {% elif 'user' in session and _key_user == session.user.key and not(total_answers or _win) %}
+    {% elif 'user' in session and _key_user == session.user.key and not(_totalanswers or _win) %}
         {{ btnform(_value=_hash_key, _name='hash_key', _endpoint='endpoints.delete_post', _text='', _class_icon='glyphicon glyphicon-trash', _class_btn='btn-danger') }}
     {% endif %}
 {%- endmacro -%}
