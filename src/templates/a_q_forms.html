@@ -37,16 +37,6 @@
     </form>
 {%- endmacro -%}
 
-{%- macro button(value, text, class_icon, class_btn, answers='', btn='' ,state_winner='') -%}
-    
-        {% if state_winner %}
-            {{ btnlink(_value=value, _text=text, _class_btn='btn-primary') }}
-        {% else %}
-            {{ btnlink(_value=value, _text=text) }}
-        {% endif %}
-	{% endif %}
-{%- endmacro -%}
-
 {%- macro ifquestion(_winanswers, _totalanswers, _key_user, _hash_key, _win) -%}
     {% if _winanswers %}
         {{ btnlink(_value=_hash_key, _text='Done!', _class_btn='btn-success', _class_icon='glyphicon glyphicon-star') }}
