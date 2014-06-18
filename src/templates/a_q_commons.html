@@ -3,7 +3,7 @@
 <li class="list-group-item">
     <div>                   
         <div class="media">
-            <a class="pull-left" href={{ url_for('endpoints.profile', nickname=data.nickname) }}>
+            <a class="pull-left" href={{ url_for('endpoints.home', nickname=data.nickname) }}>
                 <img class="img-circle resize-img"  src="{{ data.link_image }}" alt="...">
             </a>
             
@@ -15,7 +15,7 @@
             
             <div class="media-body">
                 <div class="media-heading">
-                    {{ data.name }} <a href={{ url_for('endpoints.home', nickname=data.nickname) }}>@{{ data.nickname }}</a>
+                    {{ data.name }} <a href={{ url_for('endpoints.profile', nickname=data.nickname) }}>@{{ data.nickname }}</a>
                     <div>
                         {{ data.key_timeline_post }}
                     </div>

@@ -22,7 +22,7 @@
                 <a class="btn btn-default" href="{{ url_for('endpoints.timeline') }}"><span class="glyphicon glyphicon-tasks"></span></a>
         </div>
         <div class="navbar-form navbar-right" role="query_logoff_profile">
-                <a class="btn btn-primary" href="{{ url_for('endpoints.ask') }}"><span class="glyphicon glyphicon-send"> Send</span></a>
+                <a class="btn btn-primary" href="{{ url_for('endpoints.ask') }}"><span class="glyphicon glyphicon-send"> Ask</span></a>
                 <a class="btn btn-default" href="{{ url_for('endpoints.profile', nickname=session.user.nickname) }}"><span class="glyphicon glyphicon glyphicon-cog"></span></a>
                 <a class="btn btn-default" href="{{ url_for('endpoints.logout') }}">Log out </a>
         </div>
