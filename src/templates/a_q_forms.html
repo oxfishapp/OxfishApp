@@ -17,8 +17,9 @@
             </a>
         {% endif %}
     {% elif btn == 2 %}
+        {% set endpoint = 'endpoints.show' %}
         <div class="pull-right">
-            <a class="btn {{ class_btn }} btn-xs " href={{ url_for('endpoints.show', question=value ) }}>
+            <a class="btn {{ class_btn }} btn-xs " href={{ url_for(endpoint, question=value ) }}>
                 <span class="{{ class_icon }}">{{ answers }}</span> {{ text }}
             </a>
         </div>
