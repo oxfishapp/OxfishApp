@@ -1,31 +1,31 @@
 {%- macro button(value, text, class_icon, class_btn, answers='', btn='' ,state_winner='') -%}
 	{% if btn == 0 %}
-        <form class="pull-right" method="post" action="{{ url_for('endpoints.delete_post') }}">
-            <input type="hidden" name="hash_key" value="{{ value }}">
+        <form class="pull-right" method="post" action={{ url_for('endpoints.delete_post') }}>
+            <input type="hidden" name="hash_key" value={{ value }}>
             <button type="submit" class="btn {{ class_btn }} btn-xs" title="Delete">
-                <span class="{{ class_icon }}"></span> {{ text }}
+                <span class={{ class_icon }}></span> {{ text }}
             </button>
         </form>
     {% elif btn == 1 %}
         {% if state_winner %}
-            <a class="btn btn-primary btn-xs" href="{{ url_for('endpoints.show', question=value ) }}">
+            <a class="btn btn-primary btn-xs" href={{ url_for('endpoints.show', question=value ) }}>
                 {{ text }}
             </a>
         {% else %}
-            <a class="btn btn-default btn-xs" href="{{ url_for('endpoints.show', question=value ) }}">
+            <a class="btn btn-default btn-xs" href={{ url_for('endpoints.show', question=value ) }}>
                 {{ text }}
             </a>
         {% endif %}
     {% elif btn == 2 %}
         <div class="pull-right">
-            <a class="btn {{ class_btn }} btn-xs " href="{{ url_for('endpoints.show', question=value ) }}">
-                <span class="{{ class_icon }}">{{ answers }}</span> {{ text }}
+            <a class="btn {{ class_btn }} btn-xs " href={{ url_for('endpoints.show', question=value ) }}>
+                <span class={{ class_icon }}>{{ answers }}</span> {{ text }}
             </a>
         </div>
     {% elif btn == 3 %}
         <div class="pull-right">
-            <a class="btn {{ class_btn }} btn-xs " href="{{ url_for('endpoints.answer', question=value) }}">
-                <span class="{{ class_icon }}">{{ answers }}</span> {{ text }}
+            <a class="btn {{ class_btn }} btn-xs " href={{ url_for('endpoints.answer', question=value) }}>
+                <span class={{ class_icon }}>{{ answers }}</span> {{ text }}
             </a>
         </div>
     {% elif btn == 4 %}
@@ -46,14 +46,14 @@
         {% if skill_find %}
             {% for skill in skills %}
                 {% if skill_find == skill  %}
-                    <a class="btn btn-primary btn-xs" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
+                    <a class="btn btn-primary btn-xs" href={{ url_for('endpoints.finder', find=skill ) }}>{{ skill }}</a>
                 {% else %}
-                    <a class="btn btn-default btn-xs" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
+                    <a class="btn btn-default btn-xs" href={{ url_for('endpoints.finder', find=skill ) }}>{{ skill }}</a>
                 {% endif %}
             {% endfor %}
         {% else %}
             {% for skill in skills %}
-                    <a class="btn btn-default btn-xs" href="{{ url_for('endpoints.finder', find=skill ) }}">{{ skill }}</a>
+                    <a class="btn btn-default btn-xs" href={{ url_for('endpoints.finder', find=skill ) }}>{{ skill }}</a>
             {% endfor %}
         {% endif %}
     </div>
@@ -63,7 +63,7 @@
     {% if key_original_post %}
 
         {% if 'user' in session and keyuserquestion == session.user.key %}
-            <form class="pull-right" action="{{ url_for('endpoints.update_post') }}" method="post">
+            <form class="pull-right" action={{ url_for('endpoints.update_post') }} method="post">
                 <input type="hidden" name="question" value={{ key_original_post }}>
                 <input type="hidden" name="answer" value={{ hash_key }}>
                 <input type="hidden" name="state" value={{ win }}>
