@@ -22,8 +22,7 @@
                     <form action="{{ url_for('endpoints.delete_post') }}" method="post">
                         <input type="hidden" name="hash_key" value={{ post['keys']['hash_key'] }}>
                         <input type="hidden" name="is_question" value={{ post['keys']['hash_key_original'] == None }}>
-                        <button type="summit" class="btn btn-danger">
-                            <span class="glyphicon glyphicon-trash"> Delete</span>
+                        <button type="summit" class="btn btn-danger">Delete
                         </button>
                         <a type="button" class="btn btn-default" href={{ url_for('endpoints.home', nickname=session.user.nickname) }}>Close</a>
                     </form>
