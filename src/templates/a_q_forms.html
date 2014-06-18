@@ -23,11 +23,20 @@
             </a>
         </div>
     {% elif btn == 3 %}
+<!--
         <div class="pull-right">
             <a class="btn {{ class_btn }} btn-xs " href={{ url_for('endpoints.answer', question=value) }}>
                 <span class="{{ class_icon }}">{{ answers }}</span> {{ text }}
             </a>
         </div>
+-->
+            <form class="pull-right" method="post" action="{{ url_for('endpoints.answer') }}">
+                <input type="hidden" name="full_question" value="{{ value }}"/>
+<!--                <input type="submit" value="Anwser!!" />-->
+                <button type="submit" class="btn {{ class_btn }} btn-xs" title="Answer">
+                    <span class="{{ class_icon }}">{{ answers }}</span> {{ text }}
+                </button>
+            </form>
     {% elif btn == 4 %}
         {% if state_winner %}
             <button type="submit" class="btn btn-primary btn-xs" title="winner">
