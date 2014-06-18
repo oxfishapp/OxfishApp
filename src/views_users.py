@@ -313,6 +313,7 @@ def update_post():
     if result.status_code != 200:
         return 'error update post'
     data = {'token_user': user['token_user'],
+            'key_user': request.form['key_user'],
             'w_answer': -1 if int(request.form['state']) else 1}
     result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
     return redirect(url_for('endpoints.show', question=new_data['question']))

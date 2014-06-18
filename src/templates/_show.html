@@ -97,6 +97,7 @@
 						<input type="hidden" name="question" value={{ questions['keys']['hash_key'] }}>
 						<input type="hidden" name="answer" value={{ answer['keys']['hash_key'] }}>
 						<input type="hidden" name="state" value={{ answer.win }}>
+						<input type="hidden" name="key_user" value={{ answer.key_user }}>
 						<input type="submit" value="winner"/>		
 					</form>
 				{% else %}
