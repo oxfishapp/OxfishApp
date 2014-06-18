@@ -182,7 +182,7 @@ def create_question():
     result = requests.post(OxRESTful_resource.CREATE_QUESTION, data=data)
     if result.status_code != 200:
         return 'error crear question'
-    data = {'token_user': user['token_user'], 'post': True}
+    data = {'token_user': user['token_user'], 'post': 1}
     result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
     return redirect(url_for('endpoints.home', nickname=user['nickname']))
 
@@ -205,7 +205,7 @@ def create_answer():
         import ast
 
         question = ast.literal_eval(request.form['full_question'])
-        return render_template('_answer.html', question=question)
+        return render_template('answer.html', question=question)
 
     user = session['user']
     json_question = request.form.to_dict()
@@ -215,7 +215,7 @@ def create_answer():
     result = requests.post(OxRESTful_resource.CREATE_ANSWER, data=data)
     if result.status_code != 200:
         return 'error crear answer'
-    data = {'token_user': user['token_user'], 'answer': True}
+    data = {'token_user': user['token_user'], 'answer': 1}
     result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
     return redirect(url_for('endpoints.show',
                             question=request.form['key_post_original']))
@@ -312,6 +312,9 @@ def update_post():
     result = requests.put(OxRESTful_resource.UPDATE_POST, data=data)
     if result.status_code != 200:
         return 'error update post'
+    data = {'token_user': user['token_user'],
+            'w_answer': -1 if int(request.form['state']) else 1}
+    result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
     return redirect(url_for('endpoints.show', question=new_data['question']))
 
 
@@ -343,6 +346,9 @@ def delete_post():
         result = requests.delete(OxRESTful_resource.DELETE_QA, data=data)
         if result.status_code != 200:
             return 'error delete question o answer'
+        data = {'token_user': user['token_user'],
+                'post' if request.form['is_question'] else 'answer': -1}
+        result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
     return redirect(url_for('endpoints.home',
                             nickname=session['user']['nickname']))
 
