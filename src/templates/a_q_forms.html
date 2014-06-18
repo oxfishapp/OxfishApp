@@ -67,11 +67,11 @@
                 <input type="hidden" name="question" value={{ key_original_post }}>
                 <input type="hidden" name="answer" value={{ hash_key }}>
                 <input type="hidden" name="state" value={{ win }}>
-                {{ button(value=hash_key, text='WINNER', class_icon='', class_btn='', btn=4, state_winner=win) }}
+                {{ button(value='', text='WINNER', class_icon='', class_btn='', btn=4, state_winner=win) }}
             </form>
         {% elif win %}
             <div class="pull-right">
-                 {{ button(value=hash_key, text='WINNER', class_icon='', class_btn='', btn=1, state_winner=win) }}
+                 {{ button(value=key_original_post, text='WINNER', class_icon='', class_btn='', btn=1, state_winner=win) }}
             </div>
         {% elif not keyuserquestion and 'user' in session and key_user == session.user.key and not(total_answers or win) %}
             {{ button(value=hash_key, text='', class_icon='glyphicon glyphicon-trash', class_btn='btn-danger', btn=0) }}
