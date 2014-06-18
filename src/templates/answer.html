@@ -19,7 +19,9 @@
                       <input type="hidden" name="key_post_original" value={{ question['keys']['hash_key'] }}>
                       <div class="modal-content">
                           <div class="modal-header">
-                              {{ format(data=question) }}
+                              <ul class="list-group"> 
+                                {{ format(data=question, question=0) }}
+                              </ul>
                           </div>
                           <div class="modal-body">
                               <div class="form-group">

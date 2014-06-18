@@ -30,7 +30,7 @@
             </a>
         </div>
 -->
-            <form class="pull-right" method="post" action="{{ url_for('endpoints.answer') }}">
+            <form class="pull-right" method="post" action={{ url_for('endpoints.answer') }}>
                 <input type="hidden" name="full_question" value="{{ value }}"/>
 <!--                <input type="submit" value="Anwser!!" />-->
                 <button type="submit" class="btn {{ class_btn }} btn-xs" title="Answer">
