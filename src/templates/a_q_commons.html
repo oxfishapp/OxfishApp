@@ -8,9 +8,9 @@
             </a>
             
             {% if data['keys']['hash_key_original'] %}
-                {{ ifanswer(_key_user=data.key_user, _key_original_post=data['keys']['hash_key_original'], _hash_key=data['keys']['hash_key'], _win=data.win, _keyuserquestion=key_user_question) }}
+                {{ ifanswer(_data=data, _key_user=data.key_user, _key_original_post=data['keys']['hash_key_original'], _hash_key=data['keys']['hash_key'], _win=data.win, _keyuserquestion=key_user_question) }}
             {% else %}
-                {{ ifquestion(_winanswers=data.win_answers, _totalanswers=data.total_answers, _key_user=data.key_user, _hash_key=data['keys']['hash_key'], _win=data.win) }}
+                {{ ifquestion(_data=data, _winanswers=data.win_answers, _totalanswers=data.total_answers, _key_user=data.key_user, _hash_key=data['keys']['hash_key'], _win=data.win) }}
             {% endif %}
             
             <div class="media-body">

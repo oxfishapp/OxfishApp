@@ -37,17 +37,17 @@
     </form>
 {%- endmacro -%}
 
-{%- macro ifquestion(_winanswers, _totalanswers, _key_user, _hash_key, _win) -%}
+{%- macro ifquestion(_data, _winanswers, _totalanswers, _key_user, _hash_key, _win) -%}
     {% if _winanswers %}
         {{ btnlink(_value=_hash_key, _text='Done!', _class_btn='btn-success', _class_icon='glyphicon glyphicon-star') }}
     {% elif _totalanswers %}
         {{ btnlink(_value=_hash_key, _text='progress', _class_btn='btn-primary', _class_icon='glyphicon glyphicon-refresh') }}
     {% elif 'user' in session and _key_user == session.user.key and not(_totalanswers or _win) %}
-        {{ btnform(_value=_hash_key, _name='hash_key', _endpoint='endpoints.delete_post', _text='', _class_icon='glyphicon glyphicon-trash', _class_btn='btn-danger') }}
+        {{ btnform(_value=_data, _name='full_post', _endpoint='endpoints.delete_post', _text='', _class_icon='glyphicon glyphicon-trash', _class_btn='btn-danger') }}
     {% endif %}
 {%- endmacro -%}
 
-{%- macro ifanswer(_key_user, _key_original_post, _hash_key, _win, _keyuserquestion) -%}
+{%- macro ifanswer(_data, _key_user, _key_original_post, _hash_key, _win, _keyuserquestion) -%}
     {% if 'user' in session and _keyuserquestion == session.user.key %}
         <form class="pull-right" action={{ url_for('endpoints.update_post') }} method="post">
             <input type="hidden" name="question" value={{ _key_original_post }}>
@@ -67,6 +67,6 @@
             {{ btnlink(_value=_key_original_post, _text='WINNER') }}
         {% endif %}        
     {% elif not _keyuserquestion and 'user' in session and _key_user == session.user.key and not(total_answers or _win) %}
-        {{ btnform(_value=_hash_key, _name='hash_key', _endpoint='endpoints.delete_post', _text='', _class_icon='glyphicon glyphicon-trash', _class_btn='btn-danger') }}
+        {{ btnform(_value=_data, _name='full_post', _endpoint='endpoints.delete_post', _text='', _class_icon='glyphicon glyphicon-trash', _class_btn='btn-danger') }}
     {% endif %}
 {%- endmacro -%}
