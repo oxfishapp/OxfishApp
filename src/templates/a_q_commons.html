@@ -1,12 +1,18 @@
 {%- macro a_q_format(data, skill='', key_user_question='', question=1) -%}
-{% from 'a_q_forms.html' import ifvalidation as ifbtn, q_skills, button %}
+{% from 'a_q_forms.html' import ifanswer, ifquestion, q_skills, button %}
 <li class="list-group-item">
     <div>                   
         <div class="media">
             <a class="pull-left" href={{ url_for('endpoints.profile', nickname=data.nickname) }}>
                 <img class="img-circle resize-img"  src="{{ data.link_image }}" alt="...">
             </a>
-            {{ ifbtn(winanswers=data.win_answers, totalanswers=data.total_answers, key_user=data.key_user, key_original_post=data['keys']['hash_key_original'], hash_key=data['keys']['hash_key'], win=data.win, keyuserquestion=key_user_question ) }}
+            
+            {% if data['keys']['hash_key_original'] %}
+                {{ ifanswer(_key_user=data.key_user, _key_original_post=data['keys']['hash_key_original'], _hash_key=data['keys']['hash_key'], _win=data.win, _keyuserquestion=key_user_question) }}
+            {% else %}
+                {{ ifquestion(_winanswers=data.win_answers, _totalanswers=data.total_answers, _key_user=data.key_user, _hash_key=data['keys']['hash_key'], _win=data.win) }}
+            {% endif %}
+            
             <div class="media-body">
                 <div class="media-heading">
                     {{ data.name }} <a href={{ url_for('endpoints.home', nickname=data.nickname) }}>@{{ data.nickname }}</a>
