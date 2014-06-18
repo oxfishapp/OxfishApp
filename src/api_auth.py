@@ -51,9 +51,10 @@ def login_required(func):
                             next_url=request.endpoint, data=kwargs))
 
         #verifica si el usuario ya termino de realizar el proceso de registro
-        elif request.endpoint != 'endpoints.register' and \
+        elif request.endpoint != 'endpoints.profile' and \
                 'full_register' in session and not session['full_register']:
-            return 'terminar de registrarse'
+            return redirect(url_for('endpoints.profile',
+                                    nickname=session['user']['nickname']))
 
         return func(*args, **kwargs)
     return decorated_login

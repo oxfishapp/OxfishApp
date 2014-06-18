@@ -31,7 +31,7 @@ endpoints.add_url_rule('/ask/wa', 'update_post', views_users.update_post,
                        methods=['POST'])
 endpoints.add_url_rule('/logout', 'logout', views_users.logout)
 endpoints.add_url_rule('/ask/del', 'delete_post', views_users.delete_post,
-                       methods=['POST'])
+                       methods=['GET', 'POST'])
 
 
 endpoints.add_url_rule('/about', 'about',

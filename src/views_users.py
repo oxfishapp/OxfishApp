@@ -88,11 +88,10 @@ def profile(nickname):
     actualizacion del perfil del usuario que este en sesion activa.
     '''
     if request.method == 'GET':
-        user_profile = user_by_nickname(nickname)
+        return render_template('profile.html', title='Profile',
+                               profile=user_by_nickname(nickname))
     else:
-        user_profile = register_email_skills()
-    return render_template('profile.html', profile=user_profile,
-                           title='Profile')
+        return register_email_skills()
 
 
 @login_required
@@ -131,12 +130,14 @@ def register_email_skills():
         return 'error registrando email'
 
     #actualizar los datos de sesion del usuario con los actualizados
-    session['user'].update(result.json())
+    user.update(result.json())
+    session['user'] = user
     if 'full_register' in session:
         session.pop('full_register')
         return redirect(url_for('endpoints.home',
                                 nickname=user['nickname']))
-    return result.json()
+    return render_template('profile.html', profile=result.json(),
+                           title='Profile')
 
 
 @guest_user
