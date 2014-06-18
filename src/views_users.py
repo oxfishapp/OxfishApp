@@ -182,7 +182,8 @@ def create_question():
     result = requests.post(OxRESTful_resource.CREATE_QUESTION, data=data)
     if result.status_code != 200:
         return 'error crear question'
-    data = {'token_user': user['token_user'], 'post': 1}
+    data = {'token_user': user['token_user'], 'post': 1,
+            'key_user': user['key']}
     result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
     return redirect(url_for('endpoints.home', nickname=user['nickname']))
 
@@ -215,7 +216,8 @@ def create_answer():
     result = requests.post(OxRESTful_resource.CREATE_ANSWER, data=data)
     if result.status_code != 200:
         return 'error crear answer'
-    data = {'token_user': user['token_user'], 'answer': 1}
+    data = {'token_user': user['token_user'], 'answer': 1,
+            'key_user': user['key']}
     result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
     return redirect(url_for('endpoints.show',
                             question=request.form['key_post_original']))
@@ -339,7 +341,7 @@ def delete_post():
             import ast
 
             post = ast.literal_eval(request.form['full_post'])
-            return render_template('_delete.html', post=post)
+            return render_template('delete.html', post=post)
 
         user = session['user']
         data = {'token_user': user['token_user'], 'key_user': user['key']}
@@ -347,7 +349,7 @@ def delete_post():
         result = requests.delete(OxRESTful_resource.DELETE_QA, data=data)
         if result.status_code != 200:
             return 'error delete question o answer'
-        data = {'token_user': user['token_user'],
+        data = {'token_user': user['token_user'], 'key_user': user['key'],
                 'post' if request.form['is_question'] == 'True' else 'answer': -1}
         result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
     return redirect(url_for('endpoints.home',
