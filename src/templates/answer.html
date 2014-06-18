@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block body_base %}
+{% from 'a_q_commons.html' import a_q_format as format%}
   <div class="container">
       <div class="row">
 <!-- Button trigger modal button para activar el popup -->
@@ -13,44 +14,12 @@
 <!--        <div class="modal fade" id="send" >-->
           <div id="answer">
               <div class="modal-dialog">
-                  <form method="post" action="{{ url_for('endpoints.answer', question=question) }}">
+                  <form method="post" action={{ url_for('endpoints.answer') }}>
                       <input id="latLong" type="hidden" name="geolocation">
+                      <input type="hidden" name="key_post_original" value={{ question['keys']['hash_key'] }}>
                       <div class="modal-content">
                           <div class="modal-header">
-                              <li class="list-group-item">
-                                  <div>
-                                      <div class="media">
-                                          <a class="pull-left" href="#">
-                                              <img class="img-circle resize-img"  src="https://pbs.twimg.com/profile_images/378800000520560847/85619cc22258499b15ce50be7b9631c5.jpeg" alt="...">
-                                          </a>
-                                          <div class="media-body">
-                                              <div class="media-heading">
-                                                  Emerson <a href="#">@viejoemer</a>
-                                                  <div>
-                                                      2014-06-09
-                                                  </div>
-                                              </div>
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div>
-                                      <div class="comment-text">
-                                          Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim
-                                          <a href="http://www.youtube.com/watch?v=7-7knsP2n5w">http://www.youtube.com/watch?v=7-7knsP2n5w</a>
-                                      </div>
-                                      <div class="btn-toolbar">
-                                          <div class="pull-left">
-                                              <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
-                                              <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
-                                              <a class="btn btn-default btn-xs " href="#">flaskdynamodb</a>
-                                          </div>
-                                          <div class="pull-right">
-                                              <a class="btn btn-default btn-xs " href="#">answers <span class="badge">3</span></a>
-                                              <a class="btn btn-default btn-xs " href="#">... </a>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </li>
+                              {{ format(data=question) }}
                           </div>
                           <div class="modal-body">
                               <div class="form-group">
@@ -63,12 +32,12 @@
                           </div>
                           <div class="modal-footer">
                               <a class="pull-left">
-                                  <img class="img-circle resize-img" src="{{ session.user.link_image }}">
+                                  <img class="img-circle resize-img" src={{ session.user.link_image }}>
                               </a>
                               <button type="summit" class="btn btn-primary">
                                   <span class="glyphicon glyphicon-send"> Answer</span>
                               </button>
-                              <a type="button" class="btn btn-default" href="{{ url_for('endpoints.home', nickname=session.user.nickname) }}">Close</a>
+                              <a type="button" class="btn btn-default" href={{ url_for('endpoints.home', nickname=session.user.nickname) }}>Close</a>
 <!--                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
                           </div>
                       </div><!-- /.modal-content -->

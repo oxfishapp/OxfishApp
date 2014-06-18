@@ -3,7 +3,7 @@
         <form class="pull-right" method="post" action={{ url_for('endpoints.delete_post') }}>
             <input type="hidden" name="hash_key" value={{ value }}>
             <button type="submit" class="btn {{ class_btn }} btn-xs" title="Delete">
-                <span class={{ class_icon }}></span> {{ text }}
+                <span class="{{ class_icon }}"></span> {{ text }}
             </button>
         </form>
     {% elif btn == 1 %}
@@ -19,13 +19,13 @@
     {% elif btn == 2 %}
         <div class="pull-right">
             <a class="btn {{ class_btn }} btn-xs " href={{ url_for('endpoints.show', question=value ) }}>
-                <span class={{ class_icon }}>{{ answers }}</span> {{ text }}
+                <span class="{{ class_icon }}">{{ answers }}</span> {{ text }}
             </a>
         </div>
     {% elif btn == 3 %}
         <div class="pull-right">
             <a class="btn {{ class_btn }} btn-xs " href={{ url_for('endpoints.answer', question=value) }}>
-                <span class={{ class_icon }}>{{ answers }}</span> {{ text }}
+                <span class="{{ class_icon }}">{{ answers }}</span> {{ text }}
             </a>
         </div>
     {% elif btn == 4 %}
