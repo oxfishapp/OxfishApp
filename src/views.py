@@ -155,7 +155,9 @@ def home(nickname):
                           user['key'], data=data)
     if result.status_code != 200:
         return 'error cargar historial usuario'
-    return render_template('home.html', home=result.json(), title='Home')
+    result_data = result.json()
+    return render_template('home.html', home=result_data['data'], title='Home',
+                           pagination=result_data['pagination'])
 
 
 @login_required
@@ -255,7 +257,8 @@ def view_alone(question):
         win_answers = data_result['winanswers']
         answers = result_a.json()
         return render_template('show.html', questions=questions, title='Show',
-                               answers=answers, win_answers=win_answers)
+                            answers=answers['data'], win_answers=win_answers,
+                            pagination=answers['pagination'])
     return 'error al consultar la question y sus answers'
 
 
@@ -272,7 +275,9 @@ def timeline_public():
     result = requests.get(OxRESTful_resource.PUBLIC_TIMELINE, data=data)
     if result.status_code != 200:
         return 'error consulta timeline public'
-    return render_template('timeline.html', timeline=result.json(),
+    result_data = result.json()
+    return render_template('timeline.html', timeline=result_data['data'],
+                           pagination=result_data['pagination'],
                            title='Timeline Public')
 
 
@@ -291,7 +296,9 @@ def finder(find):
     result = requests.get(OxRESTful_resource.FINDER + find, data=data)
     if result.status_code != 200:
         return 'error finder skill'
-    return render_template('find_skill.html', find_skill=result.json(),
+    result_data = result.json()
+    return render_template('find_skill.html', find_skill=result_data['data'],
+                           pagination=result_data['pagination'],
                            title='Skill', found=find)
 
 
