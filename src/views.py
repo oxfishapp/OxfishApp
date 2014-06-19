@@ -150,7 +150,8 @@ def home(nickname):
     cronologicamente.
     '''
     user = user_by_nickname(nickname)
-    data = {'token_user': session['token_guest']}
+    data = {'token_user': session['token_guest'],
+            'pagination': "{}"}
     result = requests.get(OxRESTful_resource.QUESTION_ANSWER_BY_USER + \
                           user['key'], data=data)
     if result.status_code != 200:
@@ -249,7 +250,7 @@ def view_alone(question):
     data = {'token_user': session['token_guest']}
     result_qwa = requests.get(OxRESTful_resource.QUESTION_WIN_ANSWER + \
                               question, data=data)
-    data['hash_key'] = question
+    data.update({'hash_key': question, 'pagination': "{}"})
     result_a = requests.get(OxRESTful_resource.QUESTION_ALL_ANSWER, data=data)
     if result_qwa.status_code == 200 and result_a.status_code == 200:
         data_result = result_qwa.json()
@@ -271,7 +272,7 @@ def timeline_public():
     menos un answer, luego son mostrados al usuario en orden cronologico.
     '''
 
-    data = {'token_user': session['token_guest']}
+    data = {'token_user': session['token_guest'], 'pagination': "{}"}
     result = requests.get(OxRESTful_resource.PUBLIC_TIMELINE, data=data)
     if result.status_code != 200:
         return 'error consulta timeline public'
@@ -292,7 +293,7 @@ def finder(find):
     vista find_skill.
     '''
 
-    data = {'token_user': session['token_guest']}
+    data = {'token_user': session['token_guest'], 'pagination': "{}"}
     result = requests.get(OxRESTful_resource.FINDER + find, data=data)
     if result.status_code != 200:
         return 'error finder skill'
