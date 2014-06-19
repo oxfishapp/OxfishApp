@@ -109,7 +109,7 @@ def register_email_skills():
     user = session['user']
 
     #crear una lista con los skills definidos por el usuario
-    skills = request.form.getlist('skill')
+    skills = filter(None, request.form.getlist('skills'))
 
     #definir los datos para enviar la solicitud de registro de skills
     data = {'token_user': user['token_user'], 'key_user': user['key'],
@@ -130,7 +130,7 @@ def register_email_skills():
         return 'error registrando email'
 
     #actualizar los datos de sesion del usuario con los actualizados
-    user.update(result.json())
+    user['skills'] = result.json()['skills']
     session['user'] = user
     if 'full_register' in session:
         session.pop('full_register')
@@ -249,14 +249,14 @@ def view_alone(question):
                               question, data=data)
     data['hash_key'] = question
     result_a = requests.get(OxRESTful_resource.QUESTION_ALL_ANSWER, data=data)
-    if result_qwa.status_code != 200 and result_a.status_code != 200:
-        return 'error al consultar la question y sus answers'
-    data_result = result_qwa.json()
-    questions = data_result['question']
-    win_answers = data_result['winanswers']
-    answers = result_a.json()
-    return render_template('show.html', questions=questions, answers=answers,
-                            win_answers=win_answers, title='Show')
+    if result_qwa.status_code == 200 and result_a.status_code == 200:
+        data_result = result_qwa.json()
+        questions = data_result['question']
+        win_answers = data_result['winanswers']
+        answers = result_a.json()
+        return render_template('show.html', questions=questions, title='Show',
+                               answers=answers, win_answers=win_answers)
+    return 'error al consultar la question y sus answers'
 
 
 @guest_user
