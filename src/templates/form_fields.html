@@ -1,0 +1,49 @@
+{% macro render_errors(errors) %}
+	{% if errors %}
+		<ul> {% for error in errors %} <li>{{ error }}</li> {% endfor %} </ul>
+	{% endif %}
+{% endmacro %}
+
+{% macro form_field_profile(field, symbol) %}
+	<div class="row">
+	    <div class="col-md-offset-3">
+	        <div class="col-md-8">
+               <div class="form-group">
+                  <div class="input-group input-group-sm ">
+                      <span class="input-group-addon">{{ symbol }}</span>
+                      {{ field(**kwargs)|safe }}
+                  </div>
+                  {{ render_errors(field.errors) }}
+               </div>
+	        </div>
+	    </div>                                                    
+	</div>
+{% endmacro %}
+
+{% macro form_field_question_skills(field, symbol) %}
+	<div class="form-group col-sm-4">
+		<div class="input-group">
+			<span class="input-group-addon">{{ symbol }}</span>
+			{{ field(**kwargs)|safe }}
+		</div>
+		{{ render_errors(field.errors) }}
+	</div>
+{% endmacro %}
+
+{% macro render_field_list(field_list, data, form_field_func, placeholder='') %}
+	{% if data %}
+		{% if field_list %}
+			{% for field in field_list %}
+				{{ form_field_func(field, placeholder="ex: " + placeholder[loop.index0] if placeholder, **kwargs) }}
+			{% endfor %}
+		{% else %}
+			{% for item in data %}
+				{{ form_field_func(field_list.append_entry(item), placeholder="ex: " + placeholder[loop.index0] if placeholder, **kwargs) }}
+			{% endfor %}
+		{% endif %}
+	{% else %}
+		{% for i in range(3) %}
+			{{ form_field_func(field_list.append_entry(), placeholder="ex: " + placeholder[loop.index0] if placeholder, **kwargs) }}
+		{% endfor %}
+    {% endif %}
+{% endmacro %}

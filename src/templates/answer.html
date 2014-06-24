@@ -19,16 +19,20 @@
                         {{ format(data=question, question=0) }}
                     </div>
                     <form method="post" action={{ url_for('endpoints.answer') }}>
-                        <div class="modal-body">
-                            <input id="latLong" type="hidden" name="geolocation">
+                    	{% from "form_fields.html" import render_errors %}
+                    	<div class="modal-body">
+                    		<input type="hidden" name="full_question" value="_{{ question }}"/>
+                    		<input id="latLong" type="hidden" name="geolocation">
                             <input type="hidden" name="key_post_original" value={{ question['keys']['hash_key'] }}>
                             <div class="form-group">
-                                <textarea class="form-control" rows="5" id="textarea" name="message140" placeholder="Answer!"></textarea>
+                          	    {{ form.message140(class="form-control", rows="5", placeholder="Answer!") }}
+                                {{ render_errors(form.message140.errors) }}
                             </div>
                             <div class="input-group">
                                 <span class="input-group-addon">url</span>
-                                <input name="link" type="text" class="form-control" placeholder="link">
+                                {{ form.link(class="form-control", placeholder="link") }}
                             </div>
+                            {{ render_errors(form.link.errors) }}
                         </div>
                         <div class="modal-footer">
                             <a class="pull-left">

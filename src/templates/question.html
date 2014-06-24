@@ -14,41 +14,28 @@
               <div id="question" >
                   <div class="modal-dialog">
                       <form method="post" action="{{ url_for('endpoints.ask') }}">
-                          <input id="latLong" type="hidden" name="geolocation">
+                      	{% from "form_fields.html" import form_field_question_skills, render_field_list, render_errors %}
+                      	  {{ form.geolocation(id="latLong") }}
                           <div class="modal-content">
                               <div class="modal-header">
                                   <div class="form-group">
                                       <h4 class="modal-title">Looking for people who know about...</h4>
                                   </div>
                                   <div class="row">
-                                      <div class="form-group col-sm-4">
-                                          <div class="input-group">
-                                              <span class="input-group-addon">♦</span>
-                                              <input name="skills" type="text" class="form-control" id="skillone" placeholder="Ex: java">
-                                          </div>
-                                      </div>
-                                      <div class="form-group col-sm-4">
-                                          <div class="input-group">
-                                              <span class="input-group-addon">♦</span>
-                                              <input name="skills" type="text" class="form-control" id="skilltwo" placeholder="Ex: dynamodb">
-                                          </div>
-                                      </div>
-                                      <div class="form-group col-sm-4">
-                                          <div class="input-group">
-                                              <span class="input-group-addon">♦</span>
-                                              <input name="skills" type="text" class="form-control" id="skillthree" placeholder="Ex: python">
-                                          </div>
-                                      </div>
+                                  	  {{ render_field_list(form.skills, form.skills.data, form_field_question_skills, symbol='♦', class="form-control", placeholder=['python', 'java', 'dynamoDB']) }}
+                                  	  {{ render_errors(form.skills.errors_list) }}
                                   </div>
                               </div>
                               <div class="modal-body">
                                   <div class="form-group">
-                                      <textarea class="form-control" rows="5" id="textarea" name="message140" placeholder="Question!"></textarea>
+                                  	  {{ form.message140(class="form-control", rows="5", placeholder="Question!") }}
+                                      {{ render_errors(form.message140.errors) }}
                                   </div>
                                   <div class="input-group">
                                       <span class="input-group-addon">url</span>
-                                      <input name="link" type="text" class="form-control" placeholder="link">
+                                      {{ form.link(class="form-control", placeholder="link") }}
                                   </div>
+                                  {{ render_errors(form.link.errors) }}
                               </div>
                               <div class="modal-footer">
                                 <a class="pull-left">
