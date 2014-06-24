@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block body_base %}
+{% from 'a_q_commons.html' import a_q_format as format%}
+<div class="container">
+    <div class="row">
+<!-- Button trigger modal button para activar el popup -->
+<!--
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#answer">
+  Launch demo modal
+  </button>
+-->
+
+<!--Creacion de un modal o popup con bootstrap-->
+<!--        <div class="modal fade" id="send" >-->
+      <div id="delete">
+          <div class="modal-dialog">
+              <div class="modal-content">
+                  <div class="modal-body">
+                    {{ format(data=post) }}
+                  </div>
+                  <div class="modal-footer">
+                    <form action="{{ url_for('endpoints.delete_post') }}" method="post">
+                        <input type="hidden" name="hash_key" value={{ post['keys']['hash_key'] }}>
+                        <input type="hidden" name="is_question" value={{ 1 if post['keys']['hash_key_original'] else 0 }}>
+                        <button type="summit" class="btn btn-danger">Delete
+                        </button>
+                        <a type="button" class="btn btn-default" href={{ url_for('endpoints.home', nickname=session.user.nickname) }}>Close</a>
+                    </form>
+<!--                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                  </div>
+              </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    </div>
+</div>
+{% endblock %}

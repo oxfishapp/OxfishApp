@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+{% block body_base %}
+{% from 'a_q_commons.html' import a_q_format as format%}
+<div class="container">
+    <div class="row">
+<!-- Button trigger modal button para activar el popup -->
+<!--
+<button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#answer">
+  Launch demo modal
+  </button>
+-->
+
+<!--Creacion de un modal o popup con bootstrap-->
+<!--        <div class="modal fade" id="send" >-->
+        <div id="answer">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        {{ format(data=question, question=0) }}
+                    </div>
+                    <form method="post" action={{ url_for('endpoints.answer') }}>
+                    	{% from "form_fields.html" import render_errors %}
+                    	<div class="modal-body">
+                    		<input type="hidden" name="full_question" value="_{{ question }}"/>
+                    		<input id="latLong" type="hidden" name="geolocation">
+                            <input type="hidden" name="key_post_original" value={{ question['keys']['hash_key'] }}>
+                            <div class="form-group">
+                          	    {{ form.message140(class="form-control", rows="5", placeholder="Answer!") }}
+                                {{ render_errors(form.message140.errors) }}
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">url</span>
+                                {{ form.link(class="form-control", placeholder="link") }}
+                            </div>
+                            {{ render_errors(form.link.errors) }}
+                        </div>
+                        <div class="modal-footer">
+                            <a class="pull-left">
+                                <img class="img-circle resize-img" src={{ session.user.link_image }}>
+                            </a>
+                            <button type="summit" class="btn btn-primary">
+                                <span class="glyphicon glyphicon-send"> Answer</span>
+                            </button>
+                            <a type="button" class="btn btn-default" href={{ url_for('endpoints.home', nickname=session.user.nickname) }}>Close</a>
+                            <!--                              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                        </div>
+                    </form><!-- /.form-send-post -->
+                  </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+  </div>
+</div>
+{% endblock %}

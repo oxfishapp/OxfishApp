@@ -3,10 +3,8 @@
 
 <div class="container">
   <div class="col-md-6 col-md-offset-3 text-center">
-      <div class="col-sm-12">
-          <center>
+      <div class="col-sm-12" align="center">
               <img src="{{ profile.link_image }}" class="resize-img-profile img-circle">
-          </center>
       </div>
       <div class="col-sm-12">
           <h3>{{ profile.name }}</h3>
@@ -30,46 +28,13 @@
           
 		{% if 'user' in session and profile.nickname == session.user.nickname %}
             <form action="{{ url_for('endpoints.profile', nickname=profile.nickname) }}" method="post" >
-                <strong>email: </strong>
-                <div class="row">
-                    <div class="col-md-offset-3">
-                        <div class="col-md-8">
-                              <div class="form-group">
-                                  <div class="input-group input-group-sm ">
-                                      <span class="input-group-addon">@</span>
-                                      <input  name="email" value={{ profile.email }} type="text" class="form-control" id="skillone" placeholder="example@example.com">
-                                  </div>
-                              </div>
-                        </div>
-                    </div>                                                    
-                </div>
+            	{% from "form_fields.html" import form_field_profile, render_field_list %}
+            	
+            	<strong>email: </strong>
+            	{{ form_field_profile(form.email, '@', class="form-control", id="skillone", placeholder="yourusername@example.com", value=profile.email if profile.email) }}
                 <div id="tags" itemprop="description">
-                <strong><span>Skills:</span></strong>
-                <div class="row">
-                    <div class="col-md-offset-3">
-                        <div class="col-md-8">
-                            {% if profile.skills %}
-                                {% for skill in profile.skills %}
-                                    <div class="form-group">
-                                      <div class="input-group input-group-sm">
-                                          <span class="input-group-addon">♦</span>
-                                          <input name="skill" value="{{ skill }}" type="text" class="form-control" placeholder="Ex: java">
-                                      </div>
-                                    </div>
-                                {% endfor %}
-                            {% else %}
-                                {% for i in range(3) %}
-                                    <div class="form-group">
-                                      <div class="input-group input-group-sm">
-                                          <span class="input-group-addon">♦</span>
-                                          <input name="skill" type="text" class="form-control" placeholder="Ex: java">
-                                      </div>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                    </div>                                                    
-                </div>
+                	<strong>skills: </strong>
+                	{{ render_field_list(form.skills, profile.skills, form_field_profile, symbol='♦', class="form-control", placeholder=['python', 'java', 'c#']) }}
                 </div>   
                 <button class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> Save</button>
             </form>

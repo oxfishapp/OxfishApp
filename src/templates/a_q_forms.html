@@ -1,0 +1,72 @@
+{%- macro q_skills(skills, skill_find='') -%}
+    <div class="pull-left">
+        {% if skill_find %}
+            {% for skill in skills %}
+                {% if skill_find == skill  %}
+                    <a class="btn btn-primary btn-xs" href={{ url_for('endpoints.finder', find=skill ) }}>{{ skill }}</a>
+                {% else %}
+                    <a class="btn btn-default btn-xs" href={{ url_for('endpoints.finder', find=skill ) }}>{{ skill }}</a>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% for skill in skills %}
+                    <a class="btn btn-default btn-xs" href={{ url_for('endpoints.finder', find=skill ) }}>{{ skill }}</a>
+            {% endfor %}
+        {% endif %}
+    </div>
+{%- endmacro -%}
+
+{%- macro btnlink(_value, _text, _class_icon='', _class_btn='btn-default', _answers='', _endpoint='endpoints.show') -%}
+    <div class="pull-right">
+        <a class="btn {{ _class_btn }} btn-xs " href={{ url_for(_endpoint, question=_value ) }}>
+            <span class="{{ _class_icon }}">{{ _answers }}</span> {{ _text }}
+        </a>
+    </div>
+{%- endmacro -%}
+
+{%- macro btnbase(btext, bclass_icon, bclass_btn, banswers='') -%}
+    <button type="submit" class="btn {{ bclass_btn }} btn-xs">
+        <span class="{{ bclass_icon }}">{{ banswers }}</span> {{ btext }}
+    </button>
+{%- endmacro -%}
+
+{%- macro btnform(_value, _name, _endpoint, _text, _class_icon, _class_btn, _answers='') -%}
+    <form class="pull-right" method="post" action={{ url_for(_endpoint) }}>
+        <input type="hidden" name="{{ _name }}" value="{{ _value }}"/>
+        {{ btnbase(btext=_text, bclass_icon=_class_icon, bclass_btn=_class_btn, banswers=_answers) }}
+    </form>
+{%- endmacro -%}
+
+{%- macro ifquestion(_data, _winanswers, _totalanswers, _key_user, _hash_key, _win) -%}
+    {% if _winanswers %}
+        {{ btnlink(_value=_hash_key, _text='Done!', _class_btn='btn-success', _class_icon='glyphicon glyphicon-star') }}
+    {% elif _totalanswers %}
+        {{ btnlink(_value=_hash_key, _text='progress', _class_btn='btn-primary', _class_icon='glyphicon glyphicon-refresh') }}
+    {% elif 'user' in session and _key_user == session.user.key and not(_totalanswers or _win) %}
+        {{ btnform(_value=_data, _name='full_post', _endpoint='endpoints.delete_post', _text='', _class_icon='glyphicon glyphicon-trash', _class_btn='btn-danger') }}
+    {% endif %}
+{%- endmacro -%}
+
+{%- macro ifanswer(_data, _key_user, _key_original_post, _hash_key, _win, _keyuserquestion) -%}
+    {% if 'user' in session and _keyuserquestion == session.user.key %}
+        <form class="pull-right" action={{ url_for('endpoints.update_post') }} method="post">
+            <input type="hidden" name="question" value={{ _key_original_post }}>
+            <input type="hidden" name="answer" value={{ _hash_key }}>
+            <input type="hidden" name="state" value={{ _win }}>
+            <input type="hidden" name="key_user" value={{ _key_user }}>
+                {% if _win %}
+                    {{ btnbase(btext='WINNER', bclass_icon='', bclass_btn='btn-primary', banswers='') }}
+                {% else %}
+                    {{ btnbase(btext='WINNER', bclass_icon='', bclass_btn='btn-default', banswers='') }}
+                {% endif %}
+        </form>
+    {% elif _win %}
+        {% if _win %}
+            {{ btnlink(_value=_key_original_post, _text='WINNER', _class_btn='btn-primary') }}
+        {% else %}
+            {{ btnlink(_value=_key_original_post, _text='WINNER') }}
+        {% endif %}        
+    {% elif not _keyuserquestion and 'user' in session and _key_user == session.user.key and not(total_answers or _win) %}
+        {{ btnform(_value=_data, _name='full_post', _endpoint='endpoints.delete_post', _text='', _class_icon='glyphicon glyphicon-trash', _class_btn='btn-danger') }}
+    {% endif %}
+{%- endmacro -%}

@@ -87,15 +87,20 @@ def profile(nickname):
     busqueda el nickname ingresado. Si el metodo es POST se realiza la
     actualizacion del perfil del usuario que este en sesion activa.
     '''
-    if request.method == 'GET':
-        return render_template('profile.html', title='Profile',
-                               profile=user_by_nickname(nickname))
-    else:
-        return register_email_skills()
+    from forms_fields import RegisterUserForm
+
+    form_field = RegisterUserForm(request.form)
+    if request.method == 'POST' and form_field.validate():
+        return register_email_skills(form_field)
+    profile = user_by_nickname(nickname)
+    if request.method == 'POST':
+        profile.update(form_field.data)
+    return render_template('profile.html', title='Profile', form=form_field,
+                           profile=profile)
 
 
 @login_required
-def register_email_skills():
+def register_email_skills(form_field):
     '''
     (str) -> flask.redirect
 
@@ -108,12 +113,9 @@ def register_email_skills():
     '''
     user = session['user']
 
-    #crear una lista con los skills definidos por el usuario
-    skills = filter(None, request.form.getlist('skills'))
-
     #definir los datos para enviar la solicitud de registro de skills
     data = {'token_user': user['token_user'], 'key_user': user['key'],
-            'jsonskills': json.dumps(skills)}
+            'jsonskills': json.dumps(form_field.skills.data)}
     result = requests.post(OxRESTful_resource.REGISTER_SKILLS, data=data)
 
     #validar si el registro fue exitoso o no
@@ -122,7 +124,7 @@ def register_email_skills():
 
     #definir los datos para enviar la solicitud de registro de email
     data = {'token_user': user['token_user'],
-            'email': request.form['email']}
+            'email': form_field.email.data}
     result = requests.put(OxRESTful_resource.REGISTER_EMAIL, data=data)
 
     #validar si el registro fue exitoso o no
@@ -137,7 +139,7 @@ def register_email_skills():
         return redirect(url_for('endpoints.home',
                                 nickname=user['nickname']))
     return render_template('profile.html', profile=result.json(),
-                           title='Profile')
+                           title='Profile', form=form_field)
 
 
 @guest_user
@@ -164,66 +166,77 @@ def home(nickname):
 @login_required
 def create_question():
     '''
-    (str) -> flask.redirect
+    () -> flask.redirect
 
     Gestiona el proceso de creacion de una nueva pregunta por parte del usuario
     Si el metodo de consumo del recurso es GET realiza el renderizado de la
     vista questions Si el metodo de consumo es POST realiza el registro de la
     nueva pregunta en el sistema.
     '''
-    if request.method == 'GET':
-        return render_template('question.html')
+    from forms_fields import CreateQuestionForm
 
-    user = session['user']
+    form_field = CreateQuestionForm(request.form)
 
-    data_question = request.form.to_dict()
-    add_data = {'source': 'web', 'key_user': user['key'],
-                'skills': filter(None, request.form.getlist('skills'))}
-    data_question.update(add_data)
-    data = {'token_user': user['token_user'],
-            'jsontimeline': json.dumps(data_question)}
-    result = requests.post(OxRESTful_resource.CREATE_QUESTION, data=data)
-    if result.status_code != 200:
-        return 'error crear question'
-    data = {'token_user': user['token_user'], 'post': 1,
-            'key_user': user['key']}
-    result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
-    return redirect(url_for('endpoints.home', nickname=user['nickname']))
+    if request.method == 'POST' and form_field.validate():
+        user = session['user']
+        data_question = form_field.data
+        data_question.update({'source': 'web', 'key_user': user['key']})
+        data = {'token_user': user['token_user'],
+                'jsontimeline': json.dumps(data_question)}
+        result = requests.post(OxRESTful_resource.CREATE_QUESTION, data=data)
+        if result.status_code != 200:
+            return 'error crear question'
+        data = {'token_user': user['token_user'], 'post': 1,
+                'key_user': user['key']}
+        result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
+        return redirect(url_for('endpoints.home', nickname=user['nickname']))
+
+    return render_template('question.html', form=form_field)
 
 
 @login_required
 def create_answer():
     '''
-    (str) -> flask.redirect
+    () -> flask.redirect
 
     Gestiona el proceso de creacion de una respuesta por parte del usuario
     Si el metodo de consumo del recurso es GET realiza el renderizado de la
-    vista answer. Si el metodo de consumo es POST realiza el registro de la
+    vista home. Si el metodo de consumo es POST realiza el registro de la
     nueva respuesta en el sistema.
     '''
-    if request.method == 'GET':
-        return redirect(url_for('endpoints.home',
+    if request.method == 'POST':
+
+        from forms_fields import CreateAnswerForm
+        form_field = CreateAnswerForm(request.form)
+
+        if form_field.validate():
+            user = session['user']
+            json_question = form_field.data
+            json_question.update({'source': 'web', 'key_user': user['key']})
+            data = {'token_user': user['token_user'],
+                    'jsontimeline': json.dumps(json_question)}
+            result = requests.post(OxRESTful_resource.CREATE_ANSWER, data=data)
+            if result.status_code != 200:
+                return 'error crear answer'
+            data = {'token_user': user['token_user'], 'answer': 1,
+                    'key_user': user['key']}
+            result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
+            return redirect(url_for('endpoints.show',
+                                question=form_field.data['key_post_original']))
+        else:
+            import ast
+
+            question = request.form['full_question']
+            if question.startswith('_'):
+                question = question[1:]
+            else:
+                form_field = CreateAnswerForm(request.form)
+            question = ast.literal_eval(question)
+            return render_template('answer.html', question=question,
+                                   form=form_field)
+
+    return redirect(url_for('endpoints.home',
                             nickname=session['user']['nickname']))
-
-    if 'full_question' in request.form:
-        import ast
-
-        question = ast.literal_eval(request.form['full_question'])
-        return render_template('answer.html', question=question)
-
-    user = session['user']
-    json_question = request.form.to_dict()
-    json_question.update({'source': 'web', 'key_user': user['key']})
-    data = {'token_user': user['token_user'],
-            'jsontimeline': json.dumps(json_question)}
-    result = requests.post(OxRESTful_resource.CREATE_ANSWER, data=data)
-    if result.status_code != 200:
-        return 'error crear answer'
-    data = {'token_user': user['token_user'], 'answer': 1,
-            'key_user': user['key']}
-    result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
-    return redirect(url_for('endpoints.show',
-                            question=request.form['key_post_original']))
 
 
 @guest_user
@@ -235,7 +248,10 @@ def finderdown():
     para ser pasada como parametro al endpoints.finder y ralizar la busqueda
     por skill.
     '''
-    return redirect(url_for('endpoints.finder', find=request.args.get('find')))
+    find_by = request.args.get('find')
+    if find_by:
+        return redirect(url_for('endpoints.finder', find=find_by))
+    return '', 400
 
 
 @guest_user
@@ -308,25 +324,32 @@ def update_post():
     '''
     () -> flask.redirect
 
-    Permite actualizar el estado de un answer asiciado a un question, el asnwer
-    puede alternar entre dos estados win_answer y answer comun. Se recibe el
+    Permite actualizar el estado de un answer asociado a un question, el asnwer
+    puede alternar entre dos estados win answer y common answer. Se recibe el
     hash_key del question y answer seleccionada asi como el estado actual del
     answer a ser modificado. Redirige al endpoints.show para refrescar la vista
     '''
 
-    user = session['user']
-    new_data = request.form
-    data = {'token_user': user['token_user'], 'hash_key': new_data['question'],
-            'jsontimeline': json.dumps({'hash_key_answer': new_data['answer'],
-                                'state': 0 if int(new_data['state']) else 1})}
-    result = requests.put(OxRESTful_resource.UPDATE_POST, data=data)
-    if result.status_code != 200:
-        return 'error update post'
-    data = {'token_user': user['token_user'],
-            'key_user': request.form['key_user'],
-            'w_answer': -1 if int(request.form['state']) else 1}
-    result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
-    return redirect(url_for('endpoints.show', question=new_data['question']))
+    from forms_fields import UpdatePostForm
+    form_field = UpdatePostForm(request.form)
+
+    if form_field.validate():
+        user = session['user']
+        new_data = form_field.data
+        data = {'token_user': user['token_user'],
+                'hash_key': new_data['question'],
+                'jsontimeline': json.dumps({'state': new_data['state'],
+                                       'hash_key_answer': new_data['answer']})}
+        result = requests.put(OxRESTful_resource.UPDATE_POST, data=data)
+        if result.status_code != 200:
+            return 'error update post'
+        data = {'token_user': user['token_user'],
+                'key_user': form_field.data['key_user'],
+                'w_answer': 1 if form_field.data['state'] else -1}
+        result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
+        return redirect(url_for('endpoints.show',
+                                question=new_data['question']))
+    return '', 400
 
 
 @login_required
@@ -342,24 +365,30 @@ def delete_post():
         * Un answer solo puede ser eliminada si no se ha marcado como win
           answer.
 
-    si la eliminaion fue exitosa, se redirige a la vista que realizo el llamado
+    si la eliminaion fue exitosa, se redirige al endpoints.home
     '''
-    if request.method != 'GET':
+    if request.method == 'POST':
         if 'full_post' in request.form:
             import ast
 
             post = ast.literal_eval(request.form['full_post'])
             return render_template('delete.html', post=post)
 
-        user = session['user']
-        data = {'token_user': user['token_user'], 'key_user': user['key']}
-        data['hash_key'] = request.form['hash_key']
-        result = requests.delete(OxRESTful_resource.DELETE_QA, data=data)
-        if result.status_code != 200:
-            return 'error delete question o answer'
-        data = {'token_user': user['token_user'], 'key_user': user['key'],
-                'post' if request.form['is_question'] == 'True' else 'answer': -1}
-        result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
+        from forms_fields import DeletePostForm
+        form_field = DeletePostForm(request.form)
+        if form_field.validate():
+            user = session['user']
+            data = {'token_user': user['token_user'], 'key_user': user['key']}
+            data['hash_key'] = form_field.data['hash_key']
+            result = requests.delete(OxRESTful_resource.DELETE_QA, data=data)
+            if result.status_code != 200:
+                return 'error delete question o answer'
+            data = {'token_user': user['token_user'], 'key_user': user['key'],
+                    'post' if int(form_field.data['is_question']) else \
+                                                                'answer': -1}
+            result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
+        else:
+            return '', 400
     return redirect(url_for('endpoints.home',
                             nickname=session['user']['nickname']))
 
