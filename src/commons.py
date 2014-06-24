@@ -15,7 +15,7 @@ class to_List(Raw):
         return value if isinstance(value, list) else list(value)
 
 
-def generate_token(secret_key=None, expiration=600, **kwargs):
+def generate_token(secret_key=None, expiration=0, **kwargs):
     '''
     (str, int, **kwargs) -> str
 
@@ -24,8 +24,11 @@ def generate_token(secret_key=None, expiration=600, **kwargs):
     token_guest con los datos encriptados. El secret_key es utilizado para
     el proceso de cifrado y descifrado del token. JSON Web Token (JWT)
     '''
-
+    from flask import current_app
     from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+
+    if not expiration:
+        expiration = current_app.config['OX_TOKEN_GUEST_USER_LIFETIME']
 
     token = Serializer(secret_key, expires_in=expiration)
     return token.dumps(kwargs)

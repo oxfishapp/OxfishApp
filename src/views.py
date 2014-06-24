@@ -5,6 +5,7 @@ Created on Jun 6, 2014
 '''
 import requests
 import json
+import ast
 from flask import (current_app, url_for, request, render_template, session,
                     redirect)
 from api_auth import tw_oauth, login_required, guest_user
@@ -59,7 +60,7 @@ def auth_twitter(tw_resp):
 
     #almacenar los datos del usuario en un variable de sesion.
     user = result.json()
-    timelife_token = current_app.config['TOKEN_USER_LIFETIME']
+    timelife_token = current_app.config['OX_TOKEN_USER_LIFETIME']
     user['timelife_token'] = add_timeUTCnow(timelife_token)
     session['user'] = user
 
@@ -68,8 +69,6 @@ def auth_twitter(tw_resp):
         session['full_register'] = False
         return redirect(url_for('endpoints.profile',
                                 nickname=user['nickname'], title='Profile'))
-    import ast
-
     data = {'nickname': user['nickname']} if next_url == 'endpoints.home' \
             else ast.literal_eval(request.args.get('data'))
     return redirect(url_for(next_url, **data))
@@ -224,8 +223,6 @@ def create_answer():
             return redirect(url_for('endpoints.show',
                                 question=form_field.data['key_post_original']))
         else:
-            import ast
-
             question = request.form['full_question']
             if question.startswith('_'):
                 question = question[1:]
@@ -369,8 +366,6 @@ def delete_post():
     '''
     if request.method == 'POST':
         if 'full_post' in request.form:
-            import ast
-
             post = ast.literal_eval(request.form['full_post'])
             return render_template('delete.html', post=post)
 
@@ -416,7 +411,7 @@ def logout():
     user y redirige al endpoints.timeline.
     '''
 
-    session.clear()
+    del session['user']
     return redirect(url_for('endpoints.timeline'))
 
 
