@@ -92,27 +92,28 @@ def life_token_user():
 
         * El usuario tiene actividad en la aplicacion
         * El token_user actual no ha expirado
-        * El lifetime del token_user es menor a la mitad de TOKEN_USER_LIFETIME
+        * El lifetime del token_user es menor a la mitad de
+          OX_TOKEN_USER_LIFETIME
 
-    El tiempo de renovacion se define en la variable TOKEN_USER_LIFETIME
+    El tiempo de renovacion se define en la variable OX_TOKEN_USER_LIFETIME
     definida en el config de la aplicacion.
     '''
 
     import requests
     from restful_resource import OxRESTful_resource
 
-    timelife_token = current_app.config['TOKEN_USER_LIFETIME']
+    timelife_token = current_app.config['OX_TOKEN_USER_LIFETIME']
     if 'timelife_token' in session['user']:
         user = session['user']
         timelife = difference_timeUTCnow(user['timelife_token'])
 
         #verifica si el lifetime del token_user es mayor a la mitad del
-        #TOKEN_USER_LIFETIME, de ser verdadero el token_user no es renovado.
+        #OX_TOKEN_USER_LIFETIME, de ser verdadero el token_user no es renovado.
         if timelife >= timelife_token / 2:
             return True
 
         #verifica si el lifetime del token_user es menor a la mitad del
-        #TOKEN_USER_LIFETIME y si lifetime es mayor o igual a 0, de ser
+        #OX_TOKEN_USER_LIFETIME y si lifetime es mayor o igual a 0, de ser
         #verdadero el token_user es renovado.
         elif timelife < timelife_token / 2 and timelife >= 0:
             data = {'token_user': user['token_user']}
@@ -123,4 +124,6 @@ def life_token_user():
                 user['timelife_token'] = add_timeUTCnow(timelife_token)
                 session['user'] = user
                 return True
+        else:
+            del session['user']
     return False
