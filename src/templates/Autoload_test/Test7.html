@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="utf-8">
+      <title>load demo</title>
+<!--        http://jsfiddle.net/mjaric/pJ5BR/-->
+        <script type="text/javascript" src="https://code.angularjs.org/1.0.1/angular-1.0.1.min.js"></script>
+        <script>
+
+                var app = angular.module('myApp', []);
+
+                function PeopleCtrl($scope) {
+
+                    $scope.people = [];
+
+                    $scope.loadPeople = function() {
+                            $scope.people = data;
+                    };
+
+                }
+        </script>
+    </head>
+    <body>
+        <div ng-app="myApp">
+        <div ng-controller="PeopleCtrl">
+            <p>    Click <a ng-click="loadPeople()">here</a> to load data.</p>
+        <table>
+            <tr>
+                <th>Id</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+            </tr>
+            <tr ng-repeat="person in people">
+                <td>{{person.id}}</td>
+                <td>{{person.firstName}}</td>
+                <td>{{person.lastName}}</td>
+            </tr>
+        </table>
+        </div>
+        </div>
+        
+    </body>
+</html>

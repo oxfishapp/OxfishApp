@@ -8,6 +8,10 @@
       <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js" rel="javascript" type="text/javascript"></script>
 
       <script>
+          var pagination = {{ pagination|tojson }};
+      </script>
+
+      <script>
             $('.dropdown-toggle').dropdown();
             $(window).on('resize load', function() {
                 $('body').css({"padding-top": ($(".navbar").height()+ 15 )+ "px"});
@@ -23,6 +27,31 @@
 			   	document.getElementById('latLong').value = position.coords.latitude + ',' + position.coords.longitude;
 			}
 		</script>
+
+        <script>
+            function myFunction() {
+
+                        var nodes = $("#pagination")[0].childNodes;
+
+                        $.ajax({
+                          type: "POST",
+                          contentType: "application/json; charset=utf-8",
+                          url: '/_add_numbers',
+        //                url : "}} url_for('mod.load_ajax') }}",
+
+                          data: JSON.stringify({"a" : $('input[name="a"]').val(),
+                                               "b" : $('input[name="b"]').val(),
+                                               "datos": global2}),
+                          success: function (data) {
+                            console.log(data.lista);
+                            var nodesArray = Array.prototype.slice.call(nodes)
+                            var render = nodesArray.concat(data.lista)
+                          $("#pagination").html(render);
+                          },
+                          dataType: "json"
+                        });
+                    }
+        </script>
 
       <!-- Latest compiled and minified CSS -->
       <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel=stylesheet type=text/css >
