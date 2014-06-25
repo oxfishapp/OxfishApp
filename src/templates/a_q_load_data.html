@@ -1,7 +1,7 @@
-{%- macro load(posts) -%}
+{%- macro load(posts, _skill='',_key_user_question='') -%}
     {% from 'a_q_commons.html' import a_q_format as format %}                
     {% for post in posts %}
-        {{ format(data=post) }}
+        {{ format(data=post,skill=_skill,key_user_question=_key_user_question) }}
     {% endfor %}
 {%- endmacro -%}
 
