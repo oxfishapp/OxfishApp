@@ -8,7 +8,7 @@
                     {{ load(posts=timeline) }}
                 </ul>
                 <div class="text-center">
-                  <button onclick="myFunction({{ url_for('endpoints.timeline_load') }})" class="btn btn-primary"><span class=""></span> More</button>
+                  <button onclick=myFunction('{{ url_for("endpoints.timeline_load") }}') class="btn btn-primary"><span class=""></span> More</button>
                 </div>
             </div>
         </div>
