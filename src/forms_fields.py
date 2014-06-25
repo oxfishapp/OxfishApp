@@ -19,11 +19,14 @@ class FieldListSkills(FieldList):
 
     @property
     def data(self):
-        return [f.data for f in self.entries if f.data]
+        return [f.data.lower() for f in self.entries if f.data]
 
     @property
     def errors_list(self):
-        return [e for e in self.errors if not isinstance(e, list)]
+        return [e for e in self.errors if not isinstance(e, list) and e]
+
+    def len(self):
+        return self.__len__()
 
 
 class RegisterUserForm(Form):

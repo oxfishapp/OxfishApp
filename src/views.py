@@ -411,7 +411,7 @@ def logout():
     user y redirige al endpoints.timeline.
     '''
 
-    del session['user']
+    session.clear()
     return redirect(url_for('endpoints.timeline'))
 
 

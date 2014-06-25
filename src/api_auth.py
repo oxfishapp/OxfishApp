@@ -71,13 +71,13 @@ def guest_user(func):
     def decorated_guest_user(*args, **kwargs):
         secret_key = current_app.config['SECRET_KEY_ANONYMOUS']
 
+        if 'user' in session:
+            life_token_user()
+
         #valida si existe y/o esta activo el token_guest
         if not 'token_guest' in session or \
                 not validate_token(session['token_guest'], secret_key):
             session['token_guest'] = generate_token(secret_key)
-
-        if 'user' in session:
-            life_token_user()
 
         return func(*args, **kwargs)
     return decorated_guest_user
@@ -125,5 +125,5 @@ def life_token_user():
                 session['user'] = user
                 return True
         else:
-            del session['user']
+            session.clear()
     return False

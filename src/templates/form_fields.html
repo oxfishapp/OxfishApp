@@ -43,7 +43,7 @@
 		{% endif %}
 	{% else %}
 		{% for i in range(3) %}
-			{{ form_field_func(field_list.append_entry(), placeholder="ex: " + placeholder[loop.index0] if placeholder, **kwargs) }}
+			{{ form_field_func(field_list.entries[loop.index0] if field_list.len() > i else field_list.append_entry(), placeholder="ex: " + placeholder[loop.index0] if placeholder, **kwargs) }}
 		{% endfor %}
     {% endif %}
 {% endmacro %}
