@@ -7,7 +7,7 @@ import requests
 import json
 import ast
 from flask import (current_app, url_for, request, render_template, session,
-                    redirect)
+                    redirect, jsonify)
 from api_auth import tw_oauth, login_required, guest_user
 from restful_resource import OxRESTful_resource
 from commons import add_timeUTCnow
@@ -410,13 +410,18 @@ def timeline_load():
     (str) -> flask.redirect
 
     '''
-    new_data = timeline(request.json['pagination'])
-    template = render_template('a_q_load_data.html')
+    pagination = request.json['pagination']
+    if pagination:
+        new_data = timeline(request.json['pagination'])
+        template = render_template('a_q_load_data.html', data=new_data['data'])
+        send_data = [template]
+        return jsonify(lista=send_data, pagination=new_data['pagination'])
+    return jsonify(lista=[], pagination=None)
 
 
 def timeline(pagination=None):
     data = {'token_user': session['token_guest'],
-            'pagination': pagination if pagination else "{}"}
+            'pagination': json.dumps(pagination) if pagination else "{}"}
     result = requests.get(OxRESTful_resource.PUBLIC_TIMELINE, data=data)
     if result.status_code != 200:
         return 'error consulta timeline public'

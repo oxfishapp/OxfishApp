@@ -40,11 +40,12 @@
                             contentType: "application/json; charset=utf-8",
 //                          url: '/_add_numbers',
 //                          url : "}} url_for('mod.load_ajax') }}",
-                            url : site
+                            url : site,
 
                             data: JSON.stringify({"pagination": pagination}),
                           success: function (data) {
                             console.log(data.lista);
+                            pagination = data.pagination
                             var nodesArray = Array.prototype.slice.call(nodes)
                             var render = nodesArray.concat(data.lista)
                           $("#pagination").html(render);
