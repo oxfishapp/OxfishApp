@@ -203,37 +203,31 @@ def create_answer():
     vista home. Si el metodo de consumo es POST realiza el registro de la
     nueva respuesta en el sistema.
     '''
-    if request.method == 'POST':
-
-        from forms_fields import CreateAnswerForm
-        form_field = CreateAnswerForm(request.form)
-
-        if form_field.validate():
-            user = session['user']
-            json_question = form_field.data
-            json_question.update({'source': 'web', 'key_user': user['key']})
-            data = {'token_user': user['token_user'],
-                    'jsontimeline': json.dumps(json_question)}
-            result = requests.post(OxRESTful_resource.CREATE_ANSWER, data=data)
-            if result.status_code != 200:
-                return 'error crear answer'
-            data = {'token_user': user['token_user'], 'answer': 1,
-                    'key_user': user['key']}
-            result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
-            return redirect(url_for('endpoints.show',
-                                question=form_field.data['key_post_original']))
+    from forms_fields import CreateAnswerForm
+    form_field = CreateAnswerForm(request.form)
+    if form_field.validate():
+        user = session['user']
+        json_question = form_field.data
+        json_question.update({'source': 'web', 'key_user': user['key']})
+        data = {'token_user': user['token_user'],
+                'jsontimeline': json.dumps(json_question)}
+        result = requests.post(OxRESTful_resource.CREATE_ANSWER, data=data)
+        if result.status_code != 200:
+            return 'error crear answer'
+        data = {'token_user': user['token_user'], 'answer': 1,
+                'key_user': user['key']}
+        result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
+        return redirect(url_for('endpoints.show',
+                            question=form_field.data['key_post_original']))
+    else:
+        question = request.form['full_question']
+        if question.startswith('_'):
+            question = question[1:]
         else:
-            question = request.form['full_question']
-            if question.startswith('_'):
-                question = question[1:]
-            else:
-                form_field = CreateAnswerForm(request.form)
-            question = ast.literal_eval(question)
-            return render_template('answer.html', question=question,
-                                   form=form_field)
-
-    return redirect(url_for('endpoints.home',
-                            nickname=session['user']['nickname']))
+            form_field = CreateAnswerForm(request.form)
+        question = ast.literal_eval(question)
+        return render_template('answer.html', question=question,
+                               form=form_field)
 
 
 @guest_user
