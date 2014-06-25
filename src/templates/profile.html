@@ -31,7 +31,7 @@
             	{% from "form_fields.html" import form_field_profile, render_field_list %}
             	
             	<strong>email: </strong>
-            	{{ form_field_profile(form.email, '@', class="form-control", id="skillone", placeholder="yourusername@example.com", value=profile.email if profile.email) }}
+            	{{ form_field_profile(form.email, '@', class="form-control", id="skillone", placeholder="username@example.com", value=profile.email if profile.email) }}
                 <div id="tags" itemprop="description">
                 	<strong>skills: </strong>
                 	{{ render_field_list(form.skills, profile.skills, form_field_profile, symbol='♦', class="form-control", placeholder=['python', 'java', 'c#']) }}

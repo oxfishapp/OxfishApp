@@ -21,13 +21,15 @@ class ItemsRepeated(object):
         self.message = message
 
     def __call__(self, form, field):
-        data_list = [item.lower() for item in field.data]
+        items_repeated = False
         for item in field.entries:
-            value = item.data.lower()
-            if value and data_list.count(value) > 1:
-                from wtforms import ValidationError
+            item.process_data(item.data.lower())
+            if item.data and field.data.count(item.data) > 1:
                 item.errors.append(self.message)
-                raise ValidationError()
+                items_repeated = True
+        if items_repeated:
+            from wtforms import ValidationError
+            raise ValidationError()
 
 
 class LengthListItems(object):
