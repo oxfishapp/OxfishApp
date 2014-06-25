@@ -1,0 +1,8 @@
+{%- macro load(posts) -%}
+    {% from 'a_q_commons.html' import a_q_format as format %}                
+    {% for post in posts %}
+        {{ format(data=post) }}
+    {% endfor %}
+{%- endmacro -%}
+
+{{ load(data) }}

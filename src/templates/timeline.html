@@ -1,15 +1,16 @@
 {% extends "layout.html" %}
 {% block body_base %}
-{% from 'a_q_commons.html' import a_q_format as format%}
-<div class="container" role="main">
-    <div class="row">
-        <div class="col-md-6 col-md-offset-3">
-            <ul class="list-group">  
-                {% for post in timeline %}
-                    {{ format(data=post) }}
-                {% endfor %}
-            </ul>
+    <div class="container" role="main">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <ul class="list-group" id="pagination">  
+                    {% from 'a_q_load_data.html' import load%}
+                    {{ load(posts=timeline) }}
+                </ul>
+                <div class="text-center">
+                  <button onclick="myFunction({{ url_for('endpoints.timeline_load') }})" class="btn btn-primary"><span class=""></span> More</button>
+                </div>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
