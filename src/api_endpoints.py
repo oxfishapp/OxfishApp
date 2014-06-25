@@ -18,7 +18,7 @@ endpoints.add_url_rule('/<string:nickname>/profile', 'profile',
 endpoints.add_url_rule('/ask/q', 'ask', views.create_question,
                        methods=['GET', 'POST'])
 endpoints.add_url_rule('/ask/a', 'answer', views.create_answer,
-                       methods=['POST'])
+                       methods=['GET', 'POST'])
 endpoints.add_url_rule('/show/<string:question>', 'show',
                        views.view_alone)
 endpoints.add_url_rule('/finder/finderdown', 'finderdown',
@@ -32,6 +32,8 @@ endpoints.add_url_rule('/ask/wa', 'update_post', views.update_post,
 endpoints.add_url_rule('/logout', 'logout', views.logout)
 endpoints.add_url_rule('/ask/del', 'delete_post', views.delete_post,
                        methods=['GET', 'POST'])
+endpoints.add_url_rule('/timeline_load', 'timeline_load', views.timeline_load,
+                       methods=['POST'])
 
 
 endpoints.add_url_rule('/about', 'about',

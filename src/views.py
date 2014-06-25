@@ -278,12 +278,7 @@ def timeline_public():
     Renderiza la vista timeline_public, consulta los questions que tienen al
     menos un answer, luego son mostrados al usuario en orden cronologico.
     '''
-
-    data = {'token_user': session['token_guest'], 'pagination': "{}"}
-    result = requests.get(OxRESTful_resource.PUBLIC_TIMELINE, data=data)
-    if result.status_code != 200:
-        return 'error consulta timeline public'
-    result_data = result.json()
+    result_data = timeline()
     return render_template('timeline.html', timeline=result_data['data'],
                            pagination=result_data['pagination'],
                            title='Timeline Public')
@@ -407,6 +402,25 @@ def logout():
 
     session.clear()
     return redirect(url_for('endpoints.timeline'))
+
+
+@guest_user
+def timeline_load():
+    '''
+    (str) -> flask.redirect
+
+    '''
+    new_data = timeline(request.json['pagination'])
+    template = render_template('a_q_load_data.html')
+
+
+def timeline(pagination=None):
+    data = {'token_user': session['token_guest'],
+            'pagination': pagination if pagination else "{}"}
+    result = requests.get(OxRESTful_resource.PUBLIC_TIMELINE, data=data)
+    if result.status_code != 200:
+        return 'error consulta timeline public'
+    return result.json()
 
 
 @guest_user
