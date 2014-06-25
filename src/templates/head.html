@@ -29,19 +29,18 @@
 		</script>
 
         <script>
-            function myFunction() {
+            function myFunction(site) {
 
                         var nodes = $("#pagination")[0].childNodes;
 
                         $.ajax({
-                          type: "POST",
-                          contentType: "application/json; charset=utf-8",
-                          url: '/_add_numbers',
-        //                url : "}} url_for('mod.load_ajax') }}",
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+//                          url: '/_add_numbers',
+//                          url : "}} url_for('mod.load_ajax') }}",
+                            url : site
 
-                          data: JSON.stringify({"a" : $('input[name="a"]').val(),
-                                               "b" : $('input[name="b"]').val(),
-                                               "datos": global2}),
+                            data: JSON.stringify({"pagination": pagination}),
                           success: function (data) {
                             console.log(data.lista);
                             var nodesArray = Array.prototype.slice.call(nodes)
