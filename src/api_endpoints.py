@@ -34,7 +34,12 @@ endpoints.add_url_rule('/ask/del', 'delete_post', views.delete_post,
                        methods=['GET', 'POST'])
 endpoints.add_url_rule('/timeline_load', 'timeline_load', views.timeline_load,
                        methods=['POST'])
-
+endpoints.add_url_rule('/home_load', 'home_load', views.home_load,
+                       methods=['POST'])
+endpoints.add_url_rule('/finder_load', 'finder_load', views.finder_load,
+                       methods=['POST'])
+endpoints.add_url_rule('/answers_load', 'answers_load', views.answers_load,
+                       methods=['POST'])
 
 endpoints.add_url_rule('/about', 'about',
                        views.temp)

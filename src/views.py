@@ -7,7 +7,7 @@ import requests
 import json
 import ast
 from flask import (current_app, url_for, request, render_template, session,
-                    redirect, jsonify)
+                    redirect, jsonify, abort)
 from api_auth import tw_oauth, login_required, guest_user
 from restful_resource import OxRESTful_resource
 from commons import add_timeUTCnow
@@ -56,7 +56,7 @@ def auth_twitter(tw_resp):
 
     #validar el status_code de la respuesta
     if not result.status_code in [428, 200]:
-        return "Error inicio sesion"
+        abort(result.status_code)
 
     #almacenar los datos del usuario en un variable de sesion.
     user = result.json()
@@ -119,7 +119,7 @@ def register_email_skills(form_field):
 
     #validar si el registro fue exitoso o no
     if result.status_code != 200:
-        return 'error registrando los skills'
+        abort(result.status_code)
 
     #definir los datos para enviar la solicitud de registro de email
     data = {'token_user': user['token_user'],
@@ -128,7 +128,7 @@ def register_email_skills(form_field):
 
     #validar si el registro fue exitoso o no
     if result.status_code != 200:
-        return 'error registrando email'
+        abort(result.status_code)
 
     #actualizar los datos de sesion del usuario con los actualizados
     user['skills'] = result.json()['skills']
@@ -151,13 +151,7 @@ def home(nickname):
     cronologicamente.
     '''
     user = user_by_nickname(nickname)
-    data = {'token_user': session['token_guest'],
-            'pagination': "{}"}
-    result = requests.get(OxRESTful_resource.QUESTION_ANSWER_BY_USER + \
-                          user['key'], data=data)
-    if result.status_code != 200:
-        return 'error cargar historial usuario'
-    result_data = result.json()
+    result_data = home_restful(key=user['key'])
     return render_template('home.html', home=result_data['data'], title='Home',
                            pagination=result_data['pagination'])
 
@@ -184,7 +178,7 @@ def create_question():
                 'jsontimeline': json.dumps(data_question)}
         result = requests.post(OxRESTful_resource.CREATE_QUESTION, data=data)
         if result.status_code != 200:
-            return 'error crear question'
+            abort(result.status_code)
         data = {'token_user': user['token_user'], 'post': 1,
                 'key_user': user['key']}
         result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
@@ -213,7 +207,7 @@ def create_answer():
                 'jsontimeline': json.dumps(json_question)}
         result = requests.post(OxRESTful_resource.CREATE_ANSWER, data=data)
         if result.status_code != 200:
-            return 'error crear answer'
+            abort(result.status_code)
         data = {'token_user': user['token_user'], 'answer': 1,
                 'key_user': user['key']}
         result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
@@ -242,7 +236,7 @@ def finderdown():
     find_by = request.args.get('find')
     if find_by:
         return redirect(url_for('endpoints.finder', find=find_by))
-    return '', 400
+    abort(400)
 
 
 @guest_user
@@ -257,8 +251,7 @@ def view_alone(question):
     data = {'token_user': session['token_guest']}
     result_qwa = requests.get(OxRESTful_resource.QUESTION_WIN_ANSWER + \
                               question, data=data)
-    data.update({'hash_key': question, 'pagination': "{}"})
-    result_a = requests.get(OxRESTful_resource.QUESTION_ALL_ANSWER, data=data)
+    result_a = answers_restful(question=question)
     if result_qwa.status_code == 200 and result_a.status_code == 200:
         data_result = result_qwa.json()
         questions = data_result['question']
@@ -267,7 +260,7 @@ def view_alone(question):
         return render_template('show.html', questions=questions, title='Show',
                             answers=answers['data'], win_answers=win_answers,
                             pagination=answers['pagination'])
-    return 'error al consultar la question y sus answers'
+    abort(400)
 
 
 @guest_user
@@ -278,7 +271,7 @@ def timeline_public():
     Renderiza la vista timeline_public, consulta los questions que tienen al
     menos un answer, luego son mostrados al usuario en orden cronologico.
     '''
-    result_data = timeline()
+    result_data = timeline_restful()
     return render_template('timeline.html', timeline=result_data['data'],
                            pagination=result_data['pagination'],
                            title='Timeline Public')
@@ -294,12 +287,7 @@ def finder(find):
     La lista de questions del skill buscado se muestran en la renderizacion de
     vista find_skill.
     '''
-
-    data = {'token_user': session['token_guest'], 'pagination': "{}"}
-    result = requests.get(OxRESTful_resource.FINDER + find, data=data)
-    if result.status_code != 200:
-        return 'error finder skill'
-    result_data = result.json()
+    result_data = find_restful(find=find)
     return render_template('find_skill.html', find_skill=result_data['data'],
                            pagination=result_data['pagination'],
                            title='Skill', found=find)
@@ -328,14 +316,14 @@ def update_post():
                                        'hash_key_answer': new_data['answer']})}
         result = requests.put(OxRESTful_resource.UPDATE_POST, data=data)
         if result.status_code != 200:
-            return 'error update post'
+            abort(result.status_code)
         data = {'token_user': user['token_user'],
                 'key_user': form_field.data['key_user'],
                 'w_answer': 1 if form_field.data['state'] else -1}
         result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
         return redirect(url_for('endpoints.show',
                                 question=new_data['question']))
-    return '', 400
+    abort(400)
 
 
 @login_required
@@ -366,30 +354,112 @@ def delete_post():
             data['hash_key'] = form_field.data['hash_key']
             result = requests.delete(OxRESTful_resource.DELETE_QA, data=data)
             if result.status_code != 200:
-                return 'error delete question o answer'
+                abort(result.status_code)
             data = {'token_user': user['token_user'], 'key_user': user['key'],
                     'post' if int(form_field.data['is_question']) else \
                                                                 'answer': -1}
             result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
         else:
-            return '', 400
+            abort(400)
     return redirect(url_for('endpoints.home',
                             nickname=session['user']['nickname']))
 
 
-def user_by_nickname(nickname):
+@guest_user
+def timeline_load():
     '''
-    (str) -> dict
+    () -> flask.jsonify
 
-    permite consultar un usuario teniendo como criterio de busqueda el nickname
-    del usuario.
+    Permite realizar la carga del siguiente bloque de informacion para la vista
+    timeline public.
+
+    la variable pagination contiene la informacion necesaria para cargar el
+    siguiente bloque de questions, este bloque de informacion es renderizado
+    con el formato definido a_q_load_data.html.
+
+    Finalizada la contruccion del html es retornado para ser mostrado al final
+    de la pagina.
     '''
-    data = {'token_user': session['token_guest']}
-    result = requests.get(OxRESTful_resource.USER_BY_NICKNAME + nickname,
-                          data=data)
-    if result.status_code != 200:
-        return 'error consultando por nickname'
-    return result.json()
+    pagination = request.json['pagination']
+    if pagination:
+        new_data = timeline_restful(request.json['pagination'])
+        send_data = [render_template('a_q_load_data.html',
+                                     data=new_data['data'])]
+        return jsonify(lista=send_data, pagination=new_data['pagination'])
+    return jsonify(lista=[], pagination=None)
+
+
+@guest_user
+def home_load():
+    '''
+    () -> flask.jsonify
+
+    Permite realizar la carga del siguiente bloque de informacion para la vista
+    home.
+
+    la variable pagination contiene la informacion necesaria para cargar el
+    siguiente bloque de questions y answers, este bloque de informacion es
+    renderizado con el formato definido a_q_load_data.html.
+
+    Finalizada la contruccion del html es retornado para ser mostrado al final
+    de la pagina.
+    '''
+    pagination = request.json['pagination']
+    if pagination:
+        new_data = home_restful(request.json['pagination'])
+        send_data = [render_template('a_q_load_data.html',
+                                     data=new_data['data'])]
+        return jsonify(lista=send_data, pagination=new_data['pagination'])
+    return jsonify(lista=[], pagination=None)
+
+
+@guest_user
+def finder_load():
+    '''
+    () -> flask.jsonify
+
+    Permite realizar la carga del siguiente bloque de informacion para la vista
+    find.
+
+    la variable pagination contiene la informacion necesaria para cargar el
+    siguiente bloque de questions, este bloque de informacion es renderizado
+    con el formato definido a_q_load_data.html.
+
+    Finalizada la contruccion del html es retornado para ser mostrado al final
+    de la pagina.
+    '''
+    pagination = request.json['pagination']
+    if pagination:
+        new_data = find_restful(request.json['pagination'])
+        send_data = [render_template('a_q_load_data.html',
+                                    data=new_data['data'])]
+        return jsonify(lista=send_data, pagination=new_data['pagination'])
+    return jsonify(lista=[], pagination=None)
+
+
+@guest_user
+def answers_load():
+    '''
+    () -> flask.jsonify
+
+    Permite realizar la carga del siguiente bloque de informacion para la vista
+    view alone.
+
+    la variable pagination contiene la informacion necesaria para cargar el
+    siguiente bloque de answers, este bloque de informacion es renderizado
+    con el formato definido a_q_load_data.html.
+
+    Finalizada la contruccion del html es retornado para ser mostrado al final
+    de la pagina.
+    '''
+    pagination = request.json['pagination']
+    if pagination:
+        result = answers_restful(request.json['pagination'])
+        new_data = result.json()
+        send_data = [render_template('a_q_load_data.html',
+                                     data=new_data['data'])]
+        return jsonify(lista=send_data, pagination=new_data['pagination'])
+    return jsonify(lista=[], pagination=None)
 
 
 def logout():
@@ -404,28 +474,131 @@ def logout():
     return redirect(url_for('endpoints.timeline'))
 
 
-@guest_user
-def timeline_load():
+def user_by_nickname(nickname):
     '''
-    (str) -> flask.redirect
+    (str) -> dict
 
+    permite consultar un usuario teniendo como criterio de busqueda el nickname
+    del usuario.
     '''
-    pagination = request.json['pagination']
-    if pagination:
-        new_data = timeline(request.json['pagination'])
-        template = render_template('a_q_load_data.html', data=new_data['data'])
-        send_data = [template]
-        return jsonify(lista=send_data, pagination=new_data['pagination'])
-    return jsonify(lista=[], pagination=None)
+    data = {'token_user': session['token_guest']}
+    result = requests.get(OxRESTful_resource.USER_BY_NICKNAME + nickname,
+                          data=data)
+    if result.status_code != 200:
+        abort(result.status_code)
+    return result.json()
 
 
-def timeline(pagination=None):
+def timeline_restful(pagination=None):
+    '''
+    (dict) -> dict
+
+    Permite consultar los questions que se deben mostrar en el timeline public.
+    Cuando pagination es None consulta las ultimas questions publicadas en el
+    timeline, cuando es diferente a None se trae el siguiente bloque de
+    questions el cual indica pagination.
+
+    Retorna un dict con dos keys, el primero, data, el cual contiene la lista
+    de questions y answers resultado de la busqueda y el segundo, pagination,
+    el cual contine la informacion necesaria para realizar la carga del
+    siguiente bloque en una nueva busqueda.
+    '''
     data = {'token_user': session['token_guest'],
             'pagination': json.dumps(pagination) if pagination else "{}"}
     result = requests.get(OxRESTful_resource.PUBLIC_TIMELINE, data=data)
     if result.status_code != 200:
-        return 'error consulta timeline public'
+        abort(result.status_code)
     return result.json()
+
+
+def home_restful(pagination=None, key=None):
+    '''
+    (dict, str) -> dict
+
+    Permite consultar los questios y answers que se deben mostrar en el home.
+
+    Si pagination es None, consulta los ultimos questions y answers realizados
+    por un usuario, cuando pagination es diferente a None consulta el siguinete
+    bloque de informacion.
+
+    El parametro key indica el hash_key del usuario del cual se esta buscando
+    el historial.
+
+    Retorna un dict con dos keys, el primero, data, el cual contiene la lista
+    de questions y answers resultado de la busqueda y el segundo, pagination,
+    el cual contine la informacion necesaria para realizar la carga del
+    siguiente bloque en una nueva busqueda.
+
+    Nota: los parametros pagination y key no son usuados de forma simultanea,
+    si son proporcionados en el mismo llamado de la funcion tiene prioridad
+    pagination.
+    '''
+    data = {'token_user': session['token_guest'],
+            'pagination': json.dumps(pagination) if pagination else "{}"}
+    key_user = pagination['key_user'] if pagination else key
+    result = requests.get(OxRESTful_resource.QUESTION_ANSWER_BY_USER \
+                          + key_user,
+                          data=data)
+    if result.status_code != 200:
+        abort(result.status_code)
+    return result.json()
+
+
+def find_restful(pagination=None, find=None):
+    '''
+    (dict, str) -> dict
+
+    Permite consultar los questios asociadas al que se deben mostrar e.
+
+    Si pagination es None consulta las primeras questions y answers de home,
+    cuando es diferente a None se traen el siguinete bloque de questions el
+    cual indica pagination.
+
+    El parametro find es el nombre del skill que se esta buscando.
+
+    Retorna un dict con dos keys, el primero, data, el cual contiene la lista
+    de questions y answers resultado de la busqueda y el segundo, pagination,
+    el cual contine la informacion necesaria para realizar la carga del
+    siguiente bloque en una nueva busqueda.
+
+    Nota: los parametros pagination y find no son usuados de forma simultanea,
+    si son proporcionados en el mismo llamado de la funcion tiene prioridad
+    pagination.
+    '''
+    data = {'token_user': session['token_guest'],
+            'pagination': json.dumps(pagination) if pagination else "{}"}
+    find = pagination['skill'][2:] if pagination else find
+    result = requests.get(OxRESTful_resource.FINDER + find, data=data)
+    if result.status_code != 200:
+        abort(result.status_code)
+    return result.json()
+
+
+def answers_restful(pagination=None, question=None):
+    '''
+    (dict) -> dict
+
+    permite consultar las answers que se deben mostrar en view alone.
+
+    Si pagination es None, consulta las ultimas answers publicadas relacionadas
+    a la question que se esta revisando, cuando es diferente a None se trae el
+    siguinete bloque de answers el cual indica pagination.
+
+    El parametro question es el hask_key del question que se esta revisando.
+
+    Retorna un dict con dos keys, el primero, data, el cual contiene la lista
+    de questions y answers resultado de la busqueda y el segundo, pagination,
+    el cual contine la informacion necesaria para realizar la carga del
+    siguiente bloque en una nueva busqueda.
+
+    Nota: los parametros pagination y question no son usuados de forma
+    simultanea, si son proporcionados en el mismo llamado de la funcion tiene
+    prioridad pagination.
+    '''
+    question = pagination['key_post_original'] if pagination else question
+    data = {'token_user': session['token_guest'], 'hash_key': question,
+            'pagination': json.dumps(pagination) if pagination else "{}"}
+    return requests.get(OxRESTful_resource.QUESTION_ALL_ANSWER, data=data)
 
 
 @guest_user

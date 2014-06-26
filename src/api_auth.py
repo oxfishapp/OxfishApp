@@ -106,16 +106,17 @@ def life_token_user():
     if 'timelife_token' in session['user']:
         user = session['user']
         timelife = difference_timeUTCnow(user['timelife_token'])
+        min_renew_token = timelife_token / 900
 
         #verifica si el lifetime del token_user es mayor a la mitad del
         #OX_TOKEN_USER_LIFETIME, de ser verdadero el token_user no es renovado.
-        if timelife >= timelife_token / 2:
+        if timelife >= timelife_token / min_renew_token:
             return True
 
         #verifica si el lifetime del token_user es menor a la mitad del
         #OX_TOKEN_USER_LIFETIME y si lifetime es mayor o igual a 0, de ser
         #verdadero el token_user es renovado.
-        elif timelife < timelife_token / 2 and timelife >= 0:
+        elif timelife < timelife_token / min_renew_token and timelife >= 0:
             data = {'token_user': user['token_user']}
             resp = requests.put(OxRESTful_resource.RENEW_TOKEN_USER, data=data)
             if resp.status_code == 200:
