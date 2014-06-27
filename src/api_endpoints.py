@@ -18,7 +18,7 @@ endpoints.add_url_rule('/<string:nickname>/profile', 'profile',
 endpoints.add_url_rule('/ask/q', 'ask', views.create_question,
                        methods=['GET', 'POST'])
 endpoints.add_url_rule('/ask/a', 'answer', views.create_answer,
-                       methods=['POST'])
+                       methods=['GET', 'POST'])
 endpoints.add_url_rule('/show/<string:question>', 'show',
                        views.view_alone)
 endpoints.add_url_rule('/finder/finderdown', 'finderdown',

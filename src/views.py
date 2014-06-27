@@ -10,7 +10,7 @@ from flask import (current_app, url_for, request, render_template, session,
                     redirect, jsonify, abort)
 from api_auth import tw_oauth, login_required, guest_user
 from restful_resource import OxRESTful_resource
-from commons import add_timeUTCnow
+from commons import add_timeUTCnow, token_dict_to_multidict
 
 
 def login():
@@ -22,10 +22,10 @@ def login():
     como callback para recibir la repuesta de autorizacion dada por twitter.
     '''
 
-    next_url = request.args.get('next_url') or 'endpoints.home'
+    next_url = request.args.get('next') or 'endpoints.home'
     return tw_oauth.authorize(callback=url_for('endpoints.auth_twitter',
-                                               next_url=next_url,
-                                               data=request.args.get('data')))
+                                           next=next_url,
+                                           data=request.args.get('data')))
 
 
 @tw_oauth.authorized_handler
@@ -43,8 +43,12 @@ def auth_twitter(tw_resp):
     este proceso.
     '''
 
+    if not tw_resp or not isinstance(tw_resp, dict) or \
+                not set(('oauth_token', 'oauth_token_secret')) <= set(tw_resp):
+        abort(400)
+
     #definir el endpoint al cual ser redirigido
-    next_url = request.args.get('next_url') or \
+    next_url = request.args.get('next') or \
                                 url_for('endpoints.timelinepublic')
 
     data = {'token_user': session['token_guest'],
@@ -88,11 +92,21 @@ def profile(nickname):
     '''
     from forms_fields import RegisterUserForm
 
-    form_field = RegisterUserForm(request.form)
+    data_request = dict()
+    if 'data_request' in request.args:
+        data_req = request.args.get('data_request')
+        data_request = token_dict_to_multidict(data_req)
+        if len(data_request):
+            form_field = RegisterUserForm(data_request)
+        else:
+            return redirect(url_for('endpoints.home', nickname=nickname))
+    else:
+        form_field = RegisterUserForm(request.form)
+
     if request.method == 'POST' and form_field.validate():
         return register_email_skills(form_field)
     profile = user_by_nickname(nickname)
-    if request.method == 'POST':
+    if request.method == 'POST' or len(data_request):
         profile.update(form_field.data)
     return render_template('profile.html', title='Profile', form=form_field,
                            profile=profile)
@@ -168,7 +182,11 @@ def create_question():
     '''
     from forms_fields import CreateQuestionForm
 
-    form_field = CreateQuestionForm(request.form)
+    if 'data_request' in request.args:
+        data_request = request.args.get('data_request')
+        form_field = CreateQuestionForm(token_dict_to_multidict(data_request))
+    else:
+        form_field = CreateQuestionForm(request.form)
 
     if request.method == 'POST' and form_field.validate():
         user = session['user']
@@ -198,7 +216,12 @@ def create_answer():
     nueva respuesta en el sistema.
     '''
     from forms_fields import CreateAnswerForm
-    form_field = CreateAnswerForm(request.form)
+
+    if 'data_request' in request.args:
+        data_request = request.args.get('data_request')
+        form_field = CreateAnswerForm(token_dict_to_multidict(data_request))
+    else:
+        form_field = CreateAnswerForm(request.form)
     if form_field.validate():
         user = session['user']
         json_question = form_field.data
@@ -303,10 +326,9 @@ def update_post():
     hash_key del question y answer seleccionada asi como el estado actual del
     answer a ser modificado. Redirige al endpoints.show para refrescar la vista
     '''
-
     from forms_fields import UpdatePostForm
-    form_field = UpdatePostForm(request.form)
 
+    form_field = UpdatePostForm(request.form)
     if form_field.validate():
         user = session['user']
         new_data = form_field.data
@@ -341,26 +363,33 @@ def delete_post():
 
     si la eliminaion fue exitosa, se redirige al endpoints.home
     '''
-    if request.method == 'POST':
-        if 'full_post' in request.form:
-            post = ast.literal_eval(request.form['full_post'])
-            return render_template('delete.html', post=post)
+    from forms_fields import DeletePostForm
 
-        from forms_fields import DeletePostForm
+    if 'data_request' in request.args:
+        data_req = request.args.get('data_request')
+        data_request = token_dict_to_multidict(data_req)
+        form_field = DeletePostForm(data_request) if len(data_request) \
+                                                    else abort(400)
+    else:
+        data_request = dict()
         form_field = DeletePostForm(request.form)
-        if form_field.validate():
-            user = session['user']
-            data = {'token_user': user['token_user'], 'key_user': user['key']}
-            data['hash_key'] = form_field.data['hash_key']
-            result = requests.delete(OxRESTful_resource.DELETE_QA, data=data)
-            if result.status_code != 200:
-                abort(result.status_code)
-            data = {'token_user': user['token_user'], 'key_user': user['key'],
-                    'post' if int(form_field.data['is_question']) else \
-                                                                'answer': -1}
-            result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
-        else:
-            abort(400)
+    if 'full_post' in request.form or 'full_post' in data_request:
+        post = data_request['full_post'] if 'full_post' in data_request \
+                            else request.form['full_post']
+        return render_template('delete.html', post=ast.literal_eval(post))
+    if form_field.validate():
+        user = session['user']
+        data = {'token_user': user['token_user'], 'key_user': user['key']}
+        data['hash_key'] = form_field.data['hash_key']
+        result = requests.delete(OxRESTful_resource.DELETE_QA, data=data)
+        if result.status_code != 200:
+            abort(result.status_code)
+        data = {'token_user': user['token_user'], 'key_user': user['key'],
+                'post' if int(form_field.data['is_question']) else \
+                                                            'answer': -1}
+        result = requests.put(OxRESTful_resource.USER_SCORES, data=data)
+    else:
+        abort(400)
     return redirect(url_for('endpoints.home',
                             nickname=session['user']['nickname']))
 

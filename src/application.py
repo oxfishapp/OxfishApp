@@ -10,7 +10,7 @@ from api_errors import errors
 
 SECRET_KEY = '7m3Cx7dgNdrk6U9mtRjbbJm92czTxk83xqbwWZjAya8GWqPbwV948kzd4WDfgsxy'
 SECRET_KEY_ANONYMOUS = 'YGWF5VLNhwduPtfMisczxgYDWRqoG5bW'
-OX_TOKEN_USER_LIFETIME = 1800
+OX_TOKEN_USER_LIFETIME = 3600
 OX_TOKEN_GUEST_USER_LIFETIME = 900
 
 application = Flask(__name__)
