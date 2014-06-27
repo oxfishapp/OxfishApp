@@ -94,7 +94,7 @@ def difference_timeUTCnow(time):
     return (time - datetime.utcnow()).total_seconds()
 
 
-def token_dict_to_multidict(token_dict):
+def tokendict_to_multidict(token_dict):
     '''
     (srt) -> werkzeug.datastructures.MultiDict
 

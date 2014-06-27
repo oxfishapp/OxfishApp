@@ -10,7 +10,7 @@ from flask import (current_app, url_for, request, render_template, session,
                     redirect, jsonify, abort)
 from api_auth import tw_oauth, login_required, guest_user
 from restful_resource import OxRESTful_resource
-from commons import add_timeUTCnow, token_dict_to_multidict
+from commons import add_timeUTCnow, tokendict_to_multidict
 
 
 def login():
@@ -94,8 +94,7 @@ def profile(nickname):
 
     data_request = dict()
     if 'data_request' in request.args:
-        data_req = request.args.get('data_request')
-        data_request = token_dict_to_multidict(data_req)
+        data_request = tokendict_to_multidict(request.args.get('data_request'))
         if len(data_request):
             form_field = RegisterUserForm(data_request)
         else:
@@ -183,8 +182,8 @@ def create_question():
     from forms_fields import CreateQuestionForm
 
     if 'data_request' in request.args:
-        data_request = request.args.get('data_request')
-        form_field = CreateQuestionForm(token_dict_to_multidict(data_request))
+        data_request = tokendict_to_multidict(request.args.get('data_request'))
+        form_field = CreateQuestionForm(data_request)
     else:
         form_field = CreateQuestionForm(request.form)
 
@@ -218,9 +217,10 @@ def create_answer():
     from forms_fields import CreateAnswerForm
 
     if 'data_request' in request.args:
-        data_request = request.args.get('data_request')
-        form_field = CreateAnswerForm(token_dict_to_multidict(data_request))
+        data_req = tokendict_to_multidict(request.args.get('data_request'))
+        form_field = CreateAnswerForm(data_req)
     else:
+        data_req = dict()
         form_field = CreateAnswerForm(request.form)
     if form_field.validate():
         user = session['user']
@@ -237,7 +237,8 @@ def create_answer():
         return redirect(url_for('endpoints.show',
                             question=form_field.data['key_post_original']))
     else:
-        question = request.form['full_question']
+        question = data_req['full_question'] if 'full_question' in data_req \
+                                else request.form['full_question']
         if question.startswith('_'):
             question = question[1:]
         else:
@@ -366,8 +367,7 @@ def delete_post():
     from forms_fields import DeletePostForm
 
     if 'data_request' in request.args:
-        data_req = request.args.get('data_request')
-        data_request = token_dict_to_multidict(data_req)
+        data_request = tokendict_to_multidict(request.args.get('data_request'))
         form_field = DeletePostForm(data_request) if len(data_request) \
                                                     else abort(400)
     else:
