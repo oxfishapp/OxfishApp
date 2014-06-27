@@ -373,7 +373,8 @@ def delete_post():
                                                     else abort(400)
     else:
         data_request = dict()
-        form_field = DeletePostForm(request.form)
+        form_field = DeletePostForm(request.form if request.form \
+                                                    else abort(400))
     if 'full_post' in request.form or 'full_post' in data_request:
         post = data_request['full_post'] if 'full_post' in data_request \
                             else request.form['full_post']
