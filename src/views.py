@@ -260,7 +260,8 @@ def finderdown():
     find_by = request.args.get('find')
     if find_by:
         return redirect(url_for('endpoints.finder', find=find_by))
-    abort(400)
+    else:
+        return redirect(url_for('endpoints.timeline'))
 
 
 @guest_user
