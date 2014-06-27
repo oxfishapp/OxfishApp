@@ -4,6 +4,7 @@ Created on Jun 6, 2014
 @author: anroco
 '''
 
+import os
 from functools import wraps
 from flask import session, redirect, url_for, current_app, request
 from flask_oauth import OAuth
@@ -11,9 +12,12 @@ from commons import (generate_token, retrieve_token, difference_timeUTCnow,
                      add_timeUTCnow)
 
 #definicion de variables necesarias para realizar la autenticacion con twitter.
-TW_CONSUMER_KEY = 'QbINcoPerlOi4Y4QD3wSjHJKp'
-TW_CONSUMER_SECRET = 'ZBR4eNAo6KUK0gnZO2vm2JKLZdU4gh3DVbcnSibC42diBz1fiJ'
-TW_NAME = 'restanroco'
+#TW_CONSUMER_KEY = 'QbINcoPerlOi4Y4QD3wSjHJKp'
+#TW_CONSUMER_SECRET = 'ZBR4eNAo6KUK0gnZO2vm2JKLZdU4gh3DVbcnSibC42diBz1fiJ'
+#TW_NAME = 'restanroco'
+TW_CONSUMER_KEY = os.environ.get('TW_CONSUMER_KEY')
+TW_CONSUMER_SECRET = os.environ.get('TW_CONSUMER_SECRET')
+TW_NAME = os.environ.get('TW_NAME')
 TW_ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth/access_token'
 TW_REQUEST_TOKEN_URL = 'https://api.twitter.com/oauth/request_token'
 TW_BASE_URL = 'https://api.twitter.com/1.1/'

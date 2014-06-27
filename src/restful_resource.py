@@ -3,11 +3,13 @@ Created on Jun 6, 2014
 
 @author: anroco
 '''
+import os
 
 
 class OxRESTful_resource():
 
-    SERVER_NAME = 'http://localhost:5000/api/1.0'
+    #SERVER_NAME = 'http://localhost:5000/api/1.0'
+    SERVER_NAME = os.environ.get('SERVER_NAME_RESTful')
     LOGIN_USER = SERVER_NAME + '/login'
     REGISTER_SKILLS = SERVER_NAME + '/auth/skills'
     REGISTER_EMAIL = SERVER_NAME + '/auth/register'
