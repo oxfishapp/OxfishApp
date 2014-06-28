@@ -1,0 +1,4 @@
+Flask==0.10.1
+Flask-OAuth==0.12
+itsdangerous==0.24
+WTForms==2.0
