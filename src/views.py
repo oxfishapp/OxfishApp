@@ -598,7 +598,7 @@ def find_restful(pagination=None, find=None):
     '''
     data = {'token_user': session['token_guest'],
             'pagination': json.dumps(pagination) if pagination else "{}"}
-    find = pagination['skill'][2:] if pagination else find
+    find = pagination['skill'][3:] if pagination else find
     result = requests.get(OxRESTful_resource.FINDER + find, data=data)
     if result.status_code != 200:
         abort(result.status_code)
