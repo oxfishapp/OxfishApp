@@ -25,7 +25,7 @@ application.config.from_object(__name__)
 
 #registrar los blueprints en la aplicacion
 application.register_blueprint(endpoints)
-application.register_blueprint(errors)
+#application.register_blueprint(errors)
 
 if __name__ == "__main__":
     application.run(host='0.0.0.0', port=8080, debug=DEBUG_APP)
