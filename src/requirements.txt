@@ -3,3 +3,4 @@ Flask-OAuth==0.12
 itsdangerous==0.24
 WTForms==2.0
 requests==2.1.0
+Flask-RESTful==0.2.12
