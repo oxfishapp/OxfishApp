@@ -18,6 +18,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 SECRET_KEY_ANONYMOUS = os.environ.get('SECRET_KEY_ANONYMOUS')
 OX_TOKEN_USER_LIFETIME = int(os.environ.get('OX_TOKEN_USER_LIFETIME'))
 OX_TOKEN_GUEST_USER_LIFETIME = int(os.environ.get('OX_TOKEN_GUEST_USER_LIFETIME'))
+DEBUG_APP = True if os.environ.get('DEBUG') == 'True' else False
 
 application = Flask(__name__)
 application.config.from_object(__name__)
@@ -27,4 +28,4 @@ application.register_blueprint(endpoints)
 application.register_blueprint(errors)
 
 if __name__ == "__main__":
-    application.run(host='0.0.0.0', port=8080)#, debug=True)
+    application.run(host='0.0.0.0', port=8080, debug=DEBUG_APP)
