@@ -21,7 +21,7 @@
                   <div class="modal-footer">
                     <form action="{{ url_for('endpoints.delete_post') }}" method="post">
                         <input type="hidden" name="hash_key" value={{ post['keys']['hash_key'] }}>
-                        <input type="hidden" name="is_question" value={{ 1 if post['keys']['hash_key_original'] else 0 }}>
+                        <input type="hidden" name="is_question" value={{ 0 if post['keys']['hash_key_original'] else 1 }}>
                         <button type="summit" class="btn btn-danger">Delete
                         </button>
                         <a type="button" class="btn btn-default" href={{ url_for('endpoints.home', nickname=session.user.nickname) }}>Close</a>

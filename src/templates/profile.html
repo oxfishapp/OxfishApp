@@ -4,7 +4,7 @@
 <div class="container">
   <div class="col-md-6 col-md-offset-3 text-center">
       <div class="col-sm-12" align="center">
-              <img src="{{ profile.link_image }}" class="resize-img-profile img-circle">
+              <img src="{{ profile.link_image.replace('_normal', '') }}" class="resize-img-profile img-circle">
       </div>
       <div class="col-sm-12">
           <h3>{{ profile.name }}</h3>
