@@ -13,7 +13,7 @@ errors = Blueprint('ox_errors', __name__)
 @errors.app_errorhandler(404)
 def error_code_404(e):
     return render_template('_errors.html', code=404,
-                           message='Oops!, that resource doesn’t exist.')
+                           message="Oops!, that resource doesn't exist.")
 
 
 @errors.app_errorhandler(401)
