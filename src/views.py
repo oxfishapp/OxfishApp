@@ -605,6 +605,10 @@ def find_restful(pagination=None, find=None):
     return result.json()
 
 
+def webmaster_tools():
+    return "google-site-verification: google65e813c766ec8f98.html"
+
+
 def answers_restful(pagination=None, question=None):
     '''
     (dict) -> dict
