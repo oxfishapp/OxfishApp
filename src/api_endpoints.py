@@ -58,7 +58,7 @@ endpoints.add_url_rule('/answers_load', 'answers_load', views.answers_load,
                        methods=['POST'])
 
 #Webmaster Google
-endpoints.add_url_rule('/google65e813c766ec8f98.html', 'google', views.webmaster_tools,
+endpoints.add_url_rule('/google4653f9bdbabf7762.html', 'google', views.webmaster_tools,
                        methods=['GET'])
 
 endpoints.add_url_rule('/about', 'about',

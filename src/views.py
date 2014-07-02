@@ -606,7 +606,7 @@ def find_restful(pagination=None, find=None):
 
 
 def webmaster_tools():
-    return "google-site-verification: google65e813c766ec8f98.html"
+    return "google-site-verification: google4653f9bdbabf7762.html"
 
 
 def answers_restful(pagination=None, question=None):
