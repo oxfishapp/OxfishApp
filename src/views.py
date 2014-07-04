@@ -636,10 +636,11 @@ def answers_restful(pagination=None, question=None):
     return requests.get(OxRESTful_resource.QUESTION_ALL_ANSWER, data=data)
 
 
-@guest_user
-def temp():
+def about():
     '''
-    (str) -> flask.redirect
+    () -> flask.redirect
 
+    redirige al usuario a la pagina del CMS de la aplicacion.
     '''
-    pass
+    import os
+    return redirect(os.environ.get('SERVER_NAME_CMS'))

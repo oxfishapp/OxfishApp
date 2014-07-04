@@ -62,4 +62,4 @@ endpoints.add_url_rule('/google4653f9bdbabf7762.html', 'google', views.webmaster
                        methods=['GET'])
 
 endpoints.add_url_rule('/about', 'about',
-                       views.temp)
+                       views.about)
