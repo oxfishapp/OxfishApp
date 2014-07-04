@@ -299,7 +299,7 @@ def timeline_public():
     result_data = timeline_restful()
     return render_template('timeline.html', timeline=result_data['data'],
                            pagination=result_data['pagination'],
-                           title='Timeline Public')
+                           title='Oxfish Questions and Answers')
 
 
 @guest_user
